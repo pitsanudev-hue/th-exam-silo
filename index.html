@@ -119,7 +119,7 @@
 
             try {
                 // ดึงรายการไฟล์ใน Repository ผ่าน GitHub API
-                const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/quizzes`);
+                const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/quizze/`);
                 
                 if (!response.ok) {
                     throw new Error('ไม่สามารถเชื่อมต่อ GitHub API ได้');
