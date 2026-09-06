@@ -1,0 +1,1318 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>TSB 2023 - Thailand Spelling Bee Practice Exam (Level 1: ป.1-ป.2)</title>
+    <style>
+      :root {
+        --primary: #2f6fed;
+        --primary-dark: #1e4fbb;
+        --bg: #f4f6fb;
+        --card: #ffffff;
+        --ok: #1f9d55;
+        --bad: #e0403f;
+        --border: #dfe3ec;
+        --text: #1f2430;
+        --muted: #6b7280;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        padding-bottom: 120px;
+      }
+      header.top {
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        color: #fff;
+        padding: 18px 16px 60px;
+        text-align: center;
+        position: relative;
+      }
+      header.top h1 {
+        margin: 0 0 4px;
+        font-size: 1.4rem;
+      }
+      header.top p {
+        margin: 2px 0;
+        font-size: 0.85rem;
+        opacity: 0.9;
+      }
+      .info-card {
+        max-width: 760px;
+        margin: -46px auto 20px;
+        background: var(--card);
+        border-radius: 14px;
+        box-shadow: 0 6px 20px rgba(30, 40, 80, 0.12);
+        padding: 16px;
+        position: relative;
+        z-index: 2;
+      }
+      .info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .info-grid label {
+        display: block;
+        font-size: 0.75rem;
+        color: var(--muted);
+        margin-bottom: 4px;
+      }
+      .info-grid input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        font-size: 0.95rem;
+      }
+      @media (max-width: 520px) {
+        .info-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .timer-bar {
+        max-width: 760px;
+        margin: 0 auto 20px;
+        background: var(--card);
+        border-radius: 14px;
+        box-shadow: 0 6px 20px rgba(30, 40, 80, 0.08);
+        padding: 14px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .timer-bar .time {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: var(--primary-dark);
+        font-variant-numeric: tabular-nums;
+      }
+      .btn {
+        border: none;
+        border-radius: 10px;
+        padding: 12px 20px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        color: #fff;
+        background: var(--primary);
+        transition:
+          transform 0.1s,
+          background 0.2s;
+      }
+      .btn:active {
+        transform: scale(0.97);
+      }
+      .btn.secondary {
+        background: #8a93a6;
+      }
+      .btn.big {
+        padding: 16px 28px;
+        font-size: 1.1rem;
+        border-radius: 12px;
+      }
+      .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      main {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 0 16px;
+      }
+
+      .part-title {
+        background: var(--primary-dark);
+        color: #fff;
+        padding: 12px 16px;
+        border-radius: 12px;
+        margin: 26px 0 12px;
+        font-size: 1.1rem;
+        font-weight: 700;
+      }
+      .section-title {
+        font-weight: 700;
+        margin: 18px 0 4px;
+        font-size: 1rem;
+        color: var(--primary-dark);
+      }
+      .directions {
+        color: var(--muted);
+        font-size: 0.85rem;
+        font-style: italic;
+        margin: 2px 0 12px;
+      }
+
+      .qcard {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 14px 16px 10px;
+        margin-bottom: 12px;
+      }
+      .qcard .qtext {
+        font-size: 1rem;
+        line-height: 1.5;
+        margin-bottom: 10px;
+        white-space: pre-line;
+      }
+      .qtext b.qnum {
+        color: var(--primary-dark);
+      }
+      .opt {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 12px 12px;
+        margin-bottom: 8px;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        transition:
+          background 0.15s,
+          border-color 0.15s;
+      }
+      .opt:active {
+        background: #eef3ff;
+      }
+      .opt input {
+        width: 22px;
+        height: 22px;
+        flex-shrink: 0;
+        margin-top: 2px;
+        accent-color: var(--primary);
+      }
+      .opt span {
+        font-size: 0.98rem;
+        line-height: 1.4;
+      }
+      .opt.selected {
+        border-color: var(--primary);
+        background: #eef3ff;
+      }
+
+      .opt.correct-answer {
+        border-color: var(--ok);
+        background: #eaf7ee;
+      }
+      .opt.wrong-answer {
+        border-color: var(--bad);
+        background: #fdeceb;
+      }
+      .qcard.retry-mode {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 2px rgba(47, 111, 237, 0.25);
+      }
+      .badge {
+        display: inline-block;
+        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 20px;
+        margin-left: 8px;
+        vertical-align: middle;
+      }
+      .badge.ok {
+        background: #eaf7ee;
+        color: var(--ok);
+      }
+      .badge.bad {
+        background: #fdeceb;
+        color: var(--bad);
+      }
+      .badge.skip {
+        background: #f1f1f1;
+        color: var(--muted);
+      }
+
+      .progress-bar {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: var(--card);
+        border-top: 1px solid var(--border);
+        padding: 10px 16px;
+        box-shadow: 0 -4px 14px rgba(0, 0, 0, 0.06);
+        z-index: 50;
+      }
+      .progress-bar .row {
+        max-width: 760px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .progress-track {
+        flex: 1;
+        height: 10px;
+        background: #e5e8f0;
+        border-radius: 6px;
+        overflow: hidden;
+      }
+      .progress-fill {
+        height: 100%;
+        background: var(--primary);
+        width: 0%;
+        transition: width 0.2s;
+      }
+      .progress-bar .count {
+        font-size: 0.8rem;
+        color: var(--muted);
+        white-space: nowrap;
+      }
+
+      #resultsPanel {
+        display: none;
+      }
+      .score-hero {
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        color: #fff;
+        border-radius: 16px;
+        padding: 24px;
+        text-align: center;
+        margin-bottom: 16px;
+      }
+      .score-hero .big {
+        font-size: 2.6rem;
+        font-weight: 800;
+      }
+      .part-scores {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+      .part-score-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 12px;
+        text-align: center;
+      }
+      .part-score-card .n {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--primary-dark);
+      }
+      .part-score-card .l {
+        font-size: 0.75rem;
+        color: var(--muted);
+      }
+
+      .footer-note {
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.75rem;
+        margin: 30px 0;
+      }
+      hr.sep {
+        border: none;
+        border-top: 1px dashed var(--border);
+        margin: 24px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="top">
+      <h1>TSB 2023 Practice Exam</h1>
+      <p>Thailand Spelling Bee - Level 1 (ป.1-ป.2) | For private home practice only</p>
+    </header>
+
+    <main>
+      <div class="info-card">
+        <div class="info-grid">
+          <div>
+            <label>Student name</label>
+            <input type="text" id="studentName" placeholder="Name - Surname" />
+          </div>
+          <div>
+            <label>Date</label>
+            <input type="date" id="studentDate" />
+          </div>
+        </div>
+      </div>
+
+      <div class="timer-bar">
+        <div>
+          <div style="font-size: 0.8rem; color: var(--muted)">Time remaining</div>
+          <div class="time" id="timeDisplay">01:30:00</div>
+        </div>
+        <div style="display: flex; gap: 8px">
+          <button class="btn" id="startBtn" onclick="startTimer()">Start Timer</button>
+          <button class="btn secondary" id="pauseBtn" onclick="pauseTimer()" disabled>Pause</button>
+        </div>
+      </div>
+
+      <form id="examForm">
+        <div class="part-title">PART I: Correct Spelling & Vocabulary (Items 1-17)</div>
+        <div class="section-title">Spelling Selection (Items 1-11)</div>
+        <div class="directions">
+          Out of the following options, select the correctly spelled word.
+        </div>
+        <div id="grp_spelling"></div>
+
+        <div class="section-title">Antonyms & Synonyms (Items 12-15)</div>
+        <div class="directions">Choose the correct antonym/synonym for the given word.</div>
+        <div id="grp_ant_syn"></div>
+
+        <div class="section-title">Gender Forms (Items 16-17)</div>
+        <div class="directions">Select the feminine or masculine form as instructed.</div>
+        <div id="grp_gender"></div>
+
+        <div class="part-title">PART II: Word Structure & Spelling Analysis (Items 18-51)</div>
+        <div class="section-title">Jumbled Letters (Items 18-25)</div>
+        <div class="directions">Form the correct word from the given jumbled letters.</div>
+        <div id="grp_jumbled"></div>
+
+        <div class="section-title">Image-based & Word Spelling (Items 26-33)</div>
+        <div class="directions">Choose the accurate spelling for the word/concept.</div>
+        <div id="grp_image_words"></div>
+
+        <div class="section-title">Missing & Extra Letters (Items 34-43)</div>
+        <div class="directions">
+          Determine the missing letter or find the extra letter in the given word.
+        </div>
+        <div id="grp_letters"></div>
+
+        <div class="section-title">Incorrect Spelling in Sentences (Items 44-51)</div>
+        <div class="directions">
+          Identify the incorrectly spelled word in the provided sentence.
+        </div>
+        <div id="grp_sent_error"></div>
+
+        <div class="part-title">
+          PART III: Group Categorization & Advanced Spelling (Items 52-80)
+        </div>
+        <div class="section-title">Word Categorization (Items 52-54)</div>
+        <div class="directions">Determine the element/word that belongs to the group.</div>
+        <div id="grp_category"></div>
+
+        <div class="section-title">Misspelled vs Correctly Spelled Words (Items 55-80)</div>
+        <div class="directions">
+          Choose the word that is misspelled or NOT misspelled as indicated.
+        </div>
+        <div id="grp_misspelled"></div>
+
+        <hr class="sep" />
+        <div style="text-align: center; margin-bottom: 40px">
+          <button type="button" class="btn big" id="submitBtn" onclick="gradeExam()">
+            Submit Exam &amp; See Score
+          </button>
+        </div>
+      </form>
+
+      <div id="resultsPanel">
+        <div class="score-hero">
+          <div style="font-size: 0.9rem; opacity: 0.85">Total Score</div>
+          <div class="big" id="totalScore">0 / 80</div>
+          <div id="totalPercent" style="opacity: 0.9"></div>
+          <div
+            id="retryNote"
+            style="font-size: 0.75rem; opacity: 0.85; margin-top: 4px; display: none"></div>
+        </div>
+        <div class="part-scores" id="partScores"></div>
+        <div
+          style="
+            text-align: center;
+            margin-bottom: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+          ">
+          <button type="button" class="btn secondary" id="retryBtn" onclick="startRetry()">
+            🔁 Review &amp; Retry Wrong Answers (1 time)
+          </button>
+          <button type="button" class="btn" id="revealBtn" onclick="revealAllAnswers()">
+            📖 View Correct Answers
+          </button>
+        </div>
+        <div style="text-align: center; margin-bottom: 16px; display: none" id="submitRetryWrap">
+          <button type="button" class="btn big" id="submitRetryBtn" onclick="submitRetry()">
+            Submit Retry Answers
+          </button>
+        </div>
+        <div id="reviewArea"></div>
+      </div>
+
+      <div class="footer-note">
+        Private practice copy for personal home use only &mdash; based on TSB 2023 (Academic Contest
+        Thailand). Not for redistribution.
+      </div>
+    </main>
+
+    <div class="progress-bar">
+      <div class="row">
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="count" id="progressCount">0 / 80 answered</div>
+      </div>
+    </div>
+
+    <script>
+      /* ============ QUESTION DATA ============ */
+      const spellingData = [
+        {
+          n: 1,
+          q: "Out of the following options, select the correctly spelled word:",
+          opts: ["clothes", "clohtes", "clorthes", "chlothes"],
+          a: 1,
+        },
+        {
+          n: 2,
+          q: "Out of the following options, select the correctly spelled word:",
+          opts: ["dificult", "difficlut", "difficult", "dificlut"],
+          a: 3,
+        },
+        {
+          n: 3,
+          q: "Out of the following options, select the correctly spelled word:",
+          opts: ["Nobember", "November", "Nobemver", "Novemver"],
+          a: 2,
+        },
+        {
+          n: 4,
+          q: "Out of the following options, select the correctly spelled word:",
+          opts: ["sandwitch", "sanwich", "sandwich", "sanwicth"],
+          a: 3,
+        },
+        {
+          n: 5,
+          q: "Out of the following options, select the correctly spelled word:",
+          opts: ["hospital", "hopsital", "hospatil", "hospiatal"],
+          a: 1,
+        },
+        {
+          n: 6,
+          q: "Out of the following options, select the correctly spelled word:",
+          opts: ["betwen", "betwein", "between", "beetwen"],
+          a: 3,
+        },
+        {
+          n: 7,
+          q: "Out of the following options, select the correctly spelled word:",
+          opts: ["smockin", "smaking", "snocking", "smoking"],
+          a: 4,
+        },
+        {
+          n: 8,
+          q: "Out of the following options, select the correctly spelled word:",
+          opts: ["Fabruary", "February", "Febraury", "Fabraury"],
+          a: 2,
+        },
+        {
+          n: 9,
+          q: "Out of the following options, select the correctly spelled word:",
+          opts: ["waitress", "waitres", "wairtress", "wairtres"],
+          a: 1,
+        },
+        {
+          n: 10,
+          q: "Out of the following options, select the correctly spelled word:",
+          opts: ["posiblle", "posible", "posibble", "possible"],
+          a: 4,
+        },
+        {
+          n: 11,
+          q: "Out of the following options, select the correctly spelled word:",
+          opts: ["biscunit", "biscuit", "bisckuit", "bisquit"],
+          a: 2,
+        },
+      ];
+
+      const antSynData = [
+        {
+          n: 12,
+          q: "Choose the correct antonym for the given word: wait",
+          opts: ["unwait", "leave", "await", "proced"],
+          a: 2,
+        },
+        {
+          n: 13,
+          q: "Choose the correct antonym for the given word: sometimes",
+          opts: ["constantlly", "often", "all-times", "always"],
+          a: 4,
+        },
+        {
+          n: 14,
+          q: "Choose the correct synonym for the given word: café",
+          opts: ["restaurant", "coffee", "coffe", "restaruant"],
+          a: 1,
+        },
+        {
+          n: 15,
+          q: "Choose the correct synonym for the given word: toilet",
+          opts: ["bathroom", "bathrom", "retsroom", "restrom"],
+          a: 1,
+        },
+      ];
+
+      const genderData = [
+        {
+          n: 16,
+          q: "From the options below, select the feminine form of the given word: dad",
+          opts: ["mather", "sister", "mum", "mam"],
+          a: 3,
+        },
+        {
+          n: 17,
+          q: "From the options below, select the masculine form of the given word: women",
+          opts: ["mens", "girls", "men", "mans"],
+          a: 3,
+        },
+      ];
+
+      const jumbledData = [
+        {
+          n: 18,
+          q: "Form the correct word from the given jumbled letters: icovrosantne",
+          opts: ["overactions", "conservartion", "conversation", "renovations"],
+          a: 3,
+        },
+        {
+          n: 19,
+          q: "Form the correct word from the given jumbled letters: yedawsden",
+          opts: ["Wendesday", "Wenedsday", "Wedensday", "Wednesday"],
+          a: 4,
+        },
+        {
+          n: 20,
+          q: "Form the correct word from the given jumbled letters: bermemer",
+          opts: ["member", "remember", "memberes", "rememrbe"],
+          a: 2,
+        },
+        {
+          n: 21,
+          q: "Form the correct word from the given jumbled letters: mecredbe",
+          opts: ["December", "Decebmer", "Descember", "Decembre"],
+          a: 1,
+        },
+        {
+          n: 22,
+          q: "Form the correct word from the given jumbled letters: thraewe",
+          opts: ["weather", "wreath", "heater", "wheater"],
+          a: 1,
+        },
+        {
+          n: 23,
+          q: "Form the correct word from the given jumbled letters: creahet",
+          opts: ["create", "teacher", "chaeter", "taecher"],
+          a: 2,
+        },
+        {
+          n: 24,
+          q: "Form the correct word from the given jumbled letters: eithnter",
+          opts: ["thirteen", "neither", "thriteen", "neirther"],
+          a: 1,
+        },
+        {
+          n: 25,
+          q: "Form the correct word from the given jumbled letters: nigxiect",
+          opts: ["exiting", "excinitg", "exciting", "exigint"],
+          a: 3,
+        },
+      ];
+
+      const imageWordsData = [
+        {
+          n: 26,
+          q: "Choose the accurate spelling for: beard",
+          opts: ["beard", "beart", "bread", "berad"],
+          a: 1,
+        },
+        {
+          n: 27,
+          q: "Choose the accurate spelling for: breakfast",
+          opts: ["breackfast", "breakfast", "braekfast", "breackfats"],
+          a: 2,
+        },
+        {
+          n: 28,
+          q: "Choose the accurate spelling for: kitchen",
+          opts: ["kitchien", "kitchen", "kitichen", "kidtchen"],
+          a: 2,
+        },
+        {
+          n: 29,
+          q: "Choose the accurate spelling for: newspaper",
+          opts: ["newpaper", "newspepar", "newpepar", "newspaper"],
+          a: 4,
+        },
+        {
+          n: 30,
+          q: "Choose the accurate spelling for plural of fish:",
+          opts: ["two fisves", "two fish", "two fishs", "two fishess"],
+          a: 2,
+        },
+        {
+          n: 31,
+          q: "Choose the accurate spelling for plural of sheep:",
+          opts: ["three sheeps", "three sheepes", "three sheep", "three sheeppes"],
+          a: 3,
+        },
+        {
+          n: 32,
+          q: "Choose the accurate spelling for: tickets",
+          opts: ["tikets", "trickets", "trikets", "tickets"],
+          a: 4,
+        },
+        {
+          n: 33,
+          q: "Choose the accurate spelling for: vegetables",
+          opts: ["vegatables", "vegetebles", "vegetablas", "vegetables"],
+          a: 4,
+        },
+      ];
+
+      const lettersData = [
+        {
+          n: 34,
+          q: "Determine the missing letter in this word: toge_her",
+          opts: ["w", "r", "d", "t"],
+          a: 4,
+        },
+        {
+          n: 35,
+          q: "Determine the missing letter in this word: senten_e",
+          opts: ["n", "t", "c", "s"],
+          a: 3,
+        },
+        {
+          n: 36,
+          q: "Determine the missing letter in this word: langua_e",
+          opts: ["j", "n", "m", "g"],
+          a: 4,
+        },
+        {
+          n: 37,
+          q: "Determine the missing letter in this word: hol_day",
+          opts: ["i", "l", "d", "a"],
+          a: 1,
+        },
+        {
+          n: 38,
+          q: "Determine the missing letter in this word: thank_",
+          opts: ["y", "s", "z", "e"],
+          a: 2,
+        },
+        {
+          n: 39,
+          q: "Find the extra letter in the word: speacking",
+          opts: ["c", "n", "e", "i"],
+          a: 1,
+        },
+        {
+          n: 40,
+          q: "Find the extra letter in the word: travaeling",
+          opts: ["a", "e", "r", "n"],
+          a: 2,
+        },
+        {
+          n: 41,
+          q: "Find the extra letter in the word: museaums",
+          opts: ["a", "m", "s", "u"],
+          a: 1,
+        },
+        {
+          n: 42,
+          q: "Find the extra letter in the word: childrens",
+          opts: ["l", "r", "d", "s"],
+          a: 4,
+        },
+        {
+          n: 43,
+          q: "Find the extra letter in the word: nationallity",
+          opts: ["l", "a", "i", "y"],
+          a: 1,
+        },
+      ];
+
+      const sentErrorData = [
+        {
+          n: 44,
+          q: 'Identify the incorrectly spelled word:\n"It took me some time to understend the difficult maths problem, but with practice, I finally got it."',
+          opts: ["problem", "understend", "practice", "difficult"],
+          a: 2,
+        },
+        {
+          n: 45,
+          q: 'Identify the incorrectly spelled word:\n"The view from the top of the mountain was truly beautifull, with the sun shining over the village, creating amazing colours with its light."',
+          opts: ["mountain", "amazing", "beautifull", "light"],
+          a: 3,
+        },
+        {
+          n: 46,
+          q: 'Identify the incorrectly spelled word:\n"Every season, I enjoy wearing diferent clothes to school. For example, I wear dresses in the summer and warm sweaters in the winter to stay comfortable and look good."',
+          opts: ["diferent", "summer", "sweaters", "clothes"],
+          a: 1,
+        },
+        {
+          n: 47,
+          q: 'Identify the incorrectly spelled word:\n"Every year, when my birtday is here in May, I\'m happy to have a fun party with family and friends. We play games, tell stories, and enjoy a cake with candles."',
+          opts: ["candles", "birtday", "stories", "friends"],
+          a: 2,
+        },
+        {
+          n: 48,
+          q: 'Identify the incorrectly spelled word:\n"Playing games with friends is always better than playing alone. The laughter and excitement are greatar than when I\'m by myself, and it makes the experience even more enjoyable."',
+          opts: ["better", "myself", "enjoyable", "greatar"],
+          a: 4,
+        },
+        {
+          n: 49,
+          q: 'Identify the incorrectly spelled word:\n"Many poeple like to visit the park. They enjoy playing games and having picnics with family and friends. It\'s a fun place to be and have a good time."',
+          opts: ["friends", "playing", "picnics", "poeple"],
+          a: 4,
+        },
+        {
+          n: 50,
+          q: 'Identify the incorrectly spelled word:\n"I have an important meeting tomorow, so I need to prepare my presentation and ensure all the details are in place."',
+          opts: ["details", "important", "meeting", "tomorow"],
+          a: 4,
+        },
+        {
+          n: 51,
+          q: 'Identify the incorrectly spelled word:\n"Every day, I check my phone for updates and send texts to my friends. We share our thoughts and make plans. It\'s a quick way to stay in touch and send a mesage."',
+          opts: ["thoughts", "mesage", "friends", "phone"],
+          a: 2,
+        },
+      ];
+
+      const categoryData = [
+        {
+          n: 52,
+          q: "Determine the word that belongs to the group:\ncar, boat, plane, ____",
+          opts: ["orange", "shoe", "train", "dictionary"],
+          a: 3,
+        },
+        {
+          n: 53,
+          q: "Determine the element that belongs to the group:\nhorse, pig, bird, ____",
+          opts: ["paper", "river", "shop", "dog"],
+          a: 4,
+        },
+        {
+          n: 54,
+          q: "Determine the element that belongs to the group:\narm, nose, leg, ____",
+          opts: ["beer", "mouth", "potato", "cat"],
+          a: 2,
+        },
+      ];
+
+      const misspelledData = [
+        {
+          n: 55,
+          q: "Which of the following words is misspelled?",
+          opts: ["interetsing", "university", "dictionary", "expensive"],
+          a: 1,
+        },
+        {
+          n: 56,
+          q: "Which of the following words is misspelled?",
+          opts: ["husband", "address", "quartar", "reading"],
+          a: 3,
+        },
+        {
+          n: 57,
+          q: "Which of the following words is misspelled?",
+          opts: ["writing", "computer", "Septembar", "dancing"],
+          a: 3,
+        },
+        {
+          n: 58,
+          q: "Which of the following words is misspelled?",
+          opts: ["problem", "country", "behind", "becuase"],
+          a: 4,
+        },
+        {
+          n: 59,
+          q: "Which of the following words is misspelled?",
+          opts: ["televishon", "basketball", "something", "yesterday"],
+          a: 1,
+        },
+        {
+          n: 60,
+          q: "Which of the following words is misspelled?",
+          opts: ["favourite", "clasroom", "important", "practise"],
+          a: 2,
+        },
+        {
+          n: 61,
+          q: "Which of the following words is misspelled?",
+          opts: ["shoping", "supper", "anything", "subject"],
+          a: 1,
+        },
+        {
+          n: 62,
+          q: "Which of the following words is misspelled?",
+          opts: ["website", "homework", "tomatou", "morning"],
+          a: 3,
+        },
+        {
+          n: 63,
+          q: "Which of the following words ISN'T misspelled?",
+          opts: ["bathrom", "fotball", "question", "chocolote"],
+          a: 3,
+        },
+        {
+          n: 64,
+          q: "Which of the following words ISN'T misspelled?",
+          opts: ["afternon", "village", "trausers", "Satruday"],
+          a: 2,
+        },
+        {
+          n: 65,
+          q: "Which of the following words ISN'T misspelled?",
+          opts: ["glasess", "fractory", "summer", "strret"],
+          a: 3,
+        },
+        {
+          n: 66,
+          q: "Which of the following words ISN'T misspelled?",
+          opts: ["beggin", "vellow", "eartly", "month"],
+          a: 4,
+        },
+        {
+          n: 67,
+          q: "Which of the following words ISN'T misspelled?",
+          opts: ["mous", "tooths", "pencil", "coffe"],
+          a: 3,
+        },
+        {
+          n: 68,
+          q: "Which of the following words ISN'T misspelled?",
+          opts: ["teatch", "teacher", "techear", "teetsher"],
+          a: 2,
+        },
+        {
+          n: 69,
+          q: "Which of the following words is misspelled?",
+          opts: ["animal", "student", "librery", "kitchen"],
+          a: 3,
+        },
+        {
+          n: 70,
+          q: "Which of the following words is misspelled?",
+          opts: ["famely", "yellow", "sister", "brother"],
+          a: 1,
+        },
+        {
+          n: 71,
+          q: "Which of the following words ISN'T misspelled?",
+          opts: ["biscit", "bisquit", "biscuit", "biskit"],
+          a: 3,
+        },
+        {
+          n: 72,
+          q: "Which of the following words ISN'T misspelled?",
+          opts: ["school", "school", "skool", "scool"],
+          a: 2,
+        },
+        {
+          n: 73,
+          q: "Which of the following words is misspelled?",
+          opts: ["banana", "apple", "oranje", "grape"],
+          a: 3,
+        },
+        {
+          n: 74,
+          q: "Which of the following words is misspelled?",
+          opts: ["monday", "tuesday", "fiday", "sunday"],
+          a: 3,
+        },
+        {
+          n: 75,
+          q: "Which of the following words ISN'T misspelled?",
+          opts: ["window", "windoe", "wyndow", "winndow"],
+          a: 1,
+        },
+        {
+          n: 76,
+          q: "Which of the following words ISN'T misspelled?",
+          opts: ["runing", "running", "runeng", "runnin"],
+          a: 2,
+        },
+        {
+          n: 77,
+          q: "Which of the following words is misspelled?",
+          opts: ["father", "mother", "grantmother", "sister"],
+          a: 3,
+        },
+        {
+          n: 78,
+          q: "Which of the following words is misspelled?",
+          opts: ["market", "staton", "street", "garden"],
+          a: 2,
+        },
+        {
+          n: 79,
+          q: "Which of the following words ISN'T misspelled?",
+          opts: ["anwer", "answer", "answer", "anser"],
+          a: 2,
+        },
+        {
+          n: 80,
+          q: "Which of the following words ISN'T misspelled?",
+          opts: ["happy", "hapi", "happie", "hapee"],
+          a: 1,
+        },
+      ];
+
+      function partOf(n) {
+        if (n <= 17) return "Part I: Spelling & Vocabulary";
+        if (n <= 51) return "Part II: Word Structure";
+        return "Part III: Grouping & Advanced Spelling";
+      }
+
+      const allGroups = [
+        { id: "grp_spelling", list: spellingData },
+        { id: "grp_ant_syn", list: antSynData },
+        { id: "grp_gender", list: genderData },
+        { id: "grp_jumbled", list: jumbledData },
+        { id: "grp_image_words", list: imageWordsData },
+        { id: "grp_letters", list: lettersData },
+        { id: "grp_sent_error", list: sentErrorData },
+        { id: "grp_category", list: categoryData },
+        { id: "grp_misspelled", list: misspelledData },
+      ];
+
+      const answerKey = {};
+      allGroups.forEach((g) => {
+        g.list.forEach((item) => {
+          answerKey[item.n] = { answer: item.a, opts: item.opts };
+        });
+      });
+
+      /* ============ RENDERING ============ */
+      function renderGroup(containerId, list) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        list.forEach((item) => {
+          const card = document.createElement("div");
+          card.className = "qcard";
+          card.id = "qcard_" + item.n;
+
+          const qtext = document.createElement("div");
+          qtext.className = "qtext";
+          qtext.innerHTML = '<b class="qnum">' + item.n + ".</b> " + item.q;
+          card.appendChild(qtext);
+
+          item.opts.forEach((optText, idx) => {
+            const val = idx + 1;
+            const label = document.createElement("label");
+            label.className = "opt";
+            label.id = "opt_" + item.n + "_" + val;
+            label.innerHTML =
+              '<input type="radio" name="q' +
+              item.n +
+              '" value="' +
+              val +
+              '">' +
+              "<span>" +
+              optText +
+              "</span>";
+            label.addEventListener("click", () => {
+              card.querySelectorAll(".opt").forEach((o) => o.classList.remove("selected"));
+              label.classList.add("selected");
+              updateProgress();
+            });
+            card.appendChild(label);
+          });
+
+          container.appendChild(card);
+        });
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        allGroups.forEach((g) => renderGroup(g.id, g.list));
+        updateProgress();
+      });
+
+      /* ============ PROGRESS ============ */
+      function updateProgress() {
+        let answered = 0;
+        for (let n = 1; n <= 80; n++) {
+          const checked = document.querySelector('input[name="q' + n + '"]:checked');
+          if (checked) answered++;
+        }
+        document.getElementById("progressFill").style.width = (answered / 80) * 100 + "%";
+        document.getElementById("progressCount").textContent = answered + " / 80 answered";
+      }
+
+      /* ============ TIMER ============ */
+      let totalSeconds = 90 * 60; // 90 mins for TSB
+      let timerInterval = null;
+      function formatTime(s) {
+        const h = Math.floor(s / 3600);
+        const m = Math.floor((s % 3600) / 60);
+        const sec = s % 60;
+        return [h, m, sec].map((v) => String(v).padStart(2, "0")).join(":");
+      }
+      function startTimer() {
+        document.getElementById("startBtn").disabled = true;
+        document.getElementById("pauseBtn").disabled = false;
+        timerInterval = setInterval(() => {
+          totalSeconds--;
+          document.getElementById("timeDisplay").textContent = formatTime(
+            Math.max(totalSeconds, 0),
+          );
+          if (totalSeconds <= 0) {
+            clearInterval(timerInterval);
+            alert("Time's up! The exam will now be submitted automatically.");
+            gradeExam();
+          }
+        }, 1000);
+      }
+      function pauseTimer() {
+        clearInterval(timerInterval);
+        document.getElementById("startBtn").disabled = false;
+        document.getElementById("pauseBtn").disabled = true;
+      }
+
+      /* ============ GRADING ============ */
+      let questionResult = {};
+      let lastWrongList = [];
+      let examGraded = false;
+      let retryUsed = false;
+      let answersRevealed = false;
+
+      function clearBadge(card) {
+        const qtextEl = card.querySelector(".qtext");
+        const oldBadge = qtextEl.querySelector(".badge");
+        if (oldBadge) oldBadge.remove();
+      }
+
+      function markQuestion(n, given, isCorrect, badgeLabel, badgeClass) {
+        const key = answerKey[n];
+        const card = document.getElementById("qcard_" + n);
+        if (!card) return;
+        card.querySelectorAll("input").forEach((inp) => (inp.disabled = true));
+        key.opts.forEach((opt, idx) => {
+          const val = idx + 1;
+          const lbl = document.getElementById("opt_" + n + "_" + val);
+          if (!lbl) return;
+          lbl.classList.remove("correct-answer", "wrong-answer");
+          if (val === key.answer) {
+            lbl.classList.add("correct-answer");
+          } else if (val === given && !isCorrect) {
+            lbl.classList.add("wrong-answer");
+          }
+        });
+        clearBadge(card);
+        const qtextEl = card.querySelector(".qtext");
+        qtextEl.innerHTML += '<span class="badge ' + badgeClass + '">' + badgeLabel + "</span>";
+      }
+
+      function computeTotalsAndRender() {
+        const partTotals = {
+          "Part I: Spelling & Vocabulary": { correct: 0, total: 0 },
+          "Part II: Word Structure": { correct: 0, total: 0 },
+          "Part III: Grouping & Advanced Spelling": { correct: 0, total: 0 },
+        };
+        let totalCorrect = 0;
+        for (let n = 1; n <= 80; n++) {
+          const partName = partOf(n);
+          partTotals[partName].total++;
+          if (questionResult[n] && questionResult[n].isCorrect) {
+            totalCorrect++;
+            partTotals[partName].correct++;
+          }
+        }
+        document.getElementById("totalScore").textContent = totalCorrect + " / 80";
+        document.getElementById("totalPercent").textContent =
+          Math.round((totalCorrect / 80) * 100) + "%";
+        const partScoresEl = document.getElementById("partScores");
+        partScoresEl.innerHTML = "";
+        Object.keys(partTotals).forEach((p) => {
+          const t = partTotals[p];
+          partScoresEl.innerHTML +=
+            '<div class="part-score-card"><div class="n">' +
+            t.correct +
+            " / " +
+            t.total +
+            '</div><div class="l">' +
+            p +
+            "</div></div>";
+        });
+        return totalCorrect;
+      }
+
+      function gradeExam() {
+        let unanswered = [];
+        for (let n = 1; n <= 80; n++) {
+          if (!document.querySelector('input[name="q' + n + '"]:checked')) unanswered.push(n);
+        }
+        if (unanswered.length > 0) {
+          const proceed = confirm(
+            unanswered.length +
+              " question(s) are not answered yet (e.g. Q" +
+              unanswered.slice(0, 5).join(", ") +
+              "...). Submit anyway?",
+          );
+          if (!proceed) return;
+        }
+
+        clearInterval(timerInterval);
+        document.getElementById("startBtn").disabled = true;
+        document.getElementById("pauseBtn").disabled = true;
+
+        questionResult = {};
+        lastWrongList = [];
+
+        for (let n = 1; n <= 80; n++) {
+          const key = answerKey[n];
+          const checkedEl = document.querySelector('input[name="q' + n + '"]:checked');
+          const given = checkedEl ? parseInt(checkedEl.value) : null;
+          const isCorrect = given === key.answer;
+          questionResult[n] = { given: given, isCorrect: isCorrect };
+          if (!isCorrect) lastWrongList.push(n);
+
+          const badgeLabel = isCorrect ? "Correct" : given ? "Incorrect" : "Not answered";
+          const badgeClass = isCorrect ? "ok" : given ? "bad" : "skip";
+          markQuestion(n, given, isCorrect, badgeLabel, badgeClass);
+        }
+
+        computeTotalsAndRender();
+
+        examGraded = true;
+        document.getElementById("resultsPanel").style.display = "block";
+        document.getElementById("submitBtn").disabled = true;
+
+        const retryBtn = document.getElementById("retryBtn");
+        if (lastWrongList.length === 0) {
+          retryBtn.disabled = true;
+          retryBtn.textContent = "🎉 Perfect score - nothing to retry";
+        } else {
+          retryBtn.disabled = false;
+          retryBtn.textContent = "🔁 Review & Retry Wrong Answers (1 time)";
+        }
+
+        document.getElementById("resultsPanel").scrollIntoView({ behavior: "smooth" });
+      }
+
+      /* ============ RETRY ============ */
+      function startRetry() {
+        if (!examGraded || retryUsed || lastWrongList.length === 0) return;
+        retryUsed = true;
+
+        document.getElementById("retryBtn").style.display = "none";
+        document.getElementById("submitRetryWrap").style.display = "block";
+
+        lastWrongList.forEach((n) => {
+          const card = document.getElementById("qcard_" + n);
+          if (!card) return;
+          card.classList.add("retry-mode");
+          clearBadge(card);
+          card.querySelectorAll(".opt").forEach((lbl) => {
+            lbl.classList.remove("correct-answer", "wrong-answer", "selected");
+            const inp = lbl.querySelector("input");
+            inp.disabled = false;
+            inp.checked = false;
+          });
+        });
+
+        const retryNote = document.getElementById("retryNote");
+        retryNote.style.display = "block";
+        retryNote.textContent =
+          "Retry mode: redo the " +
+          lastWrongList.length +
+          " question(s) you got wrong. You get 1 retry attempt.";
+
+        const firstCard = document.getElementById("qcard_" + lastWrongList[0]);
+        if (firstCard) firstCard.scrollIntoView({ behavior: "smooth", block: "center" });
+        updateProgress();
+      }
+
+      function submitRetry() {
+        const stillUnanswered = lastWrongList.filter(
+          (n) => !document.querySelector('input[name="q' + n + '"]:checked'),
+        );
+        if (stillUnanswered.length > 0) {
+          const proceed = confirm(
+            stillUnanswered.length +
+              " retry question(s) are still not answered. Submit retry anyway?",
+          );
+          if (!proceed) return;
+        }
+
+        let fixedCount = 0;
+        lastWrongList.forEach((n) => {
+          const key = answerKey[n];
+          const checkedEl = document.querySelector('input[name="q' + n + '"]:checked');
+          const given = checkedEl ? parseInt(checkedEl.value) : null;
+          const isCorrect = given === key.answer;
+          questionResult[n] = { given: given, isCorrect: isCorrect };
+          if (isCorrect) fixedCount++;
+
+          const card = document.getElementById("qcard_" + n);
+          if (card) card.classList.remove("retry-mode");
+
+          const badgeLabel = isCorrect
+            ? "Correct (retry)"
+            : given
+              ? "Incorrect (retry)"
+              : "Not answered";
+          const badgeClass = isCorrect ? "ok" : given ? "bad" : "skip";
+          markQuestion(n, given, isCorrect, badgeLabel, badgeClass);
+        });
+
+        computeTotalsAndRender();
+
+        document.getElementById("submitRetryWrap").style.display = "none";
+        const retryNote = document.getElementById("retryNote");
+        retryNote.style.display = "block";
+        retryNote.textContent =
+          "Retry complete: " +
+          fixedCount +
+          " of " +
+          lastWrongList.length +
+          " previously wrong answer(s) fixed.";
+
+        document.getElementById("resultsPanel").scrollIntoView({ behavior: "smooth" });
+      }
+
+      /* ============ VIEW CORRECT ANSWERS ============ */
+      function revealAllAnswers() {
+        answersRevealed = !answersRevealed;
+        const revealBtn = document.getElementById("revealBtn");
+
+        for (let n = 1; n <= 80; n++) {
+          const key = answerKey[n];
+          const card = document.getElementById("qcard_" + n);
+          if (!card) continue;
+          key.opts.forEach((opt, idx) => {
+            const val = idx + 1;
+            const lbl = document.getElementById("opt_" + n + "_" + val);
+            if (!lbl) return;
+            if (val === key.answer) {
+              lbl.classList.toggle(
+                "correct-answer",
+                answersRevealed || (questionResult[n] && questionResult[n].isCorrect),
+              );
+            }
+          });
+        }
+
+        revealBtn.textContent = answersRevealed
+          ? "🙈 Hide Correct Answers"
+          : "📖 View Correct Answers";
+        if (answersRevealed) {
+          document.getElementById("grp_spelling").scrollIntoView({ behavior: "smooth" });
+        }
+      }
+
+      document.getElementById("examForm").addEventListener("change", updateProgress);
+    </script>
+  </body>
+</html>
