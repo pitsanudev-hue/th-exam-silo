@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>แบบฝึกหัดคิดเลขเร็ว (ตัวเลข 3 ตัว คละ บวก ลบ คูณ หาร)</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+      body {
+        background-color: #f4f7f6;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .header-panel {
+        position: sticky;
+        top: 10px;
+        z-index: 100;
+        background: #ffffff;
+        padding: 15px 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        display: flex;
+        gap: 30px;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .stat-box {
+        text-align: center;
+      }
+      .stat-label {
+        font-size: 0.85rem;
+        color: #7f8c8d;
+        margin-bottom: 2px;
+      }
+      .stat-value {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #2c3e50;
+      }
+      .progress-container {
+        width: 200px;
+        background-color: #e0e0e0;
+        border-radius: 10px;
+        height: 12px;
+        overflow: hidden;
+      }
+      .progress-bar {
+        height: 100%;
+        background-color: #27ae60;
+        width: 0%;
+        transition: width 0.3s ease;
+      }
+      .container {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        max-width: 1200px;
+        width: 100%;
+      }
+      @media (max-width: 1024px) {
+        .container {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .header-panel {
+          gap: 15px;
+          padding: 10px 15px;
+        }
+      }
+      @media (max-width: 600px) {
+        .container {
+          grid-template-columns: repeat(1, 1fr);
+        }
+      }
+      .card {
+        background: #fff;
+        border-radius: 8px;
+        padding: 10px 15px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-left: 5px solid #ccc;
+      }
+      .card.active {
+        border-left-color: #8e44ad;
+        background-color: #f4ecf7;
+        box-shadow: 0 4px 8px rgba(142, 68, 173, 0.2);
+      }
+      .card.completed {
+        border-left-color: #27ae60;
+        background-color: #eafaf1;
+      }
+      .card.locked {
+        opacity: 0.5;
+      }
+      .item-num {
+        font-weight: bold;
+        color: #7f8c8d;
+        width: 35px;
+      }
+      .problem {
+        font-weight: 600;
+        font-size: 1.05rem;
+        flex-grow: 1;
+        color: #2c3e50;
+        padding-right: 5px;
+      }
+      input[type="number"] {
+        width: 85px;
+        padding: 6px;
+        font-size: 1rem;
+        text-align: center;
+        border: 1px solid #bdc3c7;
+        border-radius: 4px;
+        outline: none;
+      }
+      input[type="number"]:focus {
+        border-color: #8e44ad;
+      }
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      input[type="number"] {
+        -moz-appearance: textfield;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header-panel">
+      <div class="stat-box">
+        <div class="stat-label">เวลาที่ใช้</div>
+        <div class="stat-value" id="timer">00:00</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">ความก้าวหน้า</div>
+        <div class="stat-value" id="progress-text">0 / 100</div>
+        <div class="progress-container">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container" id="quiz-container"></div>
+
+    <script>
+      function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+      // คำนวณหาผลลัพธ์ของสมการ A op1 B op2 C
+      function evaluateExpression(a, op1, b, op2, c) {
+        // กรณี คูณ/หาร มีลำดับความสำคัญสูงกว่า บวก/ลบ
+        const isMulDiv = (op) => op === "×" || op === "÷";
+        const calc = (n1, op, n2) => {
+          if (op === "+") return n1 + n2;
+          if (op === "-") return n1 - n2;
+          if (op === "×") return n1 * n2;
+          if (op === "÷") return n1 / n2;
+        };
+
+        if (isMulDiv(op2) && !isMulDiv(op1)) {
+          // op2 สำคัญกว่า ทำ b op2 c ก่อน
+          if (op2 === "÷" && b % c !== 0) return null; // ไม่ลงตัว
+          const rightRes = calc(b, op2, c);
+          const finalRes = calc(a, op1, rightRes);
+          if (finalRes < 0 || !Number.isInteger(finalRes)) return null;
+          return finalRes;
+        } else {
+          // คำนวณจากซ้ายไปขวา
+          if (op1 === "÷" && a % b !== 0) return null;
+          const leftRes = calc(a, op1, b);
+          if (leftRes < 0) return null;
+
+          if (op2 === "÷" && leftRes % c !== 0) return null;
+          const finalRes = calc(leftRes, op2, c);
+          if (finalRes < 0 || !Number.isInteger(finalRes)) return null;
+          return finalRes;
+        }
+      }
+
+      // สุ่มสร้างโจทย์ 1 ข้อโดยกำหนดเงื่อนไขให้เป็นตัวเลขไม่เกิน 3 หลัก จำนวน 3 ตัว
+      function generateSingleProblem() {
+        const ops = ["+", "-", "×", "÷"];
+
+        while (true) {
+          const op1 = ops[getRandomInt(0, 3)];
+          const op2 = ops[getRandomInt(0, 3)];
+
+          let a, b, c;
+
+          // ปรับช่วงตัวเลขให้เหมาะสม ไม่ใหญ่จนคำนวณมือไม่ได้
+          // if (op1 === "×" || op2 === "×") {
+          //   a = getRandomInt(5, 50);
+          //   b = getRandomInt(2, 20);
+          //   c = getRandomInt(2, 20);
+          // } else if (op1 === "÷" || op2 === "÷") {
+          //   a = getRandomInt(10, 500);
+          //   b = getRandomInt(2, 50);
+          //   c = getRandomInt(2, 50);
+          // } else {
+          //   a = getRandomInt(10, 999);
+          //   b = getRandomInt(10, 999);
+          //   c = getRandomInt(10, 999);
+          // }
+
+          // โค้ดใหม่ (ตัวเลขไม่เกิน 2 หลัก)
+          if (op1 === "×" || op2 === "×") {
+            a = getRandomInt(2, 25);
+            b = getRandomInt(2, 12);
+            c = getRandomInt(2, 12);
+          } else if (op1 === "÷" || op2 === "÷") {
+            a = getRandomInt(10, 99);
+            b = getRandomInt(2, 12);
+            c = getRandomInt(2, 12);
+          } else {
+            a = getRandomInt(10, 99);
+            b = getRandomInt(10, 99);
+            c = getRandomInt(10, 99);
+          }
+
+          const answer = evaluateExpression(a, op1, b, op2, c);
+
+          // ต้องได้ผลลัพธ์ที่เป็นจำนวนเต็มบวก ไม่เกิน 9,999
+          if (answer !== null && answer >= 0 && answer <= 9999) {
+            return {
+              expr: `${a} ${op1} ${b} ${op2} ${c}`,
+              ans: answer,
+            };
+          }
+        }
+      }
+
+      function generateRandomProblems(total = 100) {
+        const list = [];
+        for (let i = 1; i <= total; i++) {
+          const p = generateSingleProblem();
+          list.push({
+            id: i,
+            expr: p.expr,
+            ans: p.ans,
+          });
+        }
+        return list;
+      }
+
+      let seconds = 0;
+      let timerInterval = null;
+      let isTimerStarted = false;
+
+      function startTimer() {
+        if (!isTimerStarted) {
+          isTimerStarted = true;
+          timerInterval = setInterval(() => {
+            seconds++;
+            const mins = String(Math.floor(seconds / 60)).padStart(2, "0");
+            const secs = String(seconds % 60).padStart(2, "0");
+            document.getElementById("timer").textContent = `${mins}:${secs}`;
+          }, 1000);
+        }
+      }
+
+      function stopTimer() {
+        clearInterval(timerInterval);
+      }
+
+      const problems = generateRandomProblems(100);
+      const container = document.getElementById("quiz-container");
+
+      problems.forEach((p, index) => {
+        const card = document.createElement("div");
+        card.className = `card ${index === 0 ? "active" : "locked"}`;
+        card.id = `card-${p.id}`;
+
+        card.innerHTML = `
+          <span class="item-num">${p.id}.</span>
+          <span class="problem">${p.expr} =</span>
+          <input type="number" id="input-${p.id}" ${index !== 0 ? "disabled" : ""} autocomplete="off">
+        `;
+
+        container.appendChild(card);
+
+        const input = card.querySelector("input");
+
+        input.addEventListener("input", function () {
+          startTimer();
+
+          const val = parseInt(this.value);
+          if (val === p.ans) {
+            card.classList.remove("active");
+            card.classList.add("completed");
+            this.disabled = true;
+
+            const completedCount = p.id;
+            document.getElementById("progress-text").textContent = `${completedCount} / 100`;
+            document.getElementById("progress-bar").style.width = `${completedCount}%`;
+
+            const nextId = p.id + 1;
+            const nextCard = document.getElementById(`card-${nextId}`);
+            if (nextCard) {
+              nextCard.classList.remove("locked");
+              nextCard.classList.add("active");
+              const nextInput = nextCard.querySelector("input");
+              nextInput.disabled = false;
+              nextInput.focus();
+            } else {
+              stopTimer();
+              const finalMins = Math.floor(seconds / 60);
+              const finalSecs = seconds % 60;
+              alert(
+                `ยอดเยี่ยมมาก! คุณทำชุดโจทย์ 3 ตัวแปร (บวก ลบ คูณ หาร) ครบ 100 ข้อแล้ว\nเวลาที่ใช้ไปทั้งหมด: ${finalMins} นาที ${finalSecs} วินาที`,
+              );
+            }
+          }
+        });
+      });
+
+      document.getElementById("input-1").focus();
+    </script>
+  </body>
+</html>
