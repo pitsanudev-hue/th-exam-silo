@@ -153,7 +153,7 @@
 
                     const card = document.createElement('a');
                     card.className = 'card';
-                    card.href = file.name;
+                    card.href = 'quizzes' + file.name;
                     card.innerHTML = `
                         <div class="card-title">${cleanName}</div>
                         <div class="card-tag">HTML Quiz</div>
@@ -191,7 +191,7 @@
 
                         const card = document.createElement('a');
                         card.className = 'card';
-                        card.href = fileName;
+                        card.href = 'quizzes/' + fileName;
                         card.innerHTML = `
                             <div class="card-title">${cleanName}</div>
                             <div class="card-tag">Saved Offline</div>
