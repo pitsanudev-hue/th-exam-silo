@@ -119,7 +119,7 @@
 
             try {
                 // ดึงรายการไฟล์ใน Repository ผ่าน GitHub API
-                const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/quizze/`);
+                const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/quizzes/`);
                 
                 if (!response.ok) {
                     throw new Error('ไม่สามารถเชื่อมต่อ GitHub API ได้');
@@ -153,7 +153,7 @@
 
                     const card = document.createElement('a');
                     card.className = 'card';
-                    card.href = 'quizzes' + file.name;
+                    card.href = 'quizzes/' + file.name;
                     card.innerHTML = `
                         <div class="card-title">${cleanName}</div>
                         <div class="card-tag">HTML Quiz</div>
