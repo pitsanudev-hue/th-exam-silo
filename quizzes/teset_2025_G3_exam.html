@@ -1,382 +1,1214 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="th">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ระบบข้อสอบออนไลน์พร้อมจับเวลาและตรวจคำตอบ</title>
-  <style>
-    :root {
-      --primary: #2f6fed;
-      --primary-dark: #1e4fbb;
-      --bg: #f4f6fb;
-      --card: #ffffff;
-      --ok: #1f9d55;
-      --bad: #e0403f;
-      --border: #dfe3ec;
-      --text: #1f2430;
-      --muted: #6b7280;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TESET 2025 - Thailand English Skills Evaluation Test (ป.1 - ป.3)</title>
+    <style>
+      :root {
+        --primary-color: #e65100;
+        --primary-light: #fff3e0;
+        --secondary-color: #29b6f6;
+        --text-color: #333333;
+        --bg-color: #f4f6f9;
+        --card-bg: #ffffff;
+        --correct-color: #2e7d32;
+        --incorrect-color: #c62828;
+        --border-radius: 8px;
+      }
 
-    * {
-      box-sizing: border-box;
-    }
+      body {
+        font-family: "Sarabun", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: var(--text-color);
+        background-color: var(--bg-color);
+        margin: 0;
+        padding: 20px;
+      }
 
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      padding: 20px 16px 100px;
-    }
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        background: var(--card-bg);
+        padding: 30px;
+        border-radius: var(--border-radius);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
 
-    header {
-      max-width: 760px;
-      margin: 0 auto 20px;
-      text-align: center;
-    }
+      header {
+        text-align: center;
+        border-bottom: 3px solid var(--primary-color);
+        padding-bottom: 20px;
+        margin-bottom: 30px;
+      }
 
-    /* แถบจับเวลาแบบ Sticky ติดด้านบน */
-    .timer-bar {
-      max-width: 760px;
-      margin: 0 auto 20px;
-      background: var(--card);
-      border-radius: 14px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      padding: 14px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 10px;
-      z-index: 100;
-    }
+      header h1 {
+        color: var(--primary-color);
+        margin: 0 0 10px 0;
+        font-size: 1.8rem;
+      }
 
-    .time-display {
-      font-size: 1.6rem;
-      font-weight: 700;
-      color: var(--primary-dark);
-      font-variant-numeric: tabular-nums;
-    }
+      header h2 {
+        font-size: 1.2rem;
+        color: #555;
+        margin: 0 0 15px 0;
+      }
 
-    .btn {
-      border: none;
-      border-radius: 8px;
-      padding: 10px 18px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-      color: #fff;
-      background: var(--primary);
-      transition: background 0.2s, transform 0.1s;
-    }
+      .exam-info {
+        background-color: var(--primary-light);
+        padding: 15px;
+        border-radius: var(--border-radius);
+        font-size: 0.95rem;
+        text-align: left;
+        margin-bottom: 20px;
+      }
 
-    .btn:active {
-      transform: scale(0.97);
-    }
+      .section-header {
+        background-color: #eceff1;
+        padding: 12px 20px;
+        margin: 30px 0 20px 0;
+        border-left: 5px solid var(--primary-color);
+        border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        font-weight: bold;
+        font-size: 1.1rem;
+      }
 
-    .btn.secondary {
-      background: #8a93a6;
-    }
+      .passage-box {
+        background-color: #f8f9fa;
+        border: 1px solid #e0e0e0;
+        border-radius: var(--border-radius);
+        padding: 20px;
+        margin-bottom: 20px;
+        font-size: 0.95rem;
+      }
 
-    .btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
+      .passage-title {
+        font-weight: bold;
+        color: var(--primary-color);
+        margin-bottom: 10px;
+      }
 
-    main {
-      max-width: 760px;
-      margin: 0 auto;
-    }
+      .question-card {
+        border: 1px solid #e0e0e0;
+        border-radius: var(--border-radius);
+        padding: 20px;
+        margin-bottom: 20px;
+        background-color: #fff;
+        transition: box-shadow 0.2s;
+      }
 
-    .qcard {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 16px;
-    }
+      .question-card:hover {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      }
 
-    .qtext {
-      font-size: 1.05rem;
-      font-weight: 600;
-      margin-bottom: 12px;
-    }
+      .question-number {
+        font-weight: bold;
+        color: var(--primary-color);
+        margin-bottom: 8px;
+      }
 
-    .opt {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 10px 14px;
-      margin-bottom: 8px;
-      cursor: pointer;
-      transition: background 0.15s, border-color 0.15s;
-    }
+      .question-text {
+        font-weight: 500;
+        margin-bottom: 15px;
+        white-space: pre-line;
+      }
 
-    .opt:hover {
-      background: #f0f4ff;
-    }
+      .question-image {
+        max-width: 100%;
+        height: auto;
+        max-height: 300px;
+        display: block;
+        margin: 15px 0;
+        border-radius: var(--border-radius);
+        border: 1px solid #ddd;
+      }
 
-    .opt input {
-      width: 18px;
-      height: 18px;
-      accent-color: var(--primary);
-    }
+      .options-list {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+      }
 
-    /* สไตล์แสดงผลหลังตรวจคำตอบ */
-    .opt.correct-answer {
-      border-color: var(--ok);
-      background: #eaf7ee;
-    }
+      .option-item {
+        margin-bottom: 10px;
+      }
 
-    .opt.wrong-answer {
-      border-color: var(--bad);
-      background: #fdeceb;
-    }
+      .option-label {
+        display: flex;
+        align-items: center;
+        padding: 10px 15px;
+        border: 1px solid #e0e0e0;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        transition:
+          background-color 0.2s,
+          border-color 0.2s;
+      }
 
-    .badge {
-      display: inline-block;
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 12px;
-      margin-left: 8px;
-    }
+      .option-label:hover {
+        background-color: #f5f5f5;
+      }
 
-    .badge.ok {
-      background: #eaf7ee;
-      color: var(--ok);
-    }
+      .option-label input[type="radio"] {
+        margin-right: 12px;
+      }
 
-    .badge.bad {
-      background: #fdeceb;
-      color: var(--bad);
-    }
+      /* Result styling */
+      .result-box {
+        display: none;
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #fff;
+        padding: 20px;
+        border-radius: var(--border-radius);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        border-top: 4px solid var(--primary-color);
+      }
 
-    .badge.skip {
-      background: #f1f1f1;
-      color: var(--muted);
-    }
+      .correct-answer {
+        background-color: #e8f5e9 !important;
+        border-color: var(--correct-color) !important;
+        color: var(--correct-color);
+        font-weight: bold;
+      }
 
-    /* กล่องสรุปผลคะแนน */
-    .results-card {
-      display: none;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: #fff;
-      border-radius: 14px;
-      padding: 24px;
-      text-align: center;
-      margin-bottom: 20px;
-    }
+      .wrong-answer {
+        background-color: #ffebee !important;
+        border-color: var(--incorrect-color) !important;
+        color: var(--incorrect-color);
+      }
 
-    .score-num {
-      font-size: 2.8rem;
-      font-weight: 800;
-      margin: 8px 0;
-    }
-  </style>
-</head>
-<body>
+      .submit-btn {
+        display: block;
+        width: 100%;
+        max-width: 300px;
+        margin: 40px auto 20px auto;
+        padding: 15px;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: var(--border-radius);
+        font-size: 1.1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
 
-  <header>
-    <h1>แบบทดสอบออนไลน์ (Practice Exam)</h1>
-  </header>
+      .submit-btn:hover {
+        background-color: #d84315;
+      }
 
-  <!-- แถบควบคุมเวลา -->
-  <div class="timer-bar">
-    <div>
-      <div style="font-size: 0.8rem; color: var(--muted);">เวลาที่เหลือ</div>
-      <div class="time-display" id="timeDisplay">00:05:00</div>
-    </div>
-    <div style="display: flex; gap: 8px;">
-      <button class="btn" id="startBtn" onclick="startTimer()">เริ่มทำข้อสอบ</button>
-      <button class="btn secondary" id="pauseBtn" onclick="pauseTimer()" disabled>หยุดชั่วคราว</button>
-    </div>
-  </div>
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 15px 0;
+      }
 
-  <main>
-    <!-- กล่องสรุปคะแนน -->
-    <div class="results-card" id="resultsCard">
-      <div style="font-size: 0.95rem; opacity: 0.9;">ผลการสอบของคุณ</div>
-      <div class="score-num" id="scoreDisplay">0 / 0</div>
-      <div id="percentDisplay" style="font-size: 1.1rem;">0%</div>
-    </div>
+      table,
+      th,
+      td {
+        border: 1px solid #ccc;
+      }
 
-    <!-- รายการข้อสอบ -->
-    <form id="examForm">
-      <div id="quizContainer"></div>
+      th,
+      td {
+        padding: 8px 12px;
+        text-align: center;
+      }
 
-      <div style="text-align: center; margin-top: 24px;">
-        <button type="button" class="btn" id="submitBtn" onclick="gradeExam()" style="padding: 14px 32px; font-size: 1.1rem;">
-          ส่งคำตอบ
-        </button>
+      th {
+        background-color: #f2f2f2;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>TESET 2025</h1>
+        <h2>Thailand English Skills Evaluation Test</h2>
+        <p>โครงการประเมินทักษะภาษาอังกฤษระดับประเทศ ครั้งที่ 6 (ระดับประถมศึกษาตอนต้น, ป.1-ป.3)</p>
+      </header>
+
+      <div class="exam-info">
+        <strong>คำชี้แจง:</strong> ข้อสอบมีทั้งหมด 100 ข้อ คะแนนเต็ม 100 คะแนน
+        <ul>
+          <li>PART I: Speaking (Items 1-25)</li>
+          <li>PART II: Grammar and Structure (Items 26-50)</li>
+          <li>PART III: Vocabulary (Items 51-70)</li>
+          <li>PART IV: Reading (Items 71-100)</li>
+        </ul>
       </div>
-    </form>
-  </main>
 
-  <script>
-    /* ============ 1. ข้อมูลข้อสอบ (Questions Data) ============ */
-    const questions = [
-      {
-        n: 1,
-        q: "ข้อใดคือเมืองหลวงของประเทศไทย?",
-        opts: ["เชียงใหม่", "กรุงเทพมหานคร", "ชลบุรี", "ภูเก็ต"],
-        a: 2 // ลำดับคำตอบที่ถูกต้อง (เริ่มต้นที่ 1)
-      },
-      {
-        n: 2,
-        q: "1 + 1 มีค่าเท่ากับเท่าใด?",
-        opts: ["1", "2", "3", "4"],
-        a: 2
-      },
-      {
-        n: 3,
-        q: "HTML ย่อมาจากอะไร?",
-        opts: [
-          "Hyper Text Markup Language",
-          "High Text Machine Language",
-          "Hyperlink Text Mode Language",
-          "Home Tool Markup Language"
-        ],
-        a: 1
-      }
-    ];
+      <form id="quizForm">
+        <div id="questionsContainer"></div>
+        <button type="button" class="submit-btn" onclick="checkAnswers()">
+          ส่งคำตอบ / ตรวจคะแนน
+        </button>
+      </form>
+    </div>
 
-    /* ============ 2. การเรนเดอร์คำถาม (Render Questions) ============ */
-    function renderQuiz() {
-      const container = document.getElementById("quizContainer");
-      container.innerHTML = "";
+    <div id="resultModal" class="result-box">
+      <h3>ผลการสอบ</h3>
+      <p>คะแนนที่ได้: <span id="score">0</span> / 100</p>
+      <p>คิดเป็น: <span id="percentage">0</span>%</p>
+    </div>
 
-      questions.forEach((item) => {
-        const card = document.createElement("div");
-        card.className = "qcard";
-        card.id = "qcard_" + item.n;
+    <script>
+      const examData = [
+        // PART 1: Speaking
+        { section: "PART I: Speaking (Items 1-25) - Situational Dialogues" },
+        {
+          n: 1,
+          q: "Pim sees a boy drop his wallet in the hallway. What should she say to help him?",
+          opts: [
+            "Why did you drop your wallet?",
+            "Is this your wallet? Here you go.",
+            "Don't leave your things on the floor.",
+            "This wallet looks old.",
+          ],
+          a: 2,
+        },
+        {
+          n: 2,
+          q: "Tom wants to borrow a ruler from a classmate. What should he say?",
+          opts: [
+            "Can you give me your ruler forever?",
+            "I lost my ruler. Can you buy me one?",
+            "May I borrow your ruler, please?",
+            "Where do you keep your rulers?",
+          ],
+          a: 3,
+        },
+        {
+          n: 3,
+          q: "You don't understand the homework instructions. What should you ask your teacher?",
+          opts: [
+            "Is this homework important?",
+            "Can you explain the homework again, please?",
+            "Why is this homework so difficult?",
+            "Do we have to do all the homework?",
+          ],
+          a: 2,
+        },
+        {
+          n: 4,
+          q: "Your friend looks sad. What is a kind way to ask about it?",
+          opts: [
+            "Did someone yell at you?",
+            "Are you okay? You look a bit sad.",
+            "What did you do this time?",
+            "Why are you always unhappy?",
+          ],
+          a: 2,
+        },
+        {
+          n: 5,
+          q: "Sophia wants to invite her friend to her birthday party. What should she say?",
+          opts: [
+            "Would you like to come to my party?",
+            "Do you want a gift from me?",
+            "I'll come to your party soon.",
+            "Where is your party?",
+          ],
+          a: 1,
+        },
+        {
+          n: 6,
+          q: "You accidentally bump into someone in the hallway. What should you say?",
+          opts: [
+            "Sorry! I didn't see you there.",
+            "Watch where you're going!",
+            "It's your fault, not mine.",
+            "You're in my way again.",
+          ],
+          a: 1,
+        },
+        {
+          n: 7,
+          q: "Tom forgot his homework at home. He sees his teacher arriving. What should Tom say?",
+          opts: [
+            "I didn't do my homework.",
+            "I forgot my homework; I'm sorry.",
+            "My homework is at home because I like it there.",
+            "You will get my homework later.",
+          ],
+          a: 2,
+        },
+        {
+          n: 8,
+          q: "Lily arrives late and meets her friend alone. What should she say to apologize?",
+          opts: [
+            "I'm sorry I'm late.",
+            "Sorry, I was late because you were too early.",
+            "You waited for nothing.",
+            "It's not my fault.",
+          ],
+          a: 1,
+        },
+        {
+          n: 9,
+          q: "During a call, you didn't hear the last sentence. What should you say?",
+          opts: [
+            "Sorry, repeat that immediately!",
+            "I don't know what you said.",
+            "You talk too quickly.",
+            "Pardon? Could you say that again?",
+          ],
+          a: 4,
+        },
+        {
+          n: 10,
+          q: "Your friend says they're busy tomorrow. What should you ask to find out when they are free?",
+          opts: [
+            "When you are free?",
+            "When will free you be?",
+            "When are you free?",
+            "What time are free you?",
+          ],
+          a: 3,
+        },
 
-        let optsHTML = "";
-        item.opts.forEach((opt, idx) => {
-          const val = idx + 1;
-          optsHTML += `
-            <label class="opt" id="opt_${item.n}_${val}">
-              <input type="radio" name="q${item.n}" value="${val}">
-              <span>${opt}</span>
-            </label>
-          `;
-        });
+        { section: "PART I: Speaking - Conversations (Items 11-20)" },
+        {
+          n: 11,
+          q: "Tom: _______\nBill: No, I'm busy. How about Saturday?",
+          opts: [
+            "What will you do tomorrow?",
+            "Are you free on Saturday?",
+            "Are you free tomorrow?",
+            "Are you busy tomorrow?",
+          ],
+          a: 3,
+        },
+        {
+          n: 12,
+          q: "Lena: _______\nMark: Not yet, but I've heard it's really good.",
+          opts: [
+            "Will you go to the new store tomorrow?",
+            "Did you eat at the new restaurant again?",
+            "What is the new menu at the Chinese restaurant?",
+            "Have you seen the new movie yet?",
+          ],
+          a: 4,
+        },
+        {
+          n: 13,
+          q: "Bob: I'm really hungry.\nPim: Yes, there's a nice café around the corner.",
+          opts: [
+            "But I am on diet.",
+            "Do you know a good place to eat?",
+            "Do you want to try the new burger restaurant?",
+            "Do you want Chinese food or Thai food this time?",
+          ],
+          a: 2,
+        },
+        {
+          n: 14,
+          q: "Anna: Hi, do you want to go to the park?\nBen: _______\nAnna: Let's meet at 3 o'clock near the cafe.",
+          opts: [
+            "I can't today. I'm sorry.",
+            "Sure, but I'm only free in the morning.",
+            "That sounds great! What time should we meet?",
+            "Let's go to the cinema instead, in the evening.",
+          ],
+          a: 3,
+        },
+        {
+          n: 15,
+          q: "Client: _______\nWaiter: Of course! Here you go. Would you like a drink first?",
+          opts: [
+            "May I order a drink first?",
+            "I will order a salad and a glass of water.",
+            "Can I see the menu, please?",
+            "Is the salad vegan?",
+          ],
+          a: 3,
+        },
+        {
+          n: 16,
+          q: "Bill: The cows are out in the field early today.\nSam: Yes, I let them out before sunrise.\nBill: _______",
+          opts: [
+            "You must have been up really early then!",
+            "Try to put them inside before sunrise.",
+            "You must have been up really late then!",
+            "The cows were inside early too.",
+          ],
+          a: 1,
+        },
+        {
+          n: 17,
+          q: "Alex: Did you watch the soccer match last night?\nBrian: Yes, it was really exciting.\nAlex: I know! I jumped off the couch when they scored the winning goal.",
+          opts: [
+            "But there were no goals in the match.",
+            "But sadly, the team drew.",
+            "Our team lost in a boring match.",
+            "Our team scored in the last minute!",
+          ],
+          a: 4,
+        },
+        {
+          n: 18,
+          q: "Worker 1: Did you finish checking the machines this morning?\nWorker 2: _______\nWorker 1: Great, then we can start the next batch.",
+          opts: [
+            "Yes, and this is the last batch.",
+            "Yes, everything is working fine now.",
+            "No, I didn't finish it.",
+            "Yes, but one of the machines is broken.",
+          ],
+          a: 2,
+        },
+        {
+          n: 19,
+          q: "Customer: Hello, I'm looking for a new phone.\nSalesperson: Sure! _______\nCustomer: I want a good camera and long battery life.",
+          opts: [
+            "What features are you looking for?",
+            "What color do you want?",
+            "How much memory do you want?",
+            "What is your budget?",
+          ],
+          a: 1,
+        },
+        {
+          n: 20,
+          q: "Engineer: _______\nWorker: Yes, everything is correct and level.",
+          opts: [
+            "Did you check the measurements?",
+            "Is the cement ready to use?",
+            "How many workers do we have today?",
+            "What time will you finish your work today?",
+          ],
+          a: 1,
+        },
 
-        card.innerHTML = `
-          <div class="qtext" id="qtext_${item.n}">ข้อ ${item.n}. ${item.q}</div>
-          ${optsHTML}
-        `;
-        container.appendChild(card);
-      });
-    }
+        { section: "PART I: Speaking - Short Situational Contexts (Items 21-25)" },
+        {
+          n: 21,
+          q: "Bob: I'd like to withdraw fifty dollars, please.\nBill: Sure. Please enter your PIN.\n\nWhere are they?",
+          opts: ["A restaurant", "A post office", "A bank", "A library"],
+          a: 3,
+        },
+        {
+          n: 22,
+          q: "Robert: The concert starts at 7 pm.\nElen: Let's find our seats.\n\nWhere are they?",
+          opts: ["A library", "A cinema", "A stadium", "A restaurant"],
+          a: 3,
+        },
+        {
+          n: 23,
+          q: "Brandon: Excuse me, is the 5:45 train to Liverpool usually on time?\nSam: Nearly always, but today there's a slight delay.\n\nWhat does Sam say about the train?",
+          opts: ["It's late", "It's early", "It's cancelled", "It's full"],
+          a: 1,
+        },
+        {
+          n: 24,
+          q: "Richard: Turn left at the traffic lights, then go straight for about 200 metres.\nSam: Thank you, I think I can find it now.\n\nWhat did Bill give?",
+          opts: ["A receipt", "A key", "A menu", "Directions"],
+          a: 4,
+        },
+        {
+          n: 25,
+          q: "Mia: We haven't met since university graduation in 2010!\nSam: Yes; time really flies, doesn't it?\n\nWhat does Sam mean by \"time really flies\"?",
+          opts: [
+            "Planes go fast",
+            "Birds migrate",
+            "Time passes quickly",
+            "Graduation certificates",
+          ],
+          a: 3,
+        },
 
-    /* ============ 3. ระบบจับเวลา (Timer System) ============ */
-    let totalSeconds = 5 * 60; // กำหนดเวลาทำข้อสอบ (เช่น 5 นาที = 300 วินาที)
-    let timerInterval = null;
+        // PART 2: Grammar and Structure
+        { section: "PART II: Grammar and Structure (Items 26-50)" },
+        {
+          n: 26,
+          q: "She always _______ her homework before dinner these days.",
+          opts: ["finish", "finished", "finishing", "finishes"],
+          a: 4,
+        },
+        {
+          n: 27,
+          q: "_______ shoes in the window display across the street are very nice.",
+          opts: ["Those", "This", "That", "These"],
+          a: 1,
+        },
+        {
+          n: 28,
+          q: "The dog curled up _______ the child on the couch.",
+          opts: ["on / slept", "behind / sleeping", "under / sleep", "in / sleeping"],
+          a: 2,
+        },
+        {
+          n: 29,
+          q: "_______ some dusty books on the bookshelf behind the classroom door.",
+          opts: ["There has", "There", "There are", "There is"],
+          a: 3,
+        },
+        {
+          n: 30,
+          q: "My sister lent _______ favorite sweater. Later, she found _______ book on the desk.",
+          opts: ["her / mine", "his / mine", "my / his", "her / my"],
+          a: 4,
+        },
+        {
+          n: 31,
+          q: "_______ invited _______ to the party because he helped them last week.",
+          opts: ["Them / her", "They / her", "They / him", "He / him"],
+          a: 3,
+        },
+        {
+          n: 32,
+          q: "He made dinner all by _______ and felt very proud.",
+          opts: ["he", "his", "himself", "him"],
+          a: 3,
+        },
+        {
+          n: 33,
+          q: "She didn't have _______ time, but she answered _______ questions.",
+          opts: ["many / many", "much / much", "much / many", "many / much"],
+          a: 3,
+        },
+        {
+          n: 34,
+          q: "This button is broken, so the machine _______ start.",
+          opts: ["can", "can't", "may", "must"],
+          a: 2,
+        },
+        {
+          n: 35,
+          q: "She _______ a new jacket at the market yesterday.",
+          opts: ["bought", "buy", "buyed", "was buy"],
+          a: 1,
+        },
+        {
+          n: 36,
+          q: "The farmers took _______ tools to the field, but _______ tractors are owned by the company.",
+          opts: ["his / these", "him / those", "them / this", "their / those"],
+          a: 4,
+        },
+        {
+          n: 37,
+          q: "The coach told the player that _______ needed to practice _______ more than before.",
+          opts: ["him / much", "he / much", "his / many", "he / many"],
+          a: 2,
+        },
+        {
+          n: 38,
+          q: "I like coffee more _______ tea on the table.",
+          opts: ["than / that", "then / than", "than / then", "that / than"],
+          a: 1,
+        },
+        {
+          n: 39,
+          q: "Do you remember the place _______ we met and the time _______ the man _______ helped us arrived?",
+          opts: [
+            "when / where / who",
+            "where / when / who",
+            "who / where / when",
+            "where / who / when",
+          ],
+          a: 2,
+        },
+        {
+          n: 40,
+          q: "If _______ finish _______ homework early, the extra snacks will be _______.",
+          opts: [
+            "your / yours / you",
+            "yours / you / your",
+            "you / your / yours",
+            "you / yours / your",
+          ],
+          a: 3,
+        },
+        {
+          n: 41,
+          q: "This road is _______ than the one we took yesterday.",
+          opts: ["shorter", "short", "shortest", "more shorter"],
+          a: 1,
+        },
+        {
+          n: 42,
+          q: "The students brought _______ books and a _______ pencils for the test.",
+          opts: ["their / few", "some / some", "their / some", "some / their"],
+          a: 1,
+        },
+        {
+          n: 43,
+          q: "We finished _______ project before _______ group even started _______.",
+          opts: [
+            "their / our / theirs",
+            "our / their / theirs",
+            "theirs / their / our",
+            "our / theirs / their",
+          ],
+          a: 2,
+        },
+        {
+          n: 44,
+          q: "He left _______ umbrella _______ the table _______ the café.",
+          opts: ["an / on / at", "at / on / an", "on / at / an", "an / at / on"],
+          a: 1,
+        },
+        {
+          n: 45,
+          q: "They invited _______ to join their team, but we decided to watch _______ play instead.",
+          opts: ["us / us", "them / us", "then / them", "us / them"],
+          a: 4,
+        },
+        {
+          n: 46,
+          q: "_______ book is hidden _______ the shelf.",
+          opts: ["These / in", "That / there", "This / behind", "Those / near"],
+          a: 3,
+        },
+        {
+          n: 47,
+          q: "She was _______ tired to go out, and the room was _______ noisy anyway.",
+          opts: ["to / too", "too / too", "too / to", "to / to"],
+          a: 2,
+        },
+        {
+          n: 48,
+          q: "My sister _______ flowers at the flower store and _______ them to the hospital.",
+          opts: ["bought / bought", "bought / brought", "brought / brought", "brought / bought"],
+          a: 2,
+        },
+        {
+          n: 49,
+          q: "People often _______ their habits slowly because making big _______ too quickly can be hard to maintain.",
+          opts: ["change / changes", "change / change", "changes / change", "changes / changes"],
+          a: 1,
+        },
+        {
+          n: 50,
+          q: "Do you know _______ the person _______ called you found your number?",
+          opts: ["who / how", "how / who", "who / who", "how / how"],
+          a: 2,
+        },
 
-    function formatTime(s) {
-      const h = Math.floor(s / 3600);
-      const m = Math.floor((s % 3600) / 60);
-      const sec = s % 60;
-      return [h, m, sec].map(v => String(v).padStart(2, '0')).join(':');
-    }
+        // PART 3: Vocabulary
+        { section: "PART III: Vocabulary (Items 51 - 70)" },
+        {
+          n: 51,
+          q: "Which of the following words isn't misspelled?",
+          opts: ["informration", "difefrence", "kilametre", "umbrella"],
+          a: 4,
+        },
+        {
+          n: 52,
+          q: "Which of the following words isn't misspelled?",
+          opts: ["pheraps", "mistake", "mahcine", "sailinrg"],
+          a: 2,
+        },
+        {
+          n: 53,
+          q: "Which of the following words isn't misspelled?",
+          opts: ["cousin", "serveral", "hearthy", "moutnain"],
+          a: 1,
+        },
+        {
+          n: 54,
+          q: "Choose the synonym of the underlined word:\nPlease <u>wait</u> here until the doctor is ready to see you.",
+          opts: ["skip", "get", "launch", "stay"],
+          a: 4,
+        },
+        {
+          n: 55,
+          q: "Choose the synonym of the underlined word:\nThis model <u>meets</u> the safety standards.",
+          opts: ["runs", "fits", "states", "includes"],
+          a: 2,
+        },
+        {
+          n: 56,
+          q: "Choose the antonym of the underlined word:\nThey tried to <u>stop</u> her from pursuing a career in music.",
+          opts: ["encourage", "exchange", "move", "Pause"],
+          a: 1,
+        },
+        {
+          n: 57,
+          q: "Choose the antonym of the underlined word:\nShe felt really <u>happy</u> after the news.",
+          opts: ["strong", "bite", "low", "neutral"],
+          a: 3,
+        },
+        {
+          n: 58,
+          q: "Select the word that doesn't fit in the group.",
+          opts: ["oven", "hammer", "screwdriver", "saw"],
+          a: 1,
+        },
+        {
+          n: 59,
+          q: "Select the word that doesn't fit in the group.",
+          opts: ["breakfast", "dinner", "supper", "launch"],
+          a: 4,
+        },
+        {
+          n: 60,
+          q: "Select the word that doesn't fit in the group.",
+          opts: ["running", "swimming", "eating", "dancing"],
+          a: 3,
+        },
+        {
+          n: 61,
+          q: "She used a new study _______ to improve her memory and retain information more effectively.",
+          opts: ["couch", "random", "information", "method"],
+          a: 4,
+        },
+        {
+          n: 62,
+          q: "She found a simple solution to the _______ after hours of overthinking and unnecessary stress.",
+          opts: ["surprise", "medium", "remind", "problem"],
+          a: 4,
+        },
+        {
+          n: 63,
+          q: "The couple sat in silence, admiring the sunset as _______ crashed gently below.",
+          opts: ["cars", "people", "waves", "birds"],
+          a: 3,
+        },
+        {
+          n: 64,
+          q: "She demanded a _______ after the dress arrived torn and two sizes too small.",
+          opts: ["refund", "indemnity", "promotion", "retail"],
+          a: 1,
+        },
+        {
+          n: 65,
+          q: "They sat on _______ sides of the table, refusing to speak or compromise.",
+          opts: ["every", "down", "opposite", "angular"],
+          a: 3,
+        },
+        {
+          n: 66,
+          q: "The _______ offered flexible hours to help staff balance work and family life.",
+          opts: ["employee", "worker", "employer", "cooker"],
+          a: 3,
+        },
+        {
+          n: 67,
+          q: "Her report was _______, clearly showing the exact figures from the latest survey.",
+          opts: ["inexact", "accurate", "inaccurate", "delivery"],
+          a: 2,
+        },
+        {
+          n: 68,
+          q: "_______ is the key to success, helping you stay focused and achieve goals.",
+          opts: ["Laziness", "Brilliant", "Discipline", "Depression"],
+          a: 3,
+        },
+        {
+          n: 69,
+          q: "The resources you need are _______ online anytime to help with your project.",
+          opts: ["engaged", "available", "occupied", "download"],
+          a: 2,
+        },
+        {
+          n: 70,
+          q: "He tried to _______ the old book from the library without anyone noticing.",
+          opts: ["steel", "remember", "worry", "steal"],
+          a: 4,
+        },
 
-    function startTimer() {
-      document.getElementById("startBtn").disabled = true;
-      document.getElementById("pauseBtn").disabled = false;
+        // PART 4: Reading
+        { section: "PART IV: Reading (Items 71-100) - Picture-Sentence Matching" },
+        {
+          n: 71,
+          q: "Look at the picture and choose the matching sentence:",
+          img: "item71.jpg",
+          opts: [
+            "It is not allowed to turn left",
+            "It is not allowed to turn right",
+            "It is allowed to turn left",
+            "It is allowed to turn right",
+          ],
+          a: 1,
+        },
+        {
+          n: 72,
+          q: "Look at the picture and choose the matching sentence:",
+          img: "item72.jpg",
+          opts: [
+            "It is forbidden to drive faster than 20 kilometers per hour",
+            "It is forbidden to drive slower than 20 kilometers per hour",
+            "It is forbidden to drive faster than 20 miles per hour",
+            "It is forbidden to drive slower than 20 miles per hour",
+          ],
+          a: 3,
+        },
+        {
+          n: 73,
+          q: "Look at the picture and choose the matching sentence:",
+          img: "item73.jpg",
+          opts: [
+            "You have to turn left in order to reach the hospital",
+            "You don't need to turn in order to reach the train station",
+            "You have to turn right in order to reach the airport",
+            "You don't need to turn in order to reach the airport",
+          ],
+          a: 2,
+        },
+        {
+          n: 74,
+          q: "Look at the picture and choose the matching sentence:",
+          img: "item74.jpg",
+          opts: [
+            "Warning: Heavy rain area",
+            "Warning: Slippery floor",
+            "Warning: Falling rocks",
+            "Warning: Road damaged",
+          ],
+          a: 3,
+        },
+        {
+          n: 75,
+          q: "Where is this sign more likely to be found?",
+          img: "item75.jpg",
+          opts: ["A hospital", "A school", "A stadium", "A factory"],
+          a: 1,
+        },
+        {
+          n: 76,
+          q: "What is not true about this picture?",
+          img: "item76.jpg",
+          opts: [
+            "One cook is holding a pan, another cook is holding a spoon",
+            "The chef is wearing a hat",
+            "The cook is wearing an apron",
+            "The cook isn't holding a plate",
+          ],
+          a: 1,
+        },
+        {
+          n: 77,
+          q: "What is true about this picture?",
+          img: "item77.jpg",
+          opts: [
+            "A girl is petting a cat in the kitchen",
+            "A girl is feeding a cat in the kitchen",
+            "A girl is feeding a cat in the living room",
+            "A girl is petting a cat in the living room",
+          ],
+          a: 2,
+        },
+        {
+          n: 78,
+          q: "What is not true about this picture?",
+          img: "item78.jpg",
+          opts: [
+            "Five people are having food",
+            "The picture includes three females and two males",
+            "In the picture there are some plates and one glass of water",
+            "The picture is indoors",
+          ],
+          a: 2,
+        },
+        {
+          n: 79,
+          q: "The following image is a painting of urban life. Which statement about the painting is true?",
+          img: "item79.jpg",
+          opts: [
+            "The picture shows four vehicles",
+            "There are two buses in the picture",
+            "There are two two-wheeled vehicles in the picture",
+            "There are at least three cars in the picture",
+          ],
+          a: 1,
+        },
+        {
+          n: 80,
+          q: "What is not true about this picture?",
+          img: "item80.jpg",
+          opts: [
+            "The boy is in the bathroom",
+            "He is brushing his teeth",
+            "There are two people in the picture",
+            "He is holding the brush with his right hand",
+          ],
+          a: 3,
+        },
 
-      timerInterval = setInterval(() => {
-        totalSeconds--;
-        document.getElementById("timeDisplay").textContent = formatTime(Math.max(totalSeconds, 0));
+        // Reading Passages
+        {
+          passageTitle: "Text 1 - Points, Cards, and Sibling Fun",
+          passageText:
+            "Ellen and Sam, two siblings from a small town, were often bored in the afternoons. One day, their grandfather gave them a deck of cards with 12 red, 12 blue, 12 black, and 12 white cards. They created a game where red cards were worth one point, blue two, black three, and white four. After shuffling, each player got five cards, and the one with the most points won. If tied, the player with more white cards won. They played all weekend and had a great time.",
+        },
+        {
+          n: 81,
+          q: "How many points do you get if you have one black card, two red cards, one blue card, and one white card?",
+          opts: ["eight points", "twelve points", "nine points", "eleven points"],
+          a: 4,
+        },
+        {
+          n: 82,
+          q: "If you remove one card of each color, how many cards will remain in the deck?",
+          opts: ["41 cards", "44 cards", "48 cards", "40 cards"],
+          a: 2,
+        },
+        {
+          n: 83,
+          q: "What is the highest score a player can achieve in this game?",
+          opts: ["ten points", "eighteen points", "fifteen points", "twenty points"],
+          a: 4,
+        },
+        {
+          n: 84,
+          q: "While playing a round, Ellen gets two blue cards and three black cards. Sam gets two blue cards and one card of each remaining color. What was the result?",
+          opts: [
+            "Sam won by one point",
+            "Ellen won by one point",
+            "Sam won by two points",
+            "Ellen won by two points",
+          ],
+          a: 2,
+        },
 
-        if (totalSeconds <= 0) {
-          clearInterval(timerInterval);
-          alert("หมดเวลาทำข้อสอบ! ระบบจะทำการส่งคำตอบให้อัตโนมัติ");
-          gradeExam();
-        }
-      }, 1000);
-    }
+        {
+          passageTitle: "Text 1 (Continued)",
+          passageText:
+            "The following weekend, Ellen and Sam invited two friends, Lily and Brandon, to their house. They played for hours and had a lot of fun. The final round would decide the ultimate champion of the weekend.\n- Ellen got one white card, two blue cards, and two black cards.\n- Sam got three red cards, one blue card, and one black card.\n- Brandon got two blue cards, one white card, one black card, and one red card.\n- Lily got two white cards and three blue cards.",
+        },
+        { n: 85, q: "Who won the final round?", opts: ["Lily", "Brandon", "Ellen", "Sam"], a: 1 },
 
-    function pauseTimer() {
-      clearInterval(timerInterval);
-      document.getElementById("startBtn").disabled = false;
-      document.getElementById("pauseBtn").disabled = true;
-    }
+        {
+          passageTitle: "Text 2 - First Soccer World Cup",
+          passageText:
+            "The first Soccer World Cup was in Uruguay in 1930. Uruguay is a small country in South America with a proud soccer tradition. The competition started on July 13 and ended on July 30. Thirteen teams came to play. Seven teams came from Europe. Three teams came from North America. Three teams came from South America.\n\nThe first match was France versus Mexico. France won 4-1. Uruguay played its first match against Romania and won 4-0. The final was Uruguay versus Argentina, and Uruguay won 4-2. Argentina scored two goals in that final, and Romania did not score any goal in Uruguay's match. Fans watched the matches in the big Estadio Centenario. Players ran on green grass. The stadium was full of happy people. The players wore old shirts. The first World Cup had simpler rules than today's games, but it was very exciting. Many people traveled from far away to see teams from different continents play together.",
+        },
+        {
+          n: 86,
+          q: "Which continent sent the most teams?",
+          opts: ["North America", "South America", "Europe", "Asia"],
+          a: 3,
+        },
+        {
+          n: 87,
+          q: "How many teams came from the Pan-American continents (North and South America together)?",
+          opts: ["three", "ten", "six", "seventeen"],
+          a: 3,
+        },
+        {
+          n: 88,
+          q: "How many goals did Uruguay score in its two matches described?",
+          opts: ["four", "six", "seven", "eight"],
+          a: 4,
+        },
+        {
+          n: 89,
+          q: "How many days did the competition last?",
+          opts: ["fifteen days", "sixteen days", "seventeen days", "eighteen days"],
+          a: 4,
+        },
+        {
+          n: 90,
+          q: "Which of these sentences is correct according to the text?",
+          opts: [
+            "Uruguay scored more goals in its first match than in the final.",
+            "Mexico scored fewer goals than Romania in their matches.",
+            "Argentina scored the same number of goals in the final as France scored in its first match.",
+            "Uruguay scored the same number of goals in its first match and in the final.",
+          ],
+          a: 4,
+        },
 
-    /* ============ 4. ระบบตรวจคำตอบ (Grading System) ============ */
-    function gradeExam() {
-      // ตรวจสอบว่าทำครบทุกข้อหรือไม่
-      let unanswered = [];
-      questions.forEach(item => {
-        if (!document.querySelector(`input[name="q${item.n}"]:checked`)) {
-          unanswered.push(item.n);
-        }
-      });
+        {
+          passageTitle: "Text 3 - The First Airplane",
+          passageText:
+            "More than one hundred years ago, people only dreamed of flying. Some people made strange machines with wings, but they could not stay in the air. Most of them were too heavy or had no engines.\n\nTwo American brothers, Wilbur and Orville Wright, wanted to change that. They lived in Ohio and worked with bicycles. They believed that building a flying machine was possible. They studied birds, made small flying models, and tested many designs.\n\nIn 1903, they went to a place called Kitty Hawk. The area had strong winds and soft sand, which made it good for testing. There, they worked on their plane, the Wright Flyer. It had a small engine, wooden wings, and a propeller. On December 17, the plane finally flew. Orville was the first pilot. The flight lasted only 12 seconds and went 36 meters, but it was the first time a powered machine flew with a person on it.\n\nThe Wright brothers didn't stop. They continued to improve their designs. A few years later, their planes could fly for many minutes and carry people. Their work helped start the age of airplanes.\n\nToday, planes travel around the world. But it all started with two brothers, a beach, and a short flight that changed history.",
+        },
+        {
+          n: 91,
+          q: "Why was Kitty Hawk a good place to test the plane?",
+          opts: [
+            "It had strong rain and big trees",
+            "It had soft ground and strong wind",
+            "It was close to the Wrights' home",
+            "It had many birds to watch",
+          ],
+          a: 2,
+        },
+        {
+          n: 92,
+          q: "What helped the Wright brothers get the idea to fly?",
+          opts: [
+            "They studied birds and made small models",
+            "They read books about ships",
+            "They lived near an airport",
+            "They saw planes in the sky",
+          ],
+          a: 1,
+        },
+        {
+          n: 93,
+          q: "Which of the following was a characteristic of the Wright Flyer?",
+          opts: [
+            "It had big wheels",
+            "It could land on water",
+            "It looked like a bike",
+            "It had an engine and propeller",
+          ],
+          a: 4,
+        },
+        {
+          n: 94,
+          q: "What happened after the first flight?",
+          opts: [
+            "The plane crashed and was never used again",
+            "The brothers gave up flying",
+            "The brothers moved to Kitty Hawk",
+            "The brothers made better planes",
+          ],
+          a: 4,
+        },
+        {
+          n: 95,
+          q: "What do we learn about travel from this story?",
+          opts: [
+            "Travel was easier before planes",
+            "Airplanes were created by mistake",
+            "Early planes was faster than trains",
+            "Modern planes come from early ideas like the Wright Flyer",
+          ],
+          a: 4,
+        },
 
-      if (unanswered.length > 0 && totalSeconds > 0) {
-        const confirmSubmit = confirm(`คุณยังไม่ได้ตอบข้อ ${unanswered.join(", ")} ต้องการส่งคำตอบเลยหรือไม่?`);
-        if (!confirmSubmit) return;
-      }
+        {
+          passageTitle: "Text 4 - Smith Brother's Shoe Store",
+          passageText:
+            "The table below shows the sales and returns for Smith Brothers' Shoe Store in June, July, August, September, and October. Please note that gross sales (sales minus returns) are not shown.<br><br><table><tr><th>Month</th><th>Sales</th><th>Returns</th></tr><tr><td>June</td><td>18</td><td>2</td></tr><tr><td>July</td><td>29</td><td>11</td></tr><tr><td>August</td><td>26</td><td>5</td></tr><tr><td>September</td><td>86</td><td>26</td></tr><tr><td>October</td><td>59</td><td>12</td></tr></table>",
+        },
+        {
+          n: 96,
+          q: "In which month did Smith Brothers' Shoe Store have the highest number of returns?",
+          opts: ["October", "September", "June", "July"],
+          a: 2,
+        },
+        {
+          n: 97,
+          q: "What were the gross sales for the month of August?",
+          opts: ["Twenty-one", "Twenty-six", "Twenty", "Twenty-two"],
+          a: 1,
+        },
+        {
+          n: 98,
+          q: "How many more sales were made in September than in July?",
+          opts: ["Forty-seven", "Fifty-seven", "Eighty-six", "Sixty"],
+          a: 2,
+        },
+        {
+          n: 99,
+          q: "Which month had the lowest gross sales?",
+          opts: ["June", "July", "August", "October"],
+          a: 1,
+        },
+        {
+          n: 100,
+          q: "Which statement is true?",
+          opts: [
+            "Returns in June and October combined were fewer than returns in July.",
+            "Sales in September were higher than the total sales in June, July, August, and October combined.",
+            "Returns in June, July, and August combined were higher than returns in September and October combined.",
+            "Gross sales in June, July, and August combined were less than gross sales in September.",
+          ],
+          a: 4,
+        },
+      ];
 
-      // หยุดเวลาและปิดปุ่มควบคุม
-      clearInterval(timerInterval);
-      document.getElementById("startBtn").disabled = true;
-      document.getElementById("pauseBtn").disabled = true;
-      document.getElementById("submitBtn").disabled = true;
+      function renderQuiz() {
+        const container = document.getElementById("questionsContainer");
+        let html = "";
 
-      let score = 0;
+        examData.forEach((item) => {
+          if (item.section) {
+            html += `<div class="section-header">${item.section}</div>`;
+          } else if (item.passageTitle) {
+            html += `
+                <div class="passage-box">
+                    <div class="passage-title">${item.passageTitle}</div>
+                    <div>${item.passageText}</div>
+                </div>
+            `;
+          } else if (item.n) {
+            html += `
+                <div class="question-card" id="q-card-${item.n}">
+                    <div class="question-number">ข้อที่ ${item.n}</div>
+                    <div class="question-text">${item.q}</div>
+                    ${item.img ? `<img src="${item.img}" alt="Picture for Q${item.n}" class="question-image" />` : ""}
+                    <ul class="options-list">
+            `;
 
-      questions.forEach(item => {
-        const checkedEl = document.querySelector(`input[name="q${item.n}"]:checked`);
-        const givenAnswer = checkedEl ? parseInt(checkedEl.value) : null;
-        const isCorrect = givenAnswer === item.a;
+            item.opts.forEach((opt, idx) => {
+              const optNum = idx + 1;
+              html += `
+                    <li class="option-item">
+                        <label class="option-label" id="label-${item.n}-${optNum}">
+                            <input type="radio" name="q${item.n}" value="${optNum}">
+                            ${optNum}. ${opt}
+                        </label>
+                    </li>
+                `;
+            });
 
-        if (isCorrect) score++;
-
-        // ปิดการแก้ไขคำตอบ
-        document.querySelectorAll(`input[name="q${item.n}"]`).forEach(input => input.disabled = true);
-
-        // แสดงผลสีตามคำตอบ
-        item.opts.forEach((_, idx) => {
-          const val = idx + 1;
-          const optLabel = document.getElementById(`opt_${item.n}_${val}`);
-
-          if (val === item.a) {
-            optLabel.classList.add("correct-answer"); // ข้อที่ถูกต้อง
-          } else if (val === givenAnswer && !isCorrect) {
-            optLabel.classList.add("wrong-answer"); // ข้อที่ตอบผิด
+            html += `
+                    </ul>
+                </div>
+            `;
           }
         });
 
-        // แปะ Badge สถานะ
-        const qtextEl = document.getElementById(`qtext_${item.n}`);
-        let badgeHTML = "";
-        if (isCorrect) {
-          badgeHTML = `<span class="badge ok">ถูกต้อง</span>`;
-        } else if (givenAnswer) {
-          badgeHTML = `<span class="badge bad">ตอบผิด</span>`;
-        } else {
-          badgeHTML = `<span class="badge skip">ไม่ได้ตอบ</span>`;
-        }
-        qtextEl.innerHTML += badgeHTML;
-      });
+        container.innerHTML = html;
+      }
 
-      // แสดงสรุปผลคะแนน
-      const totalQuestions = questions.length;
-      const percentage = Math.round((score / totalQuestions) * 100);
+      function checkAnswers() {
+        let score = 0;
+        let totalQuestions = 0;
 
-      document.getElementById("scoreDisplay").textContent = `${score} / ${totalQuestions}`;
-      document.getElementById("percentDisplay").textContent = `คิดเป็น ${percentage}%`;
-      document.getElementById("resultsCard").style.display = "block";
+        examData.forEach((item) => {
+          if (item.n) {
+            totalQuestions++;
+            const selectedOpt = document.querySelector(`input[name="q${item.n}"]:checked`);
+            const correctAnswer = item.a;
 
-      // เลื่อนหน้าจอไปที่สรุปผลคะแนน
-      document.getElementById("resultsCard").scrollIntoView({ behavior: "smooth" });
-    }
+            // Reset styles
+            for (let i = 1; i <= 4; i++) {
+              const label = document.getElementById(`label-${item.n}-${i}`);
+              if (label) {
+                label.classList.remove("correct-answer", "wrong-answer");
+              }
+            }
 
-    // เรนเดอร์ข้อสอบเมื่อโหลดหน้าเว็บ
-    document.addEventListener("DOMContentLoaded", renderQuiz);
-  </script>
-</body>
+            // Highlight Correct Answer
+            const correctLabel = document.getElementById(`label-${item.n}-${correctAnswer}`);
+            if (correctLabel) {
+              correctLabel.classList.add("correct-answer");
+            }
+
+            // Check User Selection
+            if (selectedOpt) {
+              const userVal = parseInt(selectedOpt.value);
+              if (userVal === correctAnswer) {
+                score++;
+              } else {
+                const wrongLabel = document.getElementById(`label-${item.n}-${userVal}`);
+                if (wrongLabel) {
+                  wrongLabel.classList.add("wrong-answer");
+                }
+              }
+            }
+          }
+        });
+
+        // Show Results
+        const percentage = ((score / totalQuestions) * 100).toFixed(1);
+        document.getElementById("score").innerText = score;
+        document.getElementById("percentage").innerText = percentage;
+        document.getElementById("resultModal").style.display = "block";
+
+        window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+      }
+
+      window.onload = renderQuiz;
+    </script>
+  </body>
 </html>
