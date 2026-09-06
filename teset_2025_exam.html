@@ -1,0 +1,1983 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>TESET 2025 - English Practice Exam (ป.4-ป.6)</title>
+    <style>
+      :root {
+        --primary: #2f6fed;
+        --primary-dark: #1e4fbb;
+        --bg: #f4f6fb;
+        --card: #ffffff;
+        --ok: #1f9d55;
+        --bad: #e0403f;
+        --border: #dfe3ec;
+        --text: #1f2430;
+        --muted: #6b7280;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        padding-bottom: 120px;
+      }
+      header.top {
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        color: #fff;
+        padding: 18px 16px 60px;
+        text-align: center;
+        position: relative;
+      }
+      header.top h1 {
+        margin: 0 0 4px;
+        font-size: 1.4rem;
+      }
+      header.top p {
+        margin: 2px 0;
+        font-size: 0.85rem;
+        opacity: 0.9;
+      }
+      .info-card {
+        max-width: 760px;
+        margin: -46px auto 20px;
+        background: var(--card);
+        border-radius: 14px;
+        box-shadow: 0 6px 20px rgba(30, 40, 80, 0.12);
+        padding: 16px;
+        position: relative;
+        z-index: 2;
+      }
+      .info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .info-grid label {
+        display: block;
+        font-size: 0.75rem;
+        color: var(--muted);
+        margin-bottom: 4px;
+      }
+      .info-grid input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        font-size: 0.95rem;
+      }
+      @media (max-width: 520px) {
+        .info-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .timer-bar {
+        max-width: 760px;
+        margin: 0 auto 20px;
+        background: var(--card);
+        border-radius: 14px;
+        box-shadow: 0 6px 20px rgba(30, 40, 80, 0.08);
+        padding: 14px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .timer-bar .time {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: var(--primary-dark);
+        font-variant-numeric: tabular-nums;
+      }
+      .btn {
+        border: none;
+        border-radius: 10px;
+        padding: 12px 20px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        color: #fff;
+        background: var(--primary);
+        transition:
+          transform 0.1s,
+          background 0.2s;
+      }
+      .btn:active {
+        transform: scale(0.97);
+      }
+      .btn.secondary {
+        background: #8a93a6;
+      }
+      .btn.big {
+        padding: 16px 28px;
+        font-size: 1.1rem;
+        border-radius: 12px;
+      }
+      .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      main {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 0 16px;
+      }
+
+      .part-title {
+        background: var(--primary-dark);
+        color: #fff;
+        padding: 12px 16px;
+        border-radius: 12px;
+        margin: 26px 0 12px;
+        font-size: 1.1rem;
+        font-weight: 700;
+      }
+      .section-title {
+        font-weight: 700;
+        margin: 18px 0 4px;
+        font-size: 1rem;
+        color: var(--primary-dark);
+      }
+      .directions {
+        color: var(--muted);
+        font-size: 0.85rem;
+        font-style: italic;
+        margin: 2px 0 12px;
+      }
+
+      .qcard {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 14px 16px 10px;
+        margin-bottom: 12px;
+      }
+      .qcard .qtext {
+        font-size: 1rem;
+        line-height: 1.5;
+        margin-bottom: 10px;
+        white-space: pre-line;
+      }
+      .qtext b.qnum {
+        color: var(--primary-dark);
+      }
+      .opt {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 12px 12px;
+        margin-bottom: 8px;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        transition:
+          background 0.15s,
+          border-color 0.15s;
+      }
+      .opt:active {
+        background: #eef3ff;
+      }
+      .opt input {
+        width: 22px;
+        height: 22px;
+        flex-shrink: 0;
+        margin-top: 2px;
+        accent-color: var(--primary);
+      }
+      .opt span {
+        font-size: 0.98rem;
+        line-height: 1.4;
+      }
+      .opt.selected {
+        border-color: var(--primary);
+        background: #eef3ff;
+      }
+
+      .opt.correct-answer {
+        border-color: var(--ok);
+        background: #eaf7ee;
+      }
+      .opt.wrong-answer {
+        border-color: var(--bad);
+        background: #fdeceb;
+      }
+      .qcard.retry-mode {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 2px rgba(47, 111, 237, 0.25);
+      }
+      .badge {
+        display: inline-block;
+        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 20px;
+        margin-left: 8px;
+        vertical-align: middle;
+      }
+      .badge.ok {
+        background: #eaf7ee;
+        color: var(--ok);
+      }
+      .badge.bad {
+        background: #fdeceb;
+        color: var(--bad);
+      }
+      .badge.skip {
+        background: #f1f1f1;
+        color: var(--muted);
+      }
+
+      .visual-box {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 16px;
+        margin-bottom: 16px;
+      }
+      .visual-box h4 {
+        margin: 0 0 10px;
+        text-align: center;
+      }
+      .chart {
+        display: flex;
+        align-items: flex-end;
+        gap: 16px;
+        height: 180px;
+        border-left: 2px solid #ccc;
+        border-bottom: 2px solid #ccc;
+        padding: 0 10px 0 6px;
+        position: relative;
+      }
+      .chart .bar-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+        height: 100%;
+        flex: 1;
+      }
+      .chart .bar {
+        width: 100%;
+        max-width: 56px;
+        border-radius: 6px 6px 0 0;
+        position: relative;
+      }
+      .chart .bar .val {
+        position: absolute;
+        top: -20px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-weight: 700;
+        font-size: 0.8rem;
+      }
+      .chart .lbl {
+        margin-top: 6px;
+        font-size: 0.75rem;
+        text-align: center;
+        color: var(--muted);
+      }
+
+      table.fruit-grid {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 0.75rem;
+      }
+      table.fruit-grid th,
+      table.fruit-grid td {
+        border: 1px solid #ccc;
+        text-align: center;
+        padding: 6px 2px;
+      }
+      table.fruit-grid th:first-child,
+      table.fruit-grid td:first-child {
+        text-align: left;
+        padding-left: 8px;
+        font-weight: 600;
+      }
+      .cell-ripe {
+        background: #9aa0a6;
+      }
+      .cell-unripe {
+        background: repeating-linear-gradient(45deg, #9aa0a6 0, #9aa0a6 2px, #fff 2px, #fff 6px);
+      }
+      .legend {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        margin-top: 8px;
+        font-size: 0.75rem;
+      }
+      .legend .sw {
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        margin-right: 4px;
+        vertical-align: middle;
+        border: 1px solid #999;
+      }
+
+      table.tally {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 0.85rem;
+      }
+      table.tally th,
+      table.tally td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: center;
+      }
+      table.tally th {
+        background: #eef1f7;
+      }
+
+      .notice-box {
+        border: 2px solid var(--primary);
+        border-radius: 16px;
+        padding: 14px 16px;
+        margin-bottom: 16px;
+        background: #f8faff;
+      }
+      .notice-box h4 {
+        margin: 0 0 8px;
+        text-align: center;
+        color: var(--primary-dark);
+      }
+      .notice-box ul {
+        margin: 6px 0;
+        padding-left: 18px;
+        font-size: 0.88rem;
+      }
+      .notice-box p {
+        font-size: 0.88rem;
+        margin: 6px 0;
+      }
+
+      .passage {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 16px;
+        margin-bottom: 16px;
+        font-size: 0.92rem;
+        line-height: 1.65;
+      }
+      .passage h4 {
+        margin: 0 0 8px;
+        color: var(--primary-dark);
+      }
+
+      .cloze-blank {
+        display: inline-block;
+        min-width: 52px;
+        border-bottom: 2px dashed var(--primary);
+        font-weight: 700;
+        color: var(--primary-dark);
+        text-align: center;
+      }
+
+      .progress-bar {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: var(--card);
+        border-top: 1px solid var(--border);
+        padding: 10px 16px;
+        box-shadow: 0 -4px 14px rgba(0, 0, 0, 0.06);
+        z-index: 50;
+      }
+      .progress-bar .row {
+        max-width: 760px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .progress-track {
+        flex: 1;
+        height: 10px;
+        background: #e5e8f0;
+        border-radius: 6px;
+        overflow: hidden;
+      }
+      .progress-fill {
+        height: 100%;
+        background: var(--primary);
+        width: 0%;
+        transition: width 0.2s;
+      }
+      .progress-bar .count {
+        font-size: 0.8rem;
+        color: var(--muted);
+        white-space: nowrap;
+      }
+
+      #resultsPanel {
+        display: none;
+      }
+      .score-hero {
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        color: #fff;
+        border-radius: 16px;
+        padding: 24px;
+        text-align: center;
+        margin-bottom: 16px;
+      }
+      .score-hero .big {
+        font-size: 2.6rem;
+        font-weight: 800;
+      }
+      .part-scores {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+      .part-score-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 12px;
+        text-align: center;
+      }
+      .part-score-card .n {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--primary-dark);
+      }
+      .part-score-card .l {
+        font-size: 0.75rem;
+        color: var(--muted);
+      }
+
+      .footer-note {
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.75rem;
+        margin: 30px 0;
+      }
+      hr.sep {
+        border: none;
+        border-top: 1px dashed var(--border);
+        margin: 24px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="top">
+      <h1>TESET 2025 Practice Exam</h1>
+      <p>English Skills - Elementary Level (ป.4-ป.6) | For private home practice only</p>
+    </header>
+
+    <main>
+      <div class="info-card">
+        <div class="info-grid">
+          <div>
+            <label>Student name</label>
+            <input type="text" id="studentName" placeholder="Name - Surname" />
+          </div>
+          <div>
+            <label>Date</label>
+            <input type="date" id="studentDate" />
+          </div>
+        </div>
+      </div>
+
+      <div class="timer-bar">
+        <div>
+          <div style="font-size: 0.8rem; color: var(--muted)">Time remaining</div>
+          <div class="time" id="timeDisplay">02:00:00</div>
+        </div>
+        <div style="display: flex; gap: 8px">
+          <button class="btn" id="startBtn" onclick="startTimer()">Start Timer</button>
+          <button class="btn secondary" id="pauseBtn" onclick="pauseTimer()" disabled>Pause</button>
+        </div>
+      </div>
+
+      <form id="examForm">
+        <div class="part-title">PART I: Speaking (Items 1-25)</div>
+        <div class="section-title">Situational Dialogues (Items 1-10)</div>
+        <div class="directions">Read the situations and choose the most appropriate answer for each situation.</div>
+        <div id="grp_situational"></div>
+
+        <div class="section-title">Short Conversations (Items 11-25)</div>
+        <div class="directions">Read the situations and choose the most appropriate answer for each situation.</div>
+        <div id="grp_short"></div>
+
+        <div class="part-title">PART II: Grammar and Structure (Items 26-50)</div>
+        <div class="section-title">Sentence Completion (Items 26-40)</div>
+        <div class="directions">Choose the correct answer for each item.</div>
+        <div id="grp_sentence"></div>
+
+        <div class="section-title">Error Identification (Items 41-50)</div>
+        <div class="directions">Choose the number of the INCORRECT underlined part in each sentence.</div>
+        <div id="grp_error"></div>
+
+        <div class="part-title">PART III: Vocabulary (Items 51-70)</div>
+        <div class="section-title">Odd One Out (Items 51-52)</div>
+        <div class="directions">Choose the odd one out.</div>
+        <div id="grp_odd"></div>
+
+        <div class="section-title">Spelling (Items 53-54)</div>
+        <div class="directions">Choose the incorrect spelling.</div>
+        <div id="grp_spelling"></div>
+
+        <div class="section-title">Synonym (Items 55-56)</div>
+        <div class="directions">Choose the synonym of the underlined word.</div>
+        <div id="grp_synonym"></div>
+
+        <div class="section-title">Antonym (Items 57-58)</div>
+        <div class="directions">Choose the antonym of the underlined word.</div>
+        <div id="grp_antonym"></div>
+
+        <div class="section-title">Meaning in Context (Items 59-60)</div>
+        <div class="directions">Choose the meaning of the underlined word.</div>
+        <div id="grp_meaning"></div>
+
+        <div class="section-title">Sentence Completion (Items 61-70)</div>
+        <div class="directions">Choose the best answer to complete the sentences.</div>
+        <div id="grp_vocsent"></div>
+
+        <div class="part-title">PART IV: Reading (Items 71-100)</div>
+        <div class="section-title">Graph (Items 71-75)</div>
+
+        <div class="visual-box">
+          <h4>Activities at Home</h4>
+          <div class="chart" id="barChart"></div>
+        </div>
+        <div class="directions">Use the picture above to answer questions 71-72.</div>
+        <div id="grp_graph1"></div>
+
+        <div class="visual-box">
+          <h4>The Fruits in My Refrigerator</h4>
+          <table class="fruit-grid" id="fruitGrid"></table>
+          <div class="legend">
+            <span><span class="sw cell-unripe"></span>Unripe</span>
+            <span><span class="sw cell-ripe"></span>Ripe</span>
+          </div>
+        </div>
+        <div class="directions">Use the picture above to answer questions 73-74.</div>
+        <div id="grp_graph2"></div>
+
+        <div class="visual-box">
+          <h4>How many animals are there on the farm?</h4>
+          <table class="tally" id="tallyTable"></table>
+        </div>
+        <div class="directions">
+          Each animal requires a certain amount of land: cow = 15 m², pig = 8 m², sheep = 6 m², chicken = 4 m². Use the
+          picture above to answer question 75.
+        </div>
+        <div id="grp_graph3"></div>
+
+        <div class="section-title">Signs and Notices (Items 76-80)</div>
+        <div class="directions">Choose the best answer for each question.</div>
+
+        <div class="notice-box">
+          <h4>📚 GREENFIELD PUBLIC LIBRARY</h4>
+          <p><b>OPENING HOURS:</b> Mon-Fri: 9:00 AM - 8:00 PM / Sat: 9:00 AM - 5:00 PM / Sun: 1:00 PM - 5:00 PM</p>
+          <p><b>IMPORTANT NOTICES:</b></p>
+          <ul>
+            <li>Silent Study Area: Please keep mobile phones on silent mode. No talking allowed.</li>
+            <li>Library Cards: Required to borrow books. Bring ID to apply. Annual fee: $10.</li>
+            <li>Children's Section: Story time every Saturday at 10:30 AM. Ages 3-8 welcome.</li>
+            <li>Late Fees: $0.50 per day for overdue books.</li>
+            <li>Lost Books: Replacement cost plus $5 processing fee.</li>
+          </ul>
+          <p><b>Special Event:</b> Book sale next Friday 10 AM - 4 PM. All books $2 each.</p>
+        </div>
+        <div id="grp_signs1"></div>
+
+        <div class="notice-box">
+          <h4>🍴 MARIO'S ITALIAN RESTAURANT</h4>
+          <p><b>STARTERS</b> - Garlic Bread $4.50 / Caesar Salad $7.00 / Soup of the Day $5.50</p>
+          <p>
+            <b>MAIN DISHES</b> - Spaghetti Bolognese $12.00 / Margherita Pizza $11.50 / Chicken Parmesan $15.00 /
+            Vegetarian Lasagna $13.50 / Grilled Salmon $18.00
+          </p>
+          <p><b>DESSERTS</b> - Tiramisu $6.00 / Ice Cream (3 scoops) $4.50 / Chocolate Cake $5.50</p>
+          <p><b>DRINKS</b> - Coffee/Tea $2.50 / Soft Drinks $3.00 / Fresh Orange Juice $4.00</p>
+          <p><b>Special Offer:</b> Buy any main dish and get free garlic bread!</p>
+          <p><b>Kids Menu (under 12):</b> Half price on all main dishes.</p>
+        </div>
+        <div id="grp_signs2"></div>
+
+        <div class="section-title">Short Passages (Items 81-90)</div>
+        <div class="directions">Read the texts and answer the questions that follow.</div>
+
+        <div class="passage">
+          <h4>Text 1</h4>
+          <p>
+            Emma was walking home from school when she found an old blue backpack on the dirt. It looked ordinary, but
+            when she picked it up, something strange happened. The backpack felt warm and light, almost like it was
+            alive.
+          </p>
+          <p>
+            At home, Emma opened the backpack and was surprised to find it was full of beautiful, colorful books. She
+            had never seen these books before. When she touched the first book, it opened by itself and the pages began
+            to glow softly. The story was about a brave girl who could talk to animals.
+          </p>
+          <p>
+            Emma read for hours without getting tired. When she finished the first book, another one appeared in the
+            backpack. This time it was about a boy who could fly. Emma realized that this was no ordinary backpack. It
+            was magic!
+          </p>
+          <p>
+            Every day after school, Emma would sit in her room and read the magical books. Each story taught her
+            something new about courage, friendship, and kindness. Emma kept the magic backpack secret, but she became
+            happier and more confident every day.
+          </p>
+        </div>
+        <div id="grp_text1"></div>
+
+        <div class="passage">
+          <h4>Text 2</h4>
+          <p>
+            Many people around the world are choosing to cycle more often, not just for sport but also as a daily way to
+            travel. Cycling offers numerous advantages for both people and the environment.
+          </p>
+          <p>
+            Firstly, it's an excellent form of exercise. Regular cycling can significantly improve your heart health,
+            strengthen your muscles, and help you manage your weight. It's a low-impact activity, which means it is
+            gentle on your joints, making it suitable for many ages. People often feel more energetic and less stressed
+            after a good bike ride.
+          </p>
+          <p>
+            Secondly, cycling is very environmentally friendly. Unlike cars or buses, bicycles produce no harmful
+            emissions, helping to reduce air pollution in our cities. They also take up less space and contribute to
+            less traffic congestion. For shorter journeys, cycling is often quicker than driving, especially in busy
+            urban areas.
+          </p>
+          <p>
+            Finally, cycling can be very cost-effective. You don't need to pay for fuel, parking, or expensive public
+            transport tickets every day. Its maintenance costs are generally low. Many cities are now building special
+            bike lanes, making it safer and more convenient for cyclists. So, if you're looking for a healthier,
+            greener, and cheaper way to travel, perhaps it's time to get on a bike!
+          </p>
+        </div>
+        <div id="grp_text2"></div>
+
+        <div class="section-title">Cloze Test (Items 91-100)</div>
+        <div class="directions">Read the text below and select the best word choices to complete it.</div>
+
+        <div class="passage">
+          <h4>Passage 1</h4>
+          <p>
+            The Johnson family always <span class="cloze-blank">(91)</span> forward to their weekend trips to the
+            countryside. Every Saturday morning, they would pack their car with food, games, and camping equipment and
+            drive to their favorite spot by the lake.
+          </p>
+          <p>
+            The children, Tom and Emma, loved these adventures. They would spend hours exploring the forest, collecting
+            interesting stones, and watching birds. Their parents enjoyed the peaceful atmosphere and the
+            <span class="cloze-blank">(92)</span> to relax away from city life.
+          </p>
+          <p>
+            Last weekend was particularly special because they <span class="cloze-blank">(93)</span> their new tent for
+            the first time. Although it was more difficult to set up than their old one, the extra space made it much
+            more comfortable. They cooked dinner over an open fire and told stories
+            <span class="cloze-blank">(94)</span> the stars came out. Then, they went to bed.
+          </p>
+          <p>
+            When Sunday evening arrived, nobody wanted to go home. The weekend had been so
+            <span class="cloze-blank">(95)</span> that they immediately started planning their next trip. These family
+            adventures had become the highlight of their month.
+          </p>
+        </div>
+        <div id="grp_cloze1"></div>
+
+        <div class="passage">
+          <h4>Passage 2</h4>
+          <p>
+            Sarah decided to move to London last year because she received a new job opportunity. At first, she was
+            <span class="cloze-blank">(96)</span> about living in a big city, but she quickly discovered that London had
+            many advantages. The public transport system was excellent, and she could go anywhere in the city by bus or
+            underground.
+          </p>
+          <p>
+            Her new apartment was small but comfortable, and it was located in a
+            <span class="cloze-blank">(97)</span> neighborhood with lots of cafes and shops. Sarah missed her old
+            friends from her hometown, but she was determined to make new ones. She joined a local sports club and
+            <span class="cloze-blank">(98)</span> evening classes to learn photography.
+          </p>
+          <p>
+            After six months, Sarah realized that moving to London was the
+            <span class="cloze-blank">(99)</span> decision she had ever made. She loved her job, had made several close
+            friends, and felt <span class="cloze-blank">(100)</span> confident about living independently in such a
+            large city.
+          </p>
+        </div>
+        <div id="grp_cloze2"></div>
+
+        <hr class="sep" />
+        <div style="text-align: center; margin-bottom: 40px">
+          <button type="button" class="btn big" id="submitBtn" onclick="gradeExam()">
+            Submit Exam &amp; See Score
+          </button>
+        </div>
+      </form>
+
+      <div id="resultsPanel">
+        <div class="score-hero">
+          <div style="font-size: 0.9rem; opacity: 0.85">Total Score</div>
+          <div class="big" id="totalScore">0 / 100</div>
+          <div id="totalPercent" style="opacity: 0.9"></div>
+          <div id="retryNote" style="font-size: 0.75rem; opacity: 0.85; margin-top: 4px; display: none"></div>
+        </div>
+        <div class="part-scores" id="partScores"></div>
+        <div
+          style="
+            text-align: center;
+            margin-bottom: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+          "
+        >
+          <button type="button" class="btn secondary" id="retryBtn" onclick="startRetry()">
+            🔁 Review &amp; Retry Wrong Answers (1 time)
+          </button>
+          <button type="button" class="btn" id="revealBtn" onclick="revealAllAnswers()">📖 View Correct Answers</button>
+        </div>
+        <div style="text-align: center; margin-bottom: 16px; display: none" id="submitRetryWrap">
+          <button type="button" class="btn big" id="submitRetryBtn" onclick="submitRetry()">
+            Submit Retry Answers
+          </button>
+        </div>
+        <div id="reviewArea"></div>
+      </div>
+
+      <div class="footer-note">
+        Private practice copy for personal home use only &mdash; based on TESET 2025 (Academic Contest Thailand). Not
+        for redistribution.
+      </div>
+    </main>
+
+    <div class="progress-bar">
+      <div class="row">
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="count" id="progressCount">0 / 100 answered</div>
+      </div>
+    </div>
+
+    <script>
+      /* ============ QUESTION DATA ============ */
+      // answer = 1-based index of the correct option in "opts"
+
+      const situational = [
+        {
+          n: 1,
+          q: "You are in class and the teacher has just explained the homework. You didn't hear clearly because someone next to you was talking. What should you say to the teacher?",
+          opts: [
+            'Excuse me, could you repeat the lesson?',
+            'Excuse me, could you explain the homework again?',
+            'Excuse me, can I ask my friend about the homework?',
+            'Excuse me, can I do the homework with my classmate?'
+          ],
+          a: 2
+        },
+        {
+          n: 2,
+          q: "You are in the school library and want to borrow a book, but you're not sure how long you can keep it. What do you ask the librarian?",
+          opts: [
+            'Can I take this book home forever?',
+            'Can I keep the book until I finish school?',
+            'How many days can I borrow this book?',
+            'How long have you been working here?'
+          ],
+          a: 3
+        },
+        {
+          n: 3,
+          q: "You are walking with your classmate, and he suddenly stops and looks confused. He doesn't know which classroom to go to next. What should you say to help him?",
+          opts: [
+            'This is not my problem.',
+            'You should go home now.',
+            "Why don't you know the classroom?",
+            'Do you want me to check the classroom?'
+          ],
+          a: 4
+        },
+        {
+          n: 4,
+          q: "You are at the canteen, and the menu is written in English. You don't understand one of the dishes. What should you ask the staff?",
+          opts: [
+            'What does this dish have in it?',
+            'Why is the menu written in English?',
+            'Do you have my favorite food?',
+            'Can you help me with the dish?'
+          ],
+          a: 1
+        },
+        {
+          n: 5,
+          q: 'You want to leave class a bit early to go to the doctor. What should you say to the teacher?',
+          opts: [
+            'I am very bored. Can I go home?',
+            'I have an important meeting. May I go?',
+            "I don't want to be in class today. Can I leave now?",
+            "I have a doctor's appointment. May I leave early?"
+          ],
+          a: 4
+        },
+        {
+          n: 6,
+          q: 'You are taking a test, and you forgot your eraser. Your classmate is sitting next to you. What should you say?',
+          opts: [
+            'Can I take your eraser home?',
+            'Where did you buy your eraser?',
+            'May I borrow your eraser for a moment?',
+            'Is that a new and expensive eraser?'
+          ],
+          a: 3
+        },
+        {
+          n: 7,
+          q: "You're in a museum on a school trip and want to know more about one of the exhibits. What do you say to the guide?",
+          opts: [
+            'This is boring. Is it time to leave?',
+            'Could you tell me about this painting?',
+            'Do I have to look at everything?',
+            'Can I go to the museum alone?'
+          ],
+          a: 2
+        },
+        {
+          n: 8,
+          q: "You are shopping and the cashier tells you the total price, but you didn't hear clearly. What do you say?",
+          opts: [
+            "I don't want it anymore.",
+            "That's too much for me!",
+            'Sorry, how much is it again?',
+            'Sorry, how many do you have?'
+          ],
+          a: 3
+        },
+        {
+          n: 9,
+          q: 'You are in a restaurant and the food you ordered has not arrived, but your friends are already eating. You want to ask the waiter politely. What should you say?',
+          opts: [
+            'This place is too slow!',
+            "Where is my food? I'm hungry!",
+            'Could you pay me for late service?',
+            'Could you check my order, please?'
+          ],
+          a: 4
+        },
+        {
+          n: 10,
+          q: 'You are joining an English club for the first time. Everyone is introducing themselves. You want to join the conversation. What should you say?',
+          opts: [
+            "Hi, I don't like talking in groups.",
+            "Hi, I'm Anna. I'm happy to be here.",
+            'Hi, why are we speaking English?',
+            "Hi, sorry that I'm not good at English."
+          ],
+          a: 2
+        }
+      ]
+
+      const shortConv = [
+        {
+          n: 11,
+          q: "A: I'm planning to go to the night market this evening. Would you like to join me?\nB: What time are you going?\nA: Around 6.\nB: ____________",
+          opts: ["I'll join you.", "I don't like clubs.", 'Join me for a coffee.', "Let's join a fitness center."],
+          a: 1
+        },
+        {
+          n: 12,
+          q: 'A: Do you want to join our group for the science project?\nB: ____________\nA: No problem.',
+          opts: [
+            'What group are you in?',
+            'Why do we need a project?',
+            'I hope your group works well.',
+            'I already have a group, thank you.'
+          ],
+          a: 4
+        },
+        {
+          n: 13,
+          q: 'A: ____________ Did the teacher give us any homework?\nB: Yes, we have to write a short paragraph about our last holiday.',
+          opts: [
+            'I was at school yesterday.',
+            'I missed class yesterday.',
+            'I have many things to do.',
+            "I don't like doing homework."
+          ],
+          a: 2
+        },
+        {
+          n: 14,
+          q: 'A: What are you going to do during the school break?\nB: ____________\nA: That sounds exciting!',
+          opts: [
+            "I don't like traveling.",
+            "I'm going to the cinema.",
+            "I'm going to Japan with my family.",
+            "I'll stay at home and watch a series."
+          ],
+          a: 3
+        },
+        {
+          n: 15,
+          q: 'A: Did you enjoy the school trip yesterday?\nB: Yes, it was amazing! ____________',
+          opts: [
+            "I didn't see anything interesting.",
+            'I was very bored with the trip.',
+            'I really liked the dinosaur room.',
+            'I enjoyed eating and sleeping.'
+          ],
+          a: 3
+        },
+        {
+          n: 16,
+          q: "A: I'm sorry I didn't answer your call last night. I was helping my brother with his homework.\nB: ____________",
+          opts: [
+            'I never do homework.',
+            'You should call me back.',
+            "It's boring to have a brother.",
+            "That's kind of you to help him."
+          ],
+          a: 4
+        },
+        {
+          n: 17,
+          q: 'A: I heard you passed the English test. Congratulations!\nB: ____________ I was really nervous, but I studied a lot.',
+          opts: ['Thank you. That means a lot.', "I didn't like the test.", 'Everyone passed.', 'I hate studying.'],
+          a: 1
+        },
+        {
+          n: 18,
+          q: 'A: ____________ I missed the last lesson.\nB: Sure, but please return it by tomorrow.',
+          opts: [
+            'Can you do me a favor?',
+            'Can I borrow your notebook?',
+            'I have lost my notebook.',
+            'I am sorry to ask you.'
+          ],
+          a: 2
+        },
+        {
+          n: 19,
+          q: "A: What's your favorite subject at school?\nB: I like English because I enjoy learning new words.\nA: ____________",
+          opts: ['I have class now.', 'I like to play games.', 'Japanese is very hard.', "Me too. It's useful."],
+          a: 4
+        },
+        {
+          n: 20,
+          q: "A: I'm going to the supermarket. ____________\nB: Yes, could you get me some bread and milk?",
+          opts: ['What are you doing?', 'What do you want?', 'Do you need anything?', 'Can you wait for me?'],
+          a: 3
+        },
+        {
+          n: 21,
+          q: "A: The final exam is next Friday.\nB: I didn't know that! I need to start reviewing.\nA: Let's study together.\nB: ____________",
+          opts: [
+            "That's a good idea.",
+            'Exams are easy for me.',
+            "I don't know what to do.",
+            'Friday is not a good day.'
+          ],
+          a: 1
+        },
+        {
+          n: 22,
+          q: "A: I'm making a sandwich.\nB: What kind of sandwich are you making?\nA: Ham and tuna!\nB: ____________",
+          opts: [
+            'I like to eat fast food.',
+            'Yum! I really like both of those.',
+            "Oh, I don't like vegetables.",
+            'Cooking is a waste of time.'
+          ],
+          a: 2
+        },
+        {
+          n: 23,
+          q: "A: Why weren't you at school yesterday?\nB: I wasn't feeling well. I had a fever.\nA: I hope you're feeling better now.\nB: ____________",
+          opts: [
+            'Now is not a good time.',
+            "Thanks. I'm much better.",
+            'No, I went to school.',
+            "I don't want to talk."
+          ],
+          a: 2
+        },
+        {
+          n: 24,
+          q: 'A: Have you ever been to the zoo?\nB: Yes, I went last year with my cousins.\nA: Did you enjoy it?\nB: ____________',
+          opts: [
+            'Yes, I like the animals.',
+            'No, my cousins are late.',
+            'Sure! The food was delicious.',
+            'So-so, I hate weekends.'
+          ],
+          a: 1
+        },
+        {
+          n: 25,
+          q: "A: I'm thinking about joining the English club.\nB: You should! It's fun and you can practice a lot.\nA: Maybe I will. ____________",
+          opts: ["I don't like clubs.", "I'll just stay home.", 'Thanks for the advice.', 'I know English already.'],
+          a: 3
+        }
+      ]
+
+      const sentenceCompletion = [
+        {
+          n: 26,
+          q: 'My name ____ Anna. I ____ ten years old.',
+          opts: ['is / be', 'is / am', 'am / is', 'be / is'],
+          a: 2
+        },
+        {
+          n: 27,
+          q: 'We ____ to school every day and ____ in the afternoon.',
+          opts: ['goes / plays', 'go / plays', 'go / play', 'goes / play'],
+          a: 3
+        },
+        {
+          n: 28,
+          q: 'They ____ not at home. They ____ in the park.',
+          opts: ['is / is', 'are / are', 'is / are', 'are / is'],
+          a: 2
+        },
+        {
+          n: 29,
+          q: 'Tom ____ soccer, and his sister ____ the piano.',
+          opts: ['play / play', 'plays / plays', 'plays / play', 'play / plays'],
+          a: 2
+        },
+        {
+          n: 30,
+          q: 'We ____ ever go to that restaurant because it ____ too expensive and the food ____ good.',
+          opts: ["never / is / isn't", 'hardly / are / is', "hardly / is / isn't", "sometimes / are / aren't"],
+          a: 3
+        },
+        {
+          n: 31,
+          q: 'They ____ to the park every weekend, but they ____ there yesterday because it ____.',
+          opts: [
+            "went / didn't go / rained",
+            "went / don't go / rains",
+            "go / didn't go / rained",
+            "go / doesn't go / raining"
+          ],
+          a: 3
+        },
+        {
+          n: 32,
+          q: 'While Sarah ____ TV, her brother ____ a book.',
+          opts: ['watches / reads', 'is watching / is reading', 'watching / reading', 'watch / read'],
+          a: 2
+        },
+        {
+          n: 33,
+          q: 'This test is ____ than the one we did last week, so I ____ it and ____ nervous.',
+          opts: [
+            'hard / dislike / feels',
+            "harder / don't like / feels",
+            "harder / don't like / feel",
+            "more hard / doesn't like / feeling"
+          ],
+          a: 3
+        },
+        {
+          n: 34,
+          q: 'I read the book ____ you gave me, ____ was about animals, and I ____ it interesting.',
+          opts: ['that / who / finds', 'that / which / found', 'who / that / find', 'which / it / finding'],
+          a: 2
+        },
+        {
+          n: 35,
+          q: 'He ____ his passport, so he ____ board the plane and ____ very upset.',
+          opts: ["loses / can't / is", "lost / couldn't / was", "lost / can't / is", "lose / couldn't / was"],
+          a: 2
+        },
+        {
+          n: 36,
+          q: 'The dog ____ loudly because it ____ a stranger and ____ scared.',
+          opts: [
+            'bark / see / feels',
+            'is barking / sees / feel',
+            'is barking / sees / feels',
+            'barked / saw / is feeling'
+          ],
+          a: 3
+        },
+        {
+          n: 37,
+          q: 'While we ____ dinner last night, the lights suddenly ____ and everyone ____.',
+          opts: [
+            'eat / go out / scream',
+            'were eating / goes out / screamed',
+            'were eating / went out / screamed',
+            'eating / gone out / screams'
+          ],
+          a: 3
+        },
+        {
+          n: 38,
+          q: 'We ____ already ____ lunch, and now we ____ ready to leave.',
+          opts: ['are / finished / feel', 'are / finishing / are', 'had / finish / were', 'have / finished / are'],
+          a: 4
+        },
+        {
+          n: 39,
+          q: 'If it ____ tomorrow, we ____ at home and ____ movies all day.',
+          opts: [
+            'rains / staying / watching',
+            'will rain / stay / watch',
+            'rained / stays / watched',
+            'rains / will stay / watch'
+          ],
+          a: 4
+        },
+        {
+          n: 40,
+          q: 'I ____ an email yesterday, but I ____ a reply yet, so I ____ them again.',
+          opts: [
+            "send / don't get / contact",
+            "sent / didn't get / contacts",
+            "sent / haven't got / will contact",
+            "send / haven't got / contacted"
+          ],
+          a: 3
+        }
+      ]
+
+      const errorId = [
+        {
+          n: 41,
+          q: 'Although she <u>had a fever</u><sup>(1)</sup> last night, she <u>don\u2019t</u><sup>(2)</sup> want to <u>miss</u><sup>(3)</sup> school, so she came as <u>usual</u><sup>(4)</sup>.',
+          a: 2
+        },
+        {
+          n: 42,
+          q: 'The <u>children was playing</u><sup>(1)</sup> in the yard when it suddenly <u>started</u><sup>(2)</sup> to rain, so they ran <u>back</u><sup>(3)</sup> inside <u>quickly</u><sup>(4)</sup>.',
+          a: 1
+        },
+        {
+          n: 43,
+          q: 'If it rains <u>tomorrow</u><sup>(1)</sup>, the trip <u>will cancel</u><sup>(2)</sup>, and we will stay at <u>school</u><sup>(3)</sup> for indoor <u>activities</u><sup>(4)</sup>.',
+          a: 2
+        },
+        {
+          n: 44,
+          q: 'My cousin <u>reads</u><sup>(1)</sup> very <u>good</u><sup>(2)</sup>, and he <u>enjoys</u><sup>(3)</sup> learning new words to <u>improve</u><sup>(4)</sup> his writing skills.',
+          a: 2
+        },
+        {
+          n: 45,
+          q: 'She bought a dress that <u>looked</u><sup>(1)</sup> very nice, but it didn\u2019t <u>fit</u><sup>(2)</sup> well because <u>it\u2019s size</u><sup>(3)</sup> was a bit too <u>small</u><sup>(4)</sup>.',
+          a: 3
+        },
+        {
+          n: 46,
+          q: 'Each student <u>have received</u><sup>(1)</sup> a task, and they must <u>finish</u><sup>(2)</sup> it before they <u>go</u><sup>(3)</sup> home this <u>afternoon</u><sup>(4)</sup>.',
+          a: 1
+        },
+        {
+          n: 47,
+          q: 'The teacher <u>explained</u><sup>(1)</sup> the rules clearly, but some students didn\u2019t <u>understood</u><sup>(2)</sup> what they <u>had to</u><sup>(3)</sup> do for the <u>experiment</u><sup>(4)</sup>.',
+          a: 2
+        },
+        {
+          n: 48,
+          q: 'The cat <u>was sleeping</u><sup>(1)</sup> under the table, and it didn\u2019t <u>wake up</u><sup>(2)</sup> even when we <u>turned on</u><sup>(3)</sup> the vacuum <u>very loud</u><sup>(4)</sup>.',
+          a: 4
+        },
+        {
+          n: 49,
+          q: 'The baby <u>cries</u><sup>(1)</sup> every morning, and her mother <u>always</u><sup>(2)</sup> tries to <u>calm her down</u><sup>(3)</sup> by <u>sings</u><sup>(4)</sup> a lullaby.',
+          a: 4
+        },
+        {
+          n: 50,
+          q: 'My grandparents live in the <u>countryside</u><sup>(1)</sup>, and <u>have grown</u><sup>(2)</sup> their own vegetables <u>since many years</u><sup>(3)</sup> to save money and eat <u>healthily</u><sup>(4)</sup>.',
+          a: 3
+        }
+      ]
+      const errorOpts = ['(1)', '(2)', '(3)', '(4)']
+
+      const oddOneOut = [
+        { n: 51, q: 'Choose the odd one out.', opts: ['kitchen', 'living room', 'bedroom', 'apartment'], a: 4 },
+        { n: 52, q: 'Choose the odd one out.', opts: ['dog', 'zebra', 'polar bear', 'giraffe'], a: 1 }
+      ]
+      const spelling = [
+        { n: 53, q: 'Choose the incorrect spelling.', opts: ['careful', 'fantastic', 'brillient', 'difficult'], a: 3 },
+        { n: 54, q: 'Choose the incorrect spelling.', opts: ['train', 'recieve', 'understand', 'complete'], a: 2 }
+      ]
+      const synonym = [
+        {
+          n: 55,
+          q: "The wind blew strongly all night and shook the windows.\nChoose the synonym of the underlined word 'strongly'.",
+          opts: ['powerfully', 'happily', 'loudly', 'smoothly'],
+          a: 1
+        },
+        {
+          n: 56,
+          q: "The audience stood up and gave a big round of applause to the performers of the play.\nChoose the synonym of the underlined phrase 'performers of the play'.",
+          opts: ['writers', 'designers', 'artists', 'actors'],
+          a: 4
+        }
+      ]
+      const antonym = [
+        {
+          n: 57,
+          q: "Some students are afraid to ask some questions in class.\nChoose the antonym of the underlined word 'afraid'.",
+          opts: ['weak', 'clever', 'frightened', 'brave'],
+          a: 4
+        },
+        {
+          n: 58,
+          q: "The Christmas Market is packed during wintertime.\nChoose the antonym of the underlined word 'packed'.",
+          opts: ['popular', 'crowded', 'empty', 'cheap'],
+          a: 3
+        }
+      ]
+      const meaning = [
+        {
+          n: 59,
+          q: "When schools are closed, some school children are at home and feel bored.\nChoose the meaning of the underlined word 'bored'.",
+          opts: ['safe', 'uninterested', 'annoyed', 'surprised'],
+          a: 2
+        },
+        {
+          n: 60,
+          q: "Buildings should be built to withstand an earthquake; otherwise, they can collapse.\nChoose the meaning of the underlined word 'withstand'.",
+          opts: ['resist', 'lose', 'hit', 'hold'],
+          a: 1
+        }
+      ]
+      const vocSentence = [
+        {
+          n: 61,
+          q: 'During summertime, children are selling fruit juice like ____ to make money.',
+          opts: ['lemonade', 'coffee', 'milkshake', 'iced tea'],
+          a: 1
+        },
+        {
+          n: 62,
+          q: 'To relieve a sore throat, you should ____ warm water to school instead of cold.',
+          opts: ['avoid', 'drink', 'take', 'skip'],
+          a: 3
+        },
+        {
+          n: 63,
+          q: 'Pianists must enter a ____ to win the prize.',
+          opts: ['stadium', 'contest', 'business', 'funfair'],
+          a: 2
+        },
+        {
+          n: 64,
+          q: 'Elders feel happy when they see their ____ who live far from them.',
+          opts: ['members', 'passengers', 'managers', 'grandchildren'],
+          a: 4
+        },
+        {
+          n: 65,
+          q: 'To get to the post office, ____ down Fifth Avenue and turn left on Pine Street.',
+          opts: ['reach', 'walk', 'look', 'cross'],
+          a: 2
+        },
+        {
+          n: 66,
+          q: 'On bright sunny days, kids enjoy playing in ____ on the beach.',
+          opts: ['seashells', 'sand', 'ice cream', 'jellyfish'],
+          a: 2
+        },
+        {
+          n: 67,
+          q: 'Cats on rooftops often ____ loud noises at night.',
+          opts: ['make', 'change', 'carry', 'grow'],
+          a: 1
+        },
+        {
+          n: 68,
+          q: 'When it looks ____, I always bring an umbrella with me in case of rain.',
+          opts: ['windy', 'cloudy', 'hot', 'cold'],
+          a: 2
+        },
+        {
+          n: 69,
+          q: 'Nowadays, food delivery services help people to ____ time buying meals.',
+          opts: ['show', 'fix', 'save', 'move'],
+          a: 3
+        },
+        {
+          n: 70,
+          q: 'Michael felt ____ after he ran for an hour straight without stopping.',
+          opts: ['asleep', 'safe', 'dry', 'tired'],
+          a: 4
+        }
+      ]
+
+      const graph1 = [
+        {
+          n: 71,
+          q: 'Which activity at home is the most popular among children?',
+          opts: ['Reading', 'Playing', 'Baking', 'Washing hands'],
+          a: 2
+        },
+        { n: 72, q: 'How many children enjoy baking at home?', opts: ['18', '14', '10', '8'], a: 3 }
+      ]
+      const graph2 = [
+        { n: 73, q: 'How many unripe avocados are there in the refrigerator?', opts: ['3', '4', '5', '6'], a: 1 },
+        { n: 74, q: 'How many ripe lemons are there in the refrigerator?', opts: ['7', '6', '5', '4'], a: 4 }
+      ]
+      const graph3 = [
+        {
+          n: 75,
+          q: 'Each animal requires a certain amount of land to live (see rates above). Which group of animals requires the most land on the farm?',
+          opts: ['cow', 'pig', 'sheep', 'chicken'],
+          a: 2
+        }
+      ]
+
+      const signs1 = [
+        {
+          n: 76,
+          q: 'What time does the library close on weekends?',
+          opts: ['1:00 PM', '5:00 PM', '8:00 PM', '4:00 PM'],
+          a: 2
+        },
+        {
+          n: 77,
+          q: 'What do you need to get a library card?',
+          opts: ['ID and a borrowed book', 'ID and $10', '$5 and a book', '$10 and a book'],
+          a: 2
+        },
+        {
+          n: 78,
+          q: "When is the children's story time?",
+          opts: [
+            'Every Friday at 10 AM',
+            'Every Sunday at 10:00 AM',
+            'Every Saturday at 10:30 AM',
+            'Every day at 10:30 AM'
+          ],
+          a: 3
+        }
+      ]
+      const signs2 = [
+        {
+          n: 79,
+          q: 'What do you get for free if you order Grilled Salmon?',
+          opts: ['Ice cream', 'Garlic bread', 'Coffee', 'Soft drink'],
+          a: 2
+        },
+        {
+          n: 80,
+          q: 'How much would a child pay for Chicken Parmesan?',
+          opts: ['$15.00', '$12.00', '$7.50', '$5.50'],
+          a: 3
+        }
+      ]
+
+      const text1 = [
+        {
+          n: 81,
+          q: 'What can be the best title of this story?',
+          opts: ['The Secret Backpacks', 'The Secret Book', 'The Magic Book', 'The Magical Backpack'],
+          a: 4
+        },
+        {
+          n: 82,
+          q: 'Where did Emma find the backpack?',
+          opts: ['On the ground', 'At school', 'In her bedroom', 'In the library'],
+          a: 1
+        },
+        {
+          n: 83,
+          q: 'What happened when Emma touched the first book?',
+          opts: [
+            'The book disappeared immediately.',
+            'The book became very heavy.',
+            'The book shone lightly.',
+            'The book started talking softly.'
+          ],
+          a: 3
+        },
+        {
+          n: 84,
+          q: 'Why did Emma keep the backpack secret?',
+          opts: [
+            'Because she was afraid of the magic.',
+            'Because it was special for her.',
+            "Because she didn't want to share the books.",
+            "Because her parents wouldn't believe her."
+          ],
+          a: 2
+        },
+        {
+          n: 85,
+          q: 'What is the main theme of this story?',
+          opts: [
+            'The magic of reading and learning.',
+            'Finding friends at school.',
+            'The importance of studying hard.',
+            'Taking care of lost objects.'
+          ],
+          a: 1
+        }
+      ]
+      const text2 = [
+        {
+          n: 86,
+          q: 'What is the best topic of this passage?',
+          opts: [
+            'How to Buy a Bicycle in a City',
+            'The History of Cycling',
+            'Benefits of Cycling',
+            'Cycling for the Environment'
+          ],
+          a: 3
+        },
+        {
+          n: 87,
+          q: 'What is the main purpose of this passage?',
+          opts: [
+            'To explain how to ride a bicycle safely.',
+            'To compare cycling with other sports.',
+            'To describe the history of cycling.',
+            'To persuade people to consider cycling as transportation.'
+          ],
+          a: 4
+        },
+        {
+          n: 88,
+          q: 'How is cycling good for the environment?',
+          opts: [
+            'It produces more traffic.',
+            'It uses a lot of fuel.',
+            'It creates no harmful chemicals.',
+            'It makes cities clearer.'
+          ],
+          a: 3
+        },
+        {
+          n: 89,
+          q: 'When does the passage suggest cycling is often quicker than driving?',
+          opts: [
+            'On long journeys.',
+            'In busy city areas for shorter journeys.',
+            'When there are bike lanes.',
+            'During rush hour traffic.'
+          ],
+          a: 2
+        },
+        {
+          n: 90,
+          q: 'What are many cities doing to help cyclists?',
+          opts: [
+            'Building more car parks.',
+            'Making driving easier.',
+            'Constructing lanes suitable for bikers.',
+            'Buying bikes for everyone.'
+          ],
+          a: 3
+        }
+      ]
+
+      const cloze1 = [
+        {
+          n: 91,
+          q: '(91) always ____ forward to their weekend trips.',
+          opts: ['saw', 'looked', 'watched', 'observed'],
+          a: 2
+        },
+        {
+          n: 92,
+          q: 'the (92) ____ to relax away from city life.',
+          opts: ['opportunity', 'possibility', 'occasion', 'moment'],
+          a: 1
+        },
+        {
+          n: 93,
+          q: 'they (93) ____ their new tent for the first time.',
+          opts: ['bought', 'camped', 'used', 'tied'],
+          a: 3
+        },
+        { n: 94, q: 'told stories (94) ____ the stars came out.', opts: ['until', 'about', 'to', 'during'], a: 1 },
+        {
+          n: 95,
+          q: 'the weekend had been so (95) ____ that they immediately started planning their next trip.',
+          opts: ['enjoy', 'enjoyed', 'enjoying', 'enjoyable'],
+          a: 4
+        }
+      ]
+      const cloze2 = [
+        {
+          n: 96,
+          q: 'At first, she was (96) ____ about living in a big city.',
+          opts: ['nervous', 'thrilled', 'calm', 'bored'],
+          a: 1
+        },
+        {
+          n: 97,
+          q: 'It was located in a (97) ____ neighborhood with lots of cafes and shops.',
+          opts: ['live', 'alive', 'lively', 'living'],
+          a: 3
+        },
+        {
+          n: 98,
+          q: 'She joined a local sports club and (98) ____ evening classes to learn photography.',
+          opts: ['attended', 'offered', 'went', 'came'],
+          a: 1
+        },
+        {
+          n: 99,
+          q: 'Moving to London was the (99) ____ decision she had ever made.',
+          opts: ['good', 'better', 'well', 'best'],
+          a: 4
+        },
+        {
+          n: 100,
+          q: 'She felt (100) ____ confident about living independently in such a large city.',
+          opts: ['much', 'more', 'most', 'many'],
+          a: 2
+        }
+      ]
+
+      /* Part label lookup for scoring */
+      function partOf(n) {
+        if (n <= 25) return 'Part I: Speaking'
+        if (n <= 50) return 'Part II: Grammar'
+        if (n <= 70) return 'Part III: Vocabulary'
+        return 'Part IV: Reading'
+      }
+
+      const allGroups = [
+        { list: situational, defaultOpts: null },
+        { list: shortConv, defaultOpts: null },
+        { list: sentenceCompletion, defaultOpts: null },
+        { list: errorId, defaultOpts: errorOpts },
+        { list: oddOneOut, defaultOpts: null },
+        { list: spelling, defaultOpts: null },
+        { list: synonym, defaultOpts: null },
+        { list: antonym, defaultOpts: null },
+        { list: meaning, defaultOpts: null },
+        { list: vocSentence, defaultOpts: null },
+        { list: graph1, defaultOpts: null },
+        { list: graph2, defaultOpts: null },
+        { list: graph3, defaultOpts: null },
+        { list: signs1, defaultOpts: null },
+        { list: signs2, defaultOpts: null },
+        { list: text1, defaultOpts: null },
+        { list: text2, defaultOpts: null },
+        { list: cloze1, defaultOpts: null },
+        { list: cloze2, defaultOpts: null }
+      ]
+
+      /* Master answer key for grading */
+      const answerKey = {}
+      allGroups.forEach(g => {
+        g.list.forEach(item => {
+          const opts = item.opts || g.defaultOpts
+          answerKey[item.n] = { answer: item.a, opts: opts }
+        })
+      })
+
+      /* ============ RENDERING ============ */
+      function renderGroup(containerId, list, sharedOpts) {
+        const container = document.getElementById(containerId)
+        list.forEach(item => {
+          const opts = item.opts || sharedOpts
+          const card = document.createElement('div')
+          card.className = 'qcard'
+          card.id = 'qcard_' + item.n
+
+          const qtext = document.createElement('div')
+          qtext.className = 'qtext'
+          qtext.innerHTML = '<b class="qnum">' + item.n + '.</b> ' + item.q
+          card.appendChild(qtext)
+
+          opts.forEach((optText, idx) => {
+            const val = idx + 1
+            const label = document.createElement('label')
+            label.className = 'opt'
+            label.id = 'opt_' + item.n + '_' + val
+            label.innerHTML =
+              '<input type="radio" name="q' + item.n + '" value="' + val + '">' + '<span>' + optText + '</span>'
+            label.addEventListener('click', () => {
+              card.querySelectorAll('.opt').forEach(o => o.classList.remove('selected'))
+              label.classList.add('selected')
+              updateProgress()
+            })
+            card.appendChild(label)
+          })
+
+          container.appendChild(card)
+        })
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        renderGroup('grp_situational', situational)
+        renderGroup('grp_short', shortConv)
+        renderGroup('grp_sentence', sentenceCompletion)
+        renderGroup('grp_error', errorId, errorOpts)
+        renderGroup('grp_odd', oddOneOut)
+        renderGroup('grp_spelling', spelling)
+        renderGroup('grp_synonym', synonym)
+        renderGroup('grp_antonym', antonym)
+        renderGroup('grp_meaning', meaning)
+        renderGroup('grp_vocsent', vocSentence)
+        renderGroup('grp_graph1', graph1)
+        renderGroup('grp_graph2', graph2)
+        renderGroup('grp_graph3', graph3)
+        renderGroup('grp_signs1', signs1)
+        renderGroup('grp_signs2', signs2)
+        renderGroup('grp_text1', text1)
+        renderGroup('grp_text2', text2)
+        renderGroup('grp_cloze1', cloze1)
+        renderGroup('grp_cloze2', cloze2)
+
+        buildBarChart()
+        buildFruitGrid()
+        buildTallyTable()
+        updateProgress()
+      })
+
+      function buildBarChart() {
+        const data = [
+          { label: 'Reading', val: 8, color: '#8a63e8' },
+          { label: 'Playing', val: 18, color: '#ea3d7f' },
+          { label: 'Baking', val: 10, color: '#e0403f' },
+          { label: 'Washing hands', val: 14, color: '#39a8e0' }
+        ]
+        const max = 20
+        const chart = document.getElementById('barChart')
+        data.forEach(d => {
+          const wrap = document.createElement('div')
+          wrap.className = 'bar-wrap'
+          const barHeight = (d.val / max) * 100 + '%'
+          wrap.innerHTML =
+            '<div class="bar" style="height:' +
+            barHeight +
+            ';background:' +
+            d.color +
+            ';">' +
+            '<div class="val">' +
+            d.val +
+            '</div></div>' +
+            '<div class="lbl">' +
+            d.label +
+            '</div>'
+          chart.appendChild(wrap)
+        })
+      }
+
+      function buildFruitGrid() {
+        // ripe range and unripe range per fruit, quantities 1-10
+        const rows = [
+          { name: 'Lemons', unripe: 0, ripe: 4 },
+          { name: 'Apples', unripe: 0, ripe: 5 },
+          { name: 'Avocados', unripe: 3, ripe: 2 },
+          { name: 'Peaches', unripe: 6, ripe: 0 }
+        ]
+        const table = document.getElementById('fruitGrid')
+        let thead = '<tr><th>Fruit</th>'
+        for (let i = 1; i <= 10; i++) thead += '<th>' + i + '</th>'
+        thead += '</tr>'
+        let body = ''
+        rows.forEach(r => {
+          body += '<tr><td>' + r.name + '</td>'
+          for (let i = 1; i <= 10; i++) {
+            let cls = ''
+            if (i <= r.unripe) cls = 'cell-unripe'
+            else if (i <= r.unripe + r.ripe) cls = 'cell-ripe'
+            body += '<td class="' + cls + '"></td>'
+          }
+          body += '</tr>'
+        })
+        table.innerHTML = thead + body
+      }
+
+      function buildTallyTable() {
+        const rows = [
+          { name: '🐄 Cow', total: 6 },
+          { name: '🐖 Pig', total: 12 },
+          { name: '🐔 Chicken', total: 7 },
+          { name: '🐑 Sheep', total: 5 }
+        ]
+        const table = document.getElementById('tallyTable')
+        let html = '<tr><th>Animal</th><th>Total</th></tr>'
+        rows.forEach(r => {
+          html += '<tr><td>' + r.name + '</td><td>' + r.total + '</td></tr>'
+        })
+        table.innerHTML = html
+      }
+
+      /* ============ PROGRESS ============ */
+      function updateProgress() {
+        let answered = 0
+        for (let n = 1; n <= 100; n++) {
+          const checked = document.querySelector('input[name="q' + n + '"]:checked')
+          if (checked) answered++
+        }
+        document.getElementById('progressFill').style.width = answered + '%'
+        document.getElementById('progressCount').textContent = answered + ' / 100 answered'
+      }
+
+      /* ============ TIMER ============ */
+      let totalSeconds = 2 * 60 * 60
+      let timerInterval = null
+      function formatTime(s) {
+        const h = Math.floor(s / 3600)
+        const m = Math.floor((s % 3600) / 60)
+        const sec = s % 60
+        return [h, m, sec].map(v => String(v).padStart(2, '0')).join(':')
+      }
+      function startTimer() {
+        document.getElementById('startBtn').disabled = true
+        document.getElementById('pauseBtn').disabled = false
+        timerInterval = setInterval(() => {
+          totalSeconds--
+          document.getElementById('timeDisplay').textContent = formatTime(Math.max(totalSeconds, 0))
+          if (totalSeconds <= 0) {
+            clearInterval(timerInterval)
+            alert("Time's up! The exam will now be submitted automatically.")
+            gradeExam()
+          }
+        }, 1000)
+      }
+      function pauseTimer() {
+        clearInterval(timerInterval)
+        document.getElementById('startBtn').disabled = false
+        document.getElementById('pauseBtn').disabled = true
+      }
+
+      /* ============ GRADING ============ */
+      // questionResult[n] = { given: number|null, isCorrect: boolean }
+      let questionResult = {}
+      let lastWrongList = []
+      let examGraded = false
+      let retryUsed = false
+      let answersRevealed = false
+
+      function clearBadge(card) {
+        const qtextEl = card.querySelector('.qtext')
+        const oldBadge = qtextEl.querySelector('.badge')
+        if (oldBadge) oldBadge.remove()
+      }
+
+      function markQuestion(n, given, isCorrect, badgeLabel, badgeClass) {
+        const key = answerKey[n]
+        const card = document.getElementById('qcard_' + n)
+        if (!card) return
+        card.querySelectorAll('input').forEach(inp => (inp.disabled = true))
+        key.opts.forEach((opt, idx) => {
+          const val = idx + 1
+          const lbl = document.getElementById('opt_' + n + '_' + val)
+          if (!lbl) return
+          lbl.classList.remove('correct-answer', 'wrong-answer')
+          if (val === key.answer) {
+            lbl.classList.add('correct-answer')
+          } else if (val === given && !isCorrect) {
+            lbl.classList.add('wrong-answer')
+          }
+        })
+        clearBadge(card)
+        const qtextEl = card.querySelector('.qtext')
+        qtextEl.innerHTML += '<span class="badge ' + badgeClass + '">' + badgeLabel + '</span>'
+      }
+
+      function computeTotalsAndRender() {
+        const partTotals = {
+          'Part I: Speaking': { correct: 0, total: 0 },
+          'Part II: Grammar': { correct: 0, total: 0 },
+          'Part III: Vocabulary': { correct: 0, total: 0 },
+          'Part IV: Reading': { correct: 0, total: 0 }
+        }
+        let totalCorrect = 0
+        for (let n = 1; n <= 100; n++) {
+          const partName = partOf(n)
+          partTotals[partName].total++
+          if (questionResult[n] && questionResult[n].isCorrect) {
+            totalCorrect++
+            partTotals[partName].correct++
+          }
+        }
+        document.getElementById('totalScore').textContent = totalCorrect + ' / 100'
+        document.getElementById('totalPercent').textContent = Math.round(totalCorrect) + '%'
+        const partScoresEl = document.getElementById('partScores')
+        partScoresEl.innerHTML = ''
+        Object.keys(partTotals).forEach(p => {
+          const t = partTotals[p]
+          partScoresEl.innerHTML +=
+            '<div class="part-score-card"><div class="n">' +
+            t.correct +
+            ' / ' +
+            t.total +
+            '</div><div class="l">' +
+            p +
+            '</div></div>'
+        })
+        return totalCorrect
+      }
+
+      function gradeExam() {
+        let unanswered = []
+        for (let n = 1; n <= 100; n++) {
+          if (!document.querySelector('input[name="q' + n + '"]:checked')) unanswered.push(n)
+        }
+        if (unanswered.length > 0) {
+          const proceed = confirm(
+            unanswered.length +
+              ' question(s) are not answered yet (e.g. Q' +
+              unanswered.slice(0, 5).join(', ') +
+              '...). Submit anyway?'
+          )
+          if (!proceed) return
+        }
+
+        clearInterval(timerInterval)
+        document.getElementById('startBtn').disabled = true
+        document.getElementById('pauseBtn').disabled = true
+
+        questionResult = {}
+        lastWrongList = []
+
+        for (let n = 1; n <= 100; n++) {
+          const key = answerKey[n]
+          const checkedEl = document.querySelector('input[name="q' + n + '"]:checked')
+          const given = checkedEl ? parseInt(checkedEl.value) : null
+          const isCorrect = given === key.answer
+          questionResult[n] = { given: given, isCorrect: isCorrect }
+          if (!isCorrect) lastWrongList.push(n)
+
+          const badgeLabel = isCorrect ? 'Correct' : given ? 'Incorrect' : 'Not answered'
+          const badgeClass = isCorrect ? 'ok' : given ? 'bad' : 'skip'
+          markQuestion(n, given, isCorrect, badgeLabel, badgeClass)
+        }
+
+        computeTotalsAndRender()
+
+        examGraded = true
+        document.getElementById('resultsPanel').style.display = 'block'
+        document.getElementById('submitBtn').disabled = true
+
+        const retryBtn = document.getElementById('retryBtn')
+        if (lastWrongList.length === 0) {
+          retryBtn.disabled = true
+          retryBtn.textContent = '🎉 Perfect score - nothing to retry'
+        } else {
+          retryBtn.disabled = false
+          retryBtn.textContent = '🔁 Review & Retry Wrong Answers (1 time)'
+        }
+
+        document.getElementById('resultsPanel').scrollIntoView({ behavior: 'smooth' })
+      }
+
+      /* ============ RETRY (single use) ============ */
+      function startRetry() {
+        if (!examGraded || retryUsed || lastWrongList.length === 0) return
+        retryUsed = true
+
+        document.getElementById('retryBtn').style.display = 'none'
+        document.getElementById('submitRetryWrap').style.display = 'block'
+
+        lastWrongList.forEach(n => {
+          const card = document.getElementById('qcard_' + n)
+          if (!card) return
+          card.classList.add('retry-mode')
+          clearBadge(card)
+          card.querySelectorAll('.opt').forEach(lbl => {
+            lbl.classList.remove('correct-answer', 'wrong-answer', 'selected')
+            const inp = lbl.querySelector('input')
+            inp.disabled = false
+            inp.checked = false
+          })
+        })
+
+        const retryNote = document.getElementById('retryNote')
+        retryNote.style.display = 'block'
+        retryNote.textContent =
+          'Retry mode: redo the ' + lastWrongList.length + ' question(s) you got wrong. You get 1 retry attempt.'
+
+        const firstCard = document.getElementById('qcard_' + lastWrongList[0])
+        if (firstCard) firstCard.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        updateProgress()
+      }
+
+      function submitRetry() {
+        const stillUnanswered = lastWrongList.filter(n => !document.querySelector('input[name="q' + n + '"]:checked'))
+        if (stillUnanswered.length > 0) {
+          const proceed = confirm(
+            stillUnanswered.length + ' retry question(s) are still not answered. Submit retry anyway?'
+          )
+          if (!proceed) return
+        }
+
+        let fixedCount = 0
+        lastWrongList.forEach(n => {
+          const key = answerKey[n]
+          const checkedEl = document.querySelector('input[name="q' + n + '"]:checked')
+          const given = checkedEl ? parseInt(checkedEl.value) : null
+          const isCorrect = given === key.answer
+          questionResult[n] = { given: given, isCorrect: isCorrect }
+          if (isCorrect) fixedCount++
+
+          const card = document.getElementById('qcard_' + n)
+          if (card) card.classList.remove('retry-mode')
+
+          const badgeLabel = isCorrect ? 'Correct (retry)' : given ? 'Incorrect (retry)' : 'Not answered'
+          const badgeClass = isCorrect ? 'ok' : given ? 'bad' : 'skip'
+          markQuestion(n, given, isCorrect, badgeLabel, badgeClass)
+        })
+
+        computeTotalsAndRender()
+
+        document.getElementById('submitRetryWrap').style.display = 'none'
+        const retryNote = document.getElementById('retryNote')
+        retryNote.style.display = 'block'
+        retryNote.textContent =
+          'Retry complete: ' + fixedCount + ' of ' + lastWrongList.length + ' previously wrong answer(s) fixed.'
+
+        document.getElementById('resultsPanel').scrollIntoView({ behavior: 'smooth' })
+      }
+
+      /* ============ VIEW CORRECT ANSWERS ============ */
+      function revealAllAnswers() {
+        answersRevealed = !answersRevealed
+        const revealBtn = document.getElementById('revealBtn')
+
+        for (let n = 1; n <= 100; n++) {
+          const key = answerKey[n]
+          const card = document.getElementById('qcard_' + n)
+          if (!card) continue
+          key.opts.forEach((opt, idx) => {
+            const val = idx + 1
+            const lbl = document.getElementById('opt_' + n + '_' + val)
+            if (!lbl) return
+            if (val === key.answer) {
+              lbl.classList.toggle(
+                'correct-answer',
+                answersRevealed || (questionResult[n] && questionResult[n].isCorrect)
+              )
+            }
+          })
+        }
+
+        revealBtn.textContent = answersRevealed ? '🙈 Hide Correct Answers' : '📖 View Correct Answers'
+        if (answersRevealed) {
+          document.getElementById('grp_situational').scrollIntoView({ behavior: 'smooth' })
+        }
+      }
+
+      function scrollToReview() {
+        document.getElementById('grp_situational').scrollIntoView({ behavior: 'smooth' })
+      }
+
+      document.getElementById('examForm').addEventListener('change', updateProgress)
+    </script>
+  </body>
+</html>

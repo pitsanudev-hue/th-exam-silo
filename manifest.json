@@ -1,0 +1,8 @@
+{
+  "name": "คลังแบบฝึกหัด",
+  "short_name": "แบบฝึกหัด",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f8f9fa",
+  "theme_color": "#6c5ce7"
+}
