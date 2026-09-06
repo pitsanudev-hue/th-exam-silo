@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>แบบฝึกหัดโจทย์ปัญหาแก้สมการ - ป.4</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+      body {
+        background-color: #f4f7f6;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .header-panel {
+        position: sticky;
+        top: 10px;
+        z-index: 100;
+        background: #ffffff;
+        padding: 15px 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        display: flex;
+        gap: 30px;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .stat-box {
+        text-align: center;
+      }
+      .stat-label {
+        font-size: 0.85rem;
+        color: #7f8c8d;
+        margin-bottom: 2px;
+      }
+      .stat-value {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #2c3e50;
+      }
+      .progress-container {
+        width: 200px;
+        background-color: #e0e0e0;
+        border-radius: 10px;
+        height: 12px;
+        overflow: hidden;
+      }
+      .progress-bar {
+        height: 100%;
+        background-color: #27ae60;
+        width: 0%;
+        transition: width 0.3s ease;
+      }
+      .container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        max-width: 1200px;
+        width: 100%;
+      }
+      @media (max-width: 800px) {
+        .container {
+          grid-template-columns: repeat(1, 1fr);
+        }
+      }
+      .card {
+        background: #fff;
+        border-radius: 8px;
+        padding: 15px 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        border-left: 5px solid #ccc;
+      }
+      .card.active {
+        border-left-color: #8e44ad;
+        background-color: #f4ecf7;
+        box-shadow: 0 4px 8px rgba(142, 68, 173, 0.2);
+      }
+      .card.completed {
+        border-left-color: #27ae60;
+        background-color: #eafaf1;
+      }
+      .card.locked {
+        opacity: 0.5;
+      }
+      .card-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      .item-num {
+        font-weight: bold;
+        color: #7f8c8d;
+        min-width: 30px;
+      }
+      .problem {
+        font-weight: 500;
+        font-size: 1rem;
+        color: #2c3e50;
+        line-height: 1.5;
+      }
+      .answer-box {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 5px;
+      }
+      .ans-label {
+        font-weight: bold;
+        color: #2c3e50;
+      }
+      input[type="number"] {
+        width: 90px;
+        padding: 6px;
+        font-size: 1rem;
+        text-align: center;
+        border: 1px solid #bdc3c7;
+        border-radius: 4px;
+        outline: none;
+      }
+      input[type="number"]:focus {
+        border-color: #8e44ad;
+      }
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      input[type="number"] {
+        -moz-appearance: textfield;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header-panel">
+      <div class="stat-box">
+        <div class="stat-label">เวลาที่ใช้</div>
+        <div class="stat-value" id="timer">00:00</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">ความก้าวหน้า</div>
+        <div class="stat-value" id="progress-text">0 / 50</div>
+        <div class="progress-container">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container" id="quiz-container"></div>
+
+    <script>
+      function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+      function getRandomItem(arr) {
+        return arr[Math.floor(Math.random() * arr.length)];
+      }
+
+      // สุ่มโจทย์ปัญหาภาษาไทย สำหรับ ป.4
+      function generateWordProblem() {
+        const type = getRandomInt(0, 3);
+        const names = ["แคน", "ปั้น", "ฟ้า", "ต้น", "มินต์", "น้ำมัน", "คุณครู"];
+        const items = ["สมุด", "ดินสอ", "ขนม", "ลูกแก้ว", "สติ๊กเกอร์", "คุกกี้"];
+        const units = ["เล่ม", "แท่ง", "ห่อ", "ลูก", "แผ่น", "ชิ้น"];
+
+        const name = getRandomItem(names);
+        const itemIdx = getRandomInt(0, items.length - 1);
+        const item = items[itemIdx];
+        const unit = units[itemIdx];
+
+        let text = "";
+        let ans = 0;
+
+        if (type === 0) {
+          // โจทย์สมการบวก: เช่น มีของเดิม x ซื้อมาเพิ่ม b มีรวม c (หา x)
+          ans = getRandomInt(10, 80);
+          const added = getRandomInt(5, 50);
+          const total = ans + added;
+          text = `${name}มี${item}อยู่จำนวนหนึ่ง ซื้อมาเพิ่มอีก ${added} ${unit} ทำให้มี${item}รวมทั้งหมด ${total} ${unit} เดิม${name}มี${item}กี่${unit}?`;
+        } else if (type === 1) {
+          // โจทย์สมการลบ: เช่น มีเงินเดิม x ใช้ไป b เหลือ c (หา x)
+          ans = getRandomInt(30, 150);
+          const spent = getRandomInt(10, ans - 5);
+          const remain = ans - spent;
+          text = `${name}มีเงินอยู่จำนวนหนึ่ง นำไปซื้อของ ${spent} บาท แล้วเหลือเงินอยู่ ${remain} บาท เดิม${name}มีเงินกี่บาท?`;
+        } else if (type === 2) {
+          // โจทย์สมการคูณ: เช่น จัดของใส่ ถุง ละ b ชิ้น ได้รวม c ชิ้น (หาจำนวนถุง x)
+          ans = getRandomInt(3, 15); // จำนวนกลุ่ม/ถุง (x)
+          const perGroup = getRandomInt(4, 12); // จำนวนต่อกลุ่ม
+          const total = ans * perGroup;
+          text = `คุณครูจัด${item}ใส่ถุง ถุงละ ${perGroup} ${unit} ใช้${item}ไปทั้งหมด ${total} ${unit} คุณครูจัด${item}ได้ทั้งหมดกี่ถุง?`;
+        } else {
+          // โจทย์สมการหาร: เช่น มีของ x ชิ้น แบ่งให้เพื่อน b คน ได้คนละ c ชิ้น (หา x)
+          const count = getRandomInt(2, 10); // จำนวนคน
+          const perPerson = getRandomInt(3, 12); // ได้คนละ
+          ans = count * perPerson; // ของทั้งหมด (x)
+          text = `${name}มี${item}อยู่จำนวนหนึ่ง แบ่งให้เพื่อน ${count} คน เท่าๆ กัน ได้รับคนละ ${perPerson} ${unit} เดิม${name}มี${item}ทั้งหมดกี่${unit}?`;
+        }
+
+        return { text, ans, unit: type === 1 ? "บาท" : type === 2 ? "ถุง" : unit };
+      }
+
+      function generateRandomProblems(total = 50) {
+        const list = [];
+        for (let i = 1; i <= total; i++) {
+          const p = generateWordProblem();
+          list.push({
+            id: i,
+            expr: p.text,
+            ans: p.ans,
+            unit: p.unit,
+          });
+        }
+        return list;
+      }
+
+      let seconds = 0;
+      let timerInterval = null;
+      let isTimerStarted = false;
+
+      function startTimer() {
+        if (!isTimerStarted) {
+          isTimerStarted = true;
+          timerInterval = setInterval(() => {
+            seconds++;
+            const mins = String(Math.floor(seconds / 60)).padStart(2, "0");
+            const secs = String(seconds % 60).padStart(2, "0");
+            document.getElementById("timer").textContent = `${mins}:${secs}`;
+          }, 1000);
+        }
+      }
+
+      function stopTimer() {
+        clearInterval(timerInterval);
+      }
+
+      const totalItems = 50;
+      const problems = generateRandomProblems(totalItems);
+      const container = document.getElementById("quiz-container");
+
+      problems.forEach((p, index) => {
+        const card = document.createElement("div");
+        card.className = `card ${index === 0 ? "active" : "locked"}`;
+        card.id = `card-${p.id}`;
+
+        card.innerHTML = `
+          <div class="card-header">
+            <span class="item-num">${p.id}.</span>
+            <span class="problem">${p.expr}</span>
+          </div>
+          <div class="answer-box">
+            <span class="ans-label">ตอบ:</span>
+            <input type="number" id="input-${p.id}" ${index !== 0 ? "disabled" : ""} autocomplete="off">
+            <span class="ans-label">${p.unit}</span>
+          </div>
+        `;
+
+        container.appendChild(card);
+
+        const input = card.querySelector("input");
+
+        input.addEventListener("input", function () {
+          startTimer();
+
+          const val = parseInt(this.value);
+          if (val === p.ans) {
+            card.classList.remove("active");
+            card.classList.add("completed");
+            this.disabled = true;
+
+            const completedCount = p.id;
+            document.getElementById("progress-text").textContent =
+              `${completedCount} / ${totalItems}`;
+            document.getElementById("progress-bar").style.width =
+              `${(completedCount / totalItems) * 100}%`;
+
+            const nextId = p.id + 1;
+            const nextCard = document.getElementById(`card-${nextId}`);
+            if (nextCard) {
+              nextCard.classList.remove("locked");
+              nextCard.classList.add("active");
+              const nextInput = nextCard.querySelector("input");
+              nextInput.disabled = false;
+              nextInput.focus();
+            } else {
+              stopTimer();
+              const finalMins = Math.floor(seconds / 60);
+              const finalSecs = seconds % 60;
+              alert(
+                `ยอดเยี่ยมมาก! คุณทำชุดโจทย์ปัญหาแก้สมการ ครบ ${totalItems} ข้อแล้ว\nเวลาที่ใช้ไปทั้งหมด: ${finalMins} นาที ${finalSecs} วินาที`,
+              );
+            }
+          }
+        });
+      });
+
+      document.getElementById("input-1").focus();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>แบบฝึกหัดแก้สมการตัวแปรเดียว (หาค่า X) - ป.4</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+      body {
+        background-color: #f4f7f6;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .header-panel {
+        position: sticky;
+        top: 10px;
+        z-index: 100;
+        background: #ffffff;
+        padding: 15px 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        display: flex;
+        gap: 30px;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .stat-box {
+        text-align: center;
+      }
+      .stat-label {
+        font-size: 0.85rem;
+        color: #7f8c8d;
+        margin-bottom: 2px;
+      }
+      .stat-value {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #2c3e50;
+      }
+      .progress-container {
+        width: 200px;
+        background-color: #e0e0e0;
+        border-radius: 10px;
+        height: 12px;
+        overflow: hidden;
+      }
+      .progress-bar {
+        height: 100%;
+        background-color: #27ae60;
+        width: 0%;
+        transition: width 0.3s ease;
+      }
+      .container {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        max-width: 1200px;
+        width: 100%;
+      }
+      @media (max-width: 1024px) {
+        .container {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .header-panel {
+          gap: 15px;
+          padding: 10px 15px;
+        }
+      }
+      @media (max-width: 600px) {
+        .container {
+          grid-template-columns: repeat(1, 1fr);
+        }
+      }
+      .card {
+        background: #fff;
+        border-radius: 8px;
+        padding: 10px 15px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-left: 5px solid #ccc;
+      }
+      .card.active {
+        border-left-color: #8e44ad;
+        background-color: #f4ecf7;
+        box-shadow: 0 4px 8px rgba(142, 68, 173, 0.2);
+      }
+      .card.completed {
+        border-left-color: #27ae60;
+        background-color: #eafaf1;
+      }
+      .card.locked {
+        opacity: 0.5;
+      }
+      .item-num {
+        font-weight: bold;
+        color: #7f8c8d;
+        width: 35px;
+      }
+      .problem {
+        font-weight: 600;
+        font-size: 1.05rem;
+        flex-grow: 1;
+        color: #2c3e50;
+        padding-right: 5px;
+      }
+      .answer-box {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .x-label {
+        font-weight: bold;
+        color: #8e44ad;
+      }
+      input[type="number"] {
+        width: 75px;
+        padding: 6px;
+        font-size: 1rem;
+        text-align: center;
+        border: 1px solid #bdc3c7;
+        border-radius: 4px;
+        outline: none;
+      }
+      input[type="number"]:focus {
+        border-color: #8e44ad;
+      }
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      input[type="number"] {
+        -moz-appearance: textfield;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header-panel">
+      <div class="stat-box">
+        <div class="stat-label">เวลาที่ใช้</div>
+        <div class="stat-value" id="timer">00:00</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">ความก้าวหน้า</div>
+        <div class="stat-value" id="progress-text">0 / 100</div>
+        <div class="progress-container">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container" id="quiz-container"></div>
+
+    <script>
+      function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+      // ฟังก์ชันสุ่มสร้างโจทย์สมการตัวแปรเดียว 1 ข้อ
+      function generateSingleEquation() {
+        const type = getRandomInt(0, 3);
+        let expr = "";
+        let ans = 0;
+
+        if (type === 0) {
+          // 1. สมการการบวก (x + a = b หรือ a + x = b)
+          ans = getRandomInt(5, 50);
+          const num = getRandomInt(10, 99);
+          const total = ans + num;
+
+          if (Math.random() > 0.5) {
+            expr = `x + ${num} = ${total}`;
+          } else {
+            expr = `${num} + x = ${total}`;
+          }
+        } else if (type === 1) {
+          // 2. สมการการลบ (x - a = b)
+          ans = getRandomInt(10, 99);
+          const num = getRandomInt(5, ans - 1);
+          const diff = ans - num;
+
+          expr = `x - ${num} = ${diff}`;
+        } else if (type === 2) {
+          // 3. สมการการคูณ (ax = b หรือ a × x = b)
+          ans = getRandomInt(2, 20);
+          const num = getRandomInt(2, 12);
+          const prod = ans * num;
+
+          if (Math.random() > 0.5) {
+            expr = `${num}x = ${prod}`;
+          } else {
+            expr = `${num} × x = ${prod}`;
+          }
+        } else {
+          // 4. สมการการหาร (x ÷ a = b)
+          const divisor = getRandomInt(2, 12);
+          const quotient = getRandomInt(2, 20);
+          ans = divisor * quotient;
+
+          expr = `x ÷ ${divisor} = ${quotient}`;
+        }
+
+        return { expr, ans };
+      }
+
+      function generateRandomProblems(total = 100) {
+        const list = [];
+        for (let i = 1; i <= total; i++) {
+          const p = generateSingleEquation();
+          list.push({
+            id: i,
+            expr: p.expr,
+            ans: p.ans,
+          });
+        }
+        return list;
+      }
+
+      let seconds = 0;
+      let timerInterval = null;
+      let isTimerStarted = false;
+
+      function startTimer() {
+        if (!isTimerStarted) {
+          isTimerStarted = true;
+          timerInterval = setInterval(() => {
+            seconds++;
+            const mins = String(Math.floor(seconds / 60)).padStart(2, "0");
+            const secs = String(seconds % 60).padStart(2, "0");
+            document.getElementById("timer").textContent = `${mins}:${secs}`;
+          }, 1000);
+        }
+      }
+
+      function stopTimer() {
+        clearInterval(timerInterval);
+      }
+
+      const problems = generateRandomProblems(100);
+      const container = document.getElementById("quiz-container");
+
+      problems.forEach((p, index) => {
+        const card = document.createElement("div");
+        card.className = `card ${index === 0 ? "active" : "locked"}`;
+        card.id = `card-${p.id}`;
+
+        card.innerHTML = `
+          <span class="item-num">${p.id}.</span>
+          <span class="problem">${p.expr}</span>
+          <div class="answer-box">
+            <span class="x-label">x =</span>
+            <input type="number" id="input-${p.id}" ${index !== 0 ? "disabled" : ""} autocomplete="off">
+          </div>
+        `;
+
+        container.appendChild(card);
+
+        const input = card.querySelector("input");
+
+        input.addEventListener("input", function () {
+          startTimer();
+
+          const val = parseInt(this.value);
+          if (val === p.ans) {
+            card.classList.remove("active");
+            card.classList.add("completed");
+            this.disabled = true;
+
+            const completedCount = p.id;
+            document.getElementById("progress-text").textContent = `${completedCount} / 100`;
+            document.getElementById("progress-bar").style.width = `${completedCount}%`;
+
+            const nextId = p.id + 1;
+            const nextCard = document.getElementById(`card-${nextId}`);
+            if (nextCard) {
+              nextCard.classList.remove("locked");
+              nextCard.classList.add("active");
+              const nextInput = nextCard.querySelector("input");
+              nextInput.disabled = false;
+              nextInput.focus();
+            } else {
+              stopTimer();
+              const finalMins = Math.floor(seconds / 60);
+              const finalSecs = seconds % 60;
+              alert(
+                `ยอดเยี่ยมมาก! คุณทำชุดโจทย์แก้สมการตัวแปรเดียว ครบ 100 ข้อแล้ว\nเวลาที่ใช้ไปทั้งหมด: ${finalMins} นาที ${finalSecs} วินาที`,
+              );
+            }
+          }
+        });
+      });
+
+      document.getElementById("input-1").focus();
+    </script>
+  </body>
+</html>

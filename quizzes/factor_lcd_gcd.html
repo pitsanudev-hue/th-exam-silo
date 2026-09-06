@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>แบบฝึกหัด ตัวประกอบ ห.ร.ม. และ ค.ร.น. - ป.4</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+      body {
+        background-color: #f4f7f6;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .header-panel {
+        position: sticky;
+        top: 10px;
+        z-index: 100;
+        background: #ffffff;
+        padding: 15px 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        display: flex;
+        gap: 30px;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .stat-box {
+        text-align: center;
+      }
+      .stat-label {
+        font-size: 0.85rem;
+        color: #7f8c8d;
+        margin-bottom: 2px;
+      }
+      .stat-value {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #2c3e50;
+      }
+      .progress-container {
+        width: 200px;
+        background-color: #e0e0e0;
+        border-radius: 10px;
+        height: 12px;
+        overflow: hidden;
+      }
+      .progress-bar {
+        height: 100%;
+        background-color: #27ae60;
+        width: 0%;
+        transition: width 0.3s ease;
+      }
+      .container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        max-width: 1200px;
+        width: 100%;
+      }
+      @media (max-width: 800px) {
+        .container {
+          grid-template-columns: repeat(1, 1fr);
+        }
+      }
+      .card {
+        background: #fff;
+        border-radius: 8px;
+        padding: 15px 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        border-left: 5px solid #ccc;
+      }
+      .card.active {
+        border-left-color: #8e44ad;
+        background-color: #f4ecf7;
+        box-shadow: 0 4px 8px rgba(142, 68, 173, 0.2);
+      }
+      .card.completed {
+        border-left-color: #27ae60;
+        background-color: #eafaf1;
+      }
+      .card.locked {
+        opacity: 0.5;
+      }
+      .card-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      .item-num {
+        font-weight: bold;
+        color: #7f8c8d;
+        min-width: 30px;
+      }
+      .problem {
+        font-weight: 500;
+        font-size: 1rem;
+        color: #2c3e50;
+        line-height: 1.5;
+      }
+      .answer-box {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 5px;
+      }
+      .ans-label {
+        font-weight: bold;
+        color: #2c3e50;
+      }
+      input[type="number"] {
+        width: 90px;
+        padding: 6px;
+        font-size: 1rem;
+        text-align: center;
+        border: 1px solid #bdc3c7;
+        border-radius: 4px;
+        outline: none;
+      }
+      input[type="number"]:focus {
+        border-color: #8e44ad;
+      }
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      input[type="number"] {
+        -moz-appearance: textfield;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header-panel">
+      <div class="stat-box">
+        <div class="stat-label">เวลาที่ใช้</div>
+        <div class="stat-value" id="timer">00:00</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">ความก้าวหน้า</div>
+        <div class="stat-value" id="progress-text">0 / 40</div>
+        <div class="progress-container">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container" id="quiz-container"></div>
+
+    <script>
+      function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+      // หา ห.ร.ม.
+      function gcd(a, b) {
+        return b === 0 ? a : gcd(b, a % b);
+      }
+
+      // หา ค.ร.น.
+      function lcm(a, b) {
+        return (a * b) / gcd(a, b);
+      }
+
+      // หาจำนวนตัวประกอบทั้งหมดของ n
+      function countFactors(n) {
+        let count = 0;
+        for (let i = 1; i <= n; i++) {
+          if (n % i === 0) count++;
+        }
+        return count;
+      }
+
+      // เช็กจำนวนเฉพาะ
+      function isPrime(n) {
+        if (n <= 1) return false;
+        for (let i = 2; i <= Math.sqrt(n); i++) {
+          if (n % i === 0) return false;
+        }
+        return true;
+      }
+
+      // สุ่มสร้างโจทย์ประเภทต่าง ๆ
+      function generateNumberTheoryProblem() {
+        const type = getRandomInt(0, 4);
+        let text = "";
+        let ans = 0;
+        let unit = "";
+
+        if (type === 0) {
+          // 1. การหาจำนวนตัวประกอบทั้งหมด
+          const num = getRandomInt(12, 60);
+          ans = countFactors(num);
+          text = `จำนวน ${num} มีตัวประกอบทั้งหมดกี่ตัว?`;
+          unit = "ตัว";
+        } else if (type === 1) {
+          // 2. เช็กตัวประกอบเฉพาะ / จำนวนเฉพาะ
+          const primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47];
+          const nonPrimes = [4, 6, 8, 9, 10, 12, 14, 15, 16, 18, 20, 21, 22, 24, 25, 27];
+
+          if (Math.random() > 0.5) {
+            // เลือกสร้างโจทย์ถามจำนวนเฉพาะถัดไป
+            const start = getRandomInt(10, 30);
+            let nextPrime = start;
+            while (!isPrime(nextPrime)) {
+              nextPrime++;
+            }
+            text = `จำนวนเฉพาะที่มีค่าน้อยที่สุดที่มากกว่าหรือเท่ากับ ${start} คือจำนวนใด?`;
+            ans = nextPrime;
+            unit = "";
+          } else {
+            // หาผลบวกของตัวประกอบเฉพาะ
+            const a = primes[getRandomInt(0, 4)];
+            const b = primes[getRandomInt(0, 4)];
+            if (a !== b) {
+              const num = a * b;
+              text = `ผลบวกของตัวประกอบเฉพาะทั้งหมดของ ${num} มีค่าเท่าใด?`;
+              ans = a + b;
+              unit = "";
+            } else {
+              const num = a * 2;
+              text = `ผลบวกของตัวประกอบเฉพาะทั้งหมดของ ${num} มีค่าเท่าใด?`;
+              ans = a + 2;
+              unit = "";
+            }
+          }
+        } else if (type === 2) {
+          // 3. หา ห.ร.ม. ตรงๆ
+          const g = getRandomInt(2, 12);
+          const mult1 = getRandomInt(2, 8);
+          let mult2 = getRandomInt(2, 8);
+          while (gcd(mult1, mult2) !== 1) {
+            mult2 = getRandomInt(2, 8);
+          }
+          const num1 = g * mult1;
+          const num2 = g * mult2;
+
+          ans = g;
+          text = `ตัวหารร่วมมาก (ห.ร.ม.) ของ ${num1} และ ${num2} คือจำนวนใด?`;
+          unit = "";
+        } else if (type === 3) {
+          // 4. โจทย์ปัญหา ห.ร.ม. (จัดของใส่ถุงให้ได้มากที่สุดโดยไม่เหลือเศษ)
+          const items = ["ส้ม", "แอปเปิล", "มังคุด", "ขนมปัง"];
+          const item1 = items[getRandomInt(0, items.length - 1)];
+          let item2 = items[getRandomInt(0, items.length - 1)];
+          while (item1 === item2) {
+            item2 = items[getRandomInt(0, items.length - 1)];
+          }
+
+          const g = getRandomInt(3, 15);
+          const mult1 = getRandomInt(2, 6);
+          let mult2 = getRandomInt(2, 6);
+          while (gcd(mult1, mult2) !== 1) {
+            mult2 = getRandomInt(2, 6);
+          }
+          const count1 = g * mult1;
+          const count2 = g * mult2;
+
+          ans = g;
+          text = `มี${item1} ${count1} ผล และ${item2} ${count2} ผล ต้องการจัดใส่ถุง ถุงละเท่าๆ กัน โดยไม่ปนกันและไม่เหลือเศษ จะจัดได้มากที่สุดถุงละกี่ผล?`;
+          unit = "ผล";
+        } else {
+          // 5. โจทย์ปัญหา ค.ร.น. (ปล่อยรถ/ลั่นระฆังพร้อมกัน)
+          const t1 = getRandomInt(3, 12);
+          let t2 = getRandomInt(3, 12);
+          while (t1 === t2) {
+            t2 = getRandomInt(3, 12);
+          }
+
+          ans = lcm(t1, t2);
+          text = `นาฬิกาเรือนแรกตีทุกๆ ${t1} นาที และเรือนที่สองตีทุกๆ ${t2} นาที ถ้านาฬิกาทั้งสองเรือนตีพร้อมกันครั้งแรก อีกกี่นาทีจะตีพร้อมกันเป็นครั้งต่อไป?`;
+          unit = "นาที";
+        }
+
+        return { text, ans, unit };
+      }
+
+      function generateRandomProblems(total = 40) {
+        const list = [];
+        for (let i = 1; i <= total; i++) {
+          const p = generateNumberTheoryProblem();
+          list.push({
+            id: i,
+            expr: p.text,
+            ans: p.ans,
+            unit: p.unit,
+          });
+        }
+        return list;
+      }
+
+      let seconds = 0;
+      let timerInterval = null;
+      let isTimerStarted = false;
+
+      function startTimer() {
+        if (!isTimerStarted) {
+          isTimerStarted = true;
+          timerInterval = setInterval(() => {
+            seconds++;
+            const mins = String(Math.floor(seconds / 60)).padStart(2, "0");
+            const secs = String(seconds % 60).padStart(2, "0");
+            document.getElementById("timer").textContent = `${mins}:${secs}`;
+          }, 1000);
+        }
+      }
+
+      function stopTimer() {
+        clearInterval(timerInterval);
+      }
+
+      const totalItems = 40;
+      const problems = generateRandomProblems(totalItems);
+      const container = document.getElementById("quiz-container");
+
+      problems.forEach((p, index) => {
+        const card = document.createElement("div");
+        card.className = `card ${index === 0 ? "active" : "locked"}`;
+        card.id = `card-${p.id}`;
+
+        card.innerHTML = `
+          <div class="card-header">
+            <span class="item-num">${p.id}.</span>
+            <span class="problem">${p.expr}</span>
+          </div>
+          <div class="answer-box">
+            <span class="ans-label">ตอบ:</span>
+            <input type="number" id="input-${p.id}" ${index !== 0 ? "disabled" : ""} autocomplete="off">
+            <span class="ans-label">${p.unit}</span>
+          </div>
+        `;
+
+        container.appendChild(card);
+
+        const input = card.querySelector("input");
+
+        input.addEventListener("input", function () {
+          startTimer();
+
+          const val = parseInt(this.value);
+          if (val === p.ans) {
+            card.classList.remove("active");
+            card.classList.add("completed");
+            this.disabled = true;
+
+            const completedCount = p.id;
+            document.getElementById("progress-text").textContent =
+              `${completedCount} / ${totalItems}`;
+            document.getElementById("progress-bar").style.width =
+              `${(completedCount / totalItems) * 100}%`;
+
+            const nextId = p.id + 1;
+            const nextCard = document.getElementById(`card-${nextId}`);
+            if (nextCard) {
+              nextCard.classList.remove("locked");
+              nextCard.classList.add("active");
+              const nextInput = nextCard.querySelector("input");
+              nextInput.disabled = false;
+              nextInput.focus();
+            } else {
+              stopTimer();
+              const finalMins = Math.floor(seconds / 60);
+              const finalSecs = seconds % 60;
+              alert(
+                `ยอดเยี่ยมมาก! คุณทำชุดโจทย์เรื่องตัวประกอบ ห.ร.ม. และ ค.ร.น. ครบ ${totalItems} ข้อแล้ว\nเวลาที่ใช้ไปทั้งหมด: ${finalMins} นาที ${finalSecs} วินาที`,
+              );
+            }
+          }
+        });
+      });
+
+      document.getElementById("input-1").focus();
+    </script>
+  </body>
+</html>
