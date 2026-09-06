@@ -151,6 +151,8 @@
 
           const files = await response.json();
 
+          files.sort((a, b) => a.name.localeCompare(b.name));
+
           // กรองเอาเฉพาะไฟล์ .html (ยกเว้น index.html)
           const htmlFiles = files.filter(
             (file) => file.name.endsWith(".html") && file.name.toLowerCase() !== "index.html",
