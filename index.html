@@ -113,6 +113,47 @@
         margin-top: 10px;
         color: #00b894;
       }
+
+      .stats-banner {
+        background: var(--card-bg);
+        border-radius: 12px;
+        padding: 16px 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .stats-banner .stats-summary {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+      .stats-banner .stats-item .num {
+        font-size: 1.3rem;
+        font-weight: bold;
+        color: var(--primary);
+      }
+      .stats-banner .stats-item .label {
+        font-size: 0.75rem;
+        color: #7f8c8d;
+      }
+      .stats-banner .stats-link {
+        text-decoration: none;
+        color: var(--primary);
+        font-weight: 600;
+        font-size: 0.9rem;
+        padding: 8px 14px;
+        border: 1px solid var(--primary);
+        border-radius: 8px;
+        white-space: nowrap;
+      }
+      .stats-banner .stats-link:hover {
+        background: var(--primary);
+        color: #fff;
+      }
     </style>
   </head>
   <body>
@@ -123,11 +164,14 @@
         <div class="offline-badge">⚡ รองรับการใช้งาน Offline</div>
       </header>
 
+      <div class="stats-banner" id="stats-banner"></div>
+
       <div id="quiz-list">
         <div class="status-msg">กำลังโหลดรายการแบบฝึกหัดจาก GitHub...</div>
       </div>
     </div>
 
+    <script src="assets/stats.js"></script>
     <script>
       // -------------------------------------------------------------
       // ** ข้อมูล GitHub **
@@ -202,7 +246,7 @@
       // ฟังก์ชันสำรองกรณี Offline
       async function loadFromCache(container) {
         if ("caches" in window) {
-          const cache = await caches.open("quiz-hub-v1");
+          const cache = await caches.open("quiz-hub-v3");
           const keys = await cache.keys();
           const cachedHtmlFiles = keys
             .map((req) => req.url)
@@ -236,7 +280,31 @@
           '<div class="status-msg">❌ ไม่สามารถดึงรายการโจทย์ได้ กรุณาเชื่อมต่ออินเทอร์เน็ตครั้งแรกเพื่อโหลดข้อมูล</div>';
       }
 
+      // แสดงสรุปสถิติสั้นๆ พร้อมลิงก์ไปหน้าสถิติแบบละเอียด
+      function renderStatsBanner() {
+        const banner = document.getElementById("stats-banner");
+        if (!window.ExamSiloStats) return;
+
+        const stats = ExamSiloStats.getAllStats();
+        const totalRuns = stats.length;
+        const uniqueQuizzes = new Set(stats.map((s) => s.quizFile)).size;
+
+        const summaryHtml =
+          totalRuns > 0
+            ? `
+              <div class="stats-item"><div class="num">${totalRuns}</div><div class="label">ครั้งที่ทำแล้ว</div></div>
+              <div class="stats-item"><div class="num">${uniqueQuizzes}</div><div class="label">ชุดที่เคยทำ</div></div>
+            `
+            : `<span style="color:#7f8c8d;font-size:0.9rem;">ยังไม่มีสถิติ ลองทำแบบฝึกหัดสักชุดดูสิ!</span>`;
+
+        banner.innerHTML = `
+          <div class="stats-summary">${summaryHtml}</div>
+          <a class="stats-link" href="stats.html">📊 ดูสถิติและพัฒนาการ</a>
+        `;
+      }
+
       // เริ่มทำงาน
+      renderStatsBanner();
       loadQuizzesFromGitHub();
 
       // Register Service Worker สำหรับใช้ Offline

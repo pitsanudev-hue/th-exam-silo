@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>สถิติการทำแบบฝึกหัด</title>
+    <link rel="manifest" href="manifest.json" />
+    <style>
+      :root {
+        --primary: #6c5ce7;
+        --bg: #f8f9fa;
+        --card-bg: #ffffff;
+        --text: #2d3436;
+        --good: #27ae60;
+        --bad: #e74c3c;
+      }
+      * {
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background-color: var(--bg);
+        color: var(--text);
+        padding: 20px;
+      }
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+      header {
+        text-align: center;
+        padding: 30px 10px;
+        background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+        color: white;
+        border-radius: 16px;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 20px rgba(108, 92, 231, 0.2);
+      }
+      header h1 {
+        font-size: 1.8rem;
+        margin-bottom: 8px;
+      }
+      header p {
+        font-size: 0.95rem;
+        opacity: 0.9;
+      }
+      .top-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .back-link {
+        text-decoration: none;
+        color: var(--primary);
+        font-weight: 600;
+        font-size: 0.95rem;
+      }
+      .btn-clear {
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        color: var(--bad);
+        padding: 8px 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: 600;
+      }
+      .btn-clear:hover {
+        background: #fdecea;
+      }
+      .card {
+        background: var(--card-bg);
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        margin-bottom: 25px;
+      }
+      .card h2 {
+        font-size: 1.15rem;
+        margin-bottom: 15px;
+        color: var(--primary);
+      }
+      .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 12px;
+      }
+      .summary-box {
+        background: #f4f2fe;
+        border-radius: 10px;
+        padding: 14px;
+        text-align: center;
+      }
+      .summary-box .num {
+        font-size: 1.6rem;
+        font-weight: bold;
+        color: var(--primary);
+      }
+      .summary-box .label {
+        font-size: 0.8rem;
+        color: #7f8c8d;
+        margin-top: 4px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 10px 8px;
+        border-bottom: 1px solid #eee;
+      }
+      th {
+        color: #7f8c8d;
+        font-weight: 600;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+      }
+      tr:hover {
+        background: #fafafa;
+      }
+      .badge {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+      .badge.drill {
+        background: #eef2ff;
+        color: var(--primary);
+      }
+      .badge.exam {
+        background: #fff3e0;
+        color: #e67e22;
+      }
+      .trend {
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+      .trend.up {
+        color: var(--good);
+      }
+      .trend.down {
+        color: var(--bad);
+      }
+      .status-msg {
+        text-align: center;
+        padding: 30px;
+        color: #7f8c8d;
+      }
+      .table-wrap {
+        overflow-x: auto;
+      }
+      select {
+        padding: 6px 10px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        font-size: 0.85rem;
+      }
+      .filter-row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-bottom: 15px;
+        flex-wrap: wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>📊 สถิติการทำแบบฝึกหัด</h1>
+        <p>ดูพัฒนาการความเร็วและคะแนนของคุณในแต่ละชุดแบบฝึกหัด</p>
+      </header>
+
+      <div class="top-actions">
+        <a class="back-link" href="index.html">← กลับหน้าหลัก</a>
+        <button class="btn-clear" id="clearBtn">🗑️ ล้างสถิติทั้งหมด</button>
+      </div>
+
+      <div class="card">
+        <h2>ภาพรวม</h2>
+        <div class="summary-grid" id="summaryGrid">
+          <div class="status-msg">กำลังโหลดข้อมูล...</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>พัฒนาการต่อชุดแบบฝึกหัด (เร็วขึ้น / ช้าลงเมื่อเทียบกับครั้งก่อน)</h2>
+        <div id="perQuizProgress">
+          <div class="status-msg">กำลังโหลดข้อมูล...</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>ประวัติการทำทั้งหมด</h2>
+        <div class="filter-row">
+          <label for="filterSelect">แสดงเฉพาะ:</label>
+          <select id="filterSelect">
+            <option value="all">ทั้งหมด</option>
+          </select>
+        </div>
+        <div class="table-wrap">
+          <table id="historyTable">
+            <thead>
+              <tr>
+                <th>วันที่/เวลา</th>
+                <th>ชื่อแบบฝึกหัด</th>
+                <th>ประเภท</th>
+                <th>เวลาที่ใช้</th>
+                <th>คะแนน</th>
+              </tr>
+            </thead>
+            <tbody id="historyBody"></tbody>
+          </table>
+        </div>
+        <div id="emptyMsg" class="status-msg" style="display: none">
+          ยังไม่มีสถิติ ลองไปทำแบบฝึกหัดสักชุดแล้วกลับมาดูที่นี่อีกครั้ง
+        </div>
+      </div>
+    </div>
+
+    <script src="assets/stats.js"></script>
+    <script>
+      let allStats = [];
+
+      function loadAndRender() {
+        allStats = ExamSiloStats.getAllStats().sort(
+          (a, b) => new Date(b.date) - new Date(a.date),
+        );
+        renderSummary();
+        renderPerQuizProgress();
+        renderFilterOptions();
+        renderHistoryTable("all");
+      }
+
+      function renderSummary() {
+        const grid = document.getElementById("summaryGrid");
+        if (allStats.length === 0) {
+          grid.innerHTML = '<div class="status-msg">ยังไม่มีสถิติ</div>';
+          return;
+        }
+        const totalRuns = allStats.length;
+        const uniqueQuizzes = new Set(allStats.map((s) => s.quizFile)).size;
+        const examRuns = allStats.filter((s) => s.type === "exam" && s.score != null);
+        const avgScorePct =
+          examRuns.length > 0
+            ? (
+                (examRuns.reduce((sum, s) => sum + s.score / s.total, 0) / examRuns.length) *
+                100
+              ).toFixed(1) + "%"
+            : "-";
+
+        grid.innerHTML = `
+          <div class="summary-box"><div class="num">${totalRuns}</div><div class="label">ครั้งที่ทำทั้งหมด</div></div>
+          <div class="summary-box"><div class="num">${uniqueQuizzes}</div><div class="label">ชุดแบบฝึกหัดที่เคยทำ</div></div>
+          <div class="summary-box"><div class="num">${avgScorePct}</div><div class="label">คะแนนเฉลี่ย (ข้อสอบ)</div></div>
+        `;
+      }
+
+      function renderPerQuizProgress() {
+        const container = document.getElementById("perQuizProgress");
+        if (allStats.length === 0) {
+          container.innerHTML = '<div class="status-msg">ยังไม่มีสถิติ</div>';
+          return;
+        }
+
+        // จัดกลุ่มตาม quizFile แล้วเรียงตามวันที่ (เก่า -> ใหม่)
+        const byQuiz = {};
+        allStats.forEach((s) => {
+          if (!byQuiz[s.quizFile]) byQuiz[s.quizFile] = [];
+          byQuiz[s.quizFile].push(s);
+        });
+        Object.values(byQuiz).forEach((list) => list.sort((a, b) => new Date(a.date) - new Date(b.date)));
+
+        let html = '<div class="table-wrap"><table><thead><tr>' +
+          "<th>ชื่อแบบฝึกหัด</th><th>จำนวนครั้ง</th><th>เวลาล่าสุด</th><th>เวลาเร็วที่สุด</th><th>เทียบกับครั้งก่อน</th>" +
+          "</tr></thead><tbody>";
+
+        Object.keys(byQuiz).forEach((quizFile) => {
+          const list = byQuiz[quizFile];
+          const quizName = list[list.length - 1].quizName || quizFile;
+          const withTime = list.filter((s) => typeof s.timeSeconds === "number");
+          const latest = withTime[withTime.length - 1];
+          const best = withTime.reduce(
+            (min, s) => (min === null || s.timeSeconds < min.timeSeconds ? s : min),
+            null,
+          );
+
+          let trendHtml = "-";
+          if (withTime.length >= 2) {
+            const prev = withTime[withTime.length - 2];
+            const diff = latest.timeSeconds - prev.timeSeconds;
+            if (diff < 0) {
+              trendHtml = `<span class="trend up">▼ เร็วขึ้น ${ExamSiloStats.formatDuration(Math.abs(diff))}</span>`;
+            } else if (diff > 0) {
+              trendHtml = `<span class="trend down">▲ ช้าลง ${ExamSiloStats.formatDuration(diff)}</span>`;
+            } else {
+              trendHtml = `<span class="trend">เท่ากับครั้งก่อน</span>`;
+            }
+          }
+
+          html += `<tr>
+            <td>${escapeHtml(quizName)}</td>
+            <td>${list.length}</td>
+            <td>${latest ? ExamSiloStats.formatDuration(latest.timeSeconds) : "-"}</td>
+            <td>${best ? ExamSiloStats.formatDuration(best.timeSeconds) : "-"}</td>
+            <td>${trendHtml}</td>
+          </tr>`;
+        });
+
+        html += "</tbody></table></div>";
+        container.innerHTML = html;
+      }
+
+      function renderFilterOptions() {
+        const select = document.getElementById("filterSelect");
+        const uniqueFiles = [...new Set(allStats.map((s) => s.quizFile))];
+        select.innerHTML = '<option value="all">ทั้งหมด</option>';
+        uniqueFiles.forEach((file) => {
+          const entry = allStats.find((s) => s.quizFile === file);
+          const opt = document.createElement("option");
+          opt.value = file;
+          opt.textContent = entry ? entry.quizName : file;
+          select.appendChild(opt);
+        });
+        select.onchange = () => renderHistoryTable(select.value);
+      }
+
+      function renderHistoryTable(filter) {
+        const body = document.getElementById("historyBody");
+        const emptyMsg = document.getElementById("emptyMsg");
+        const rows = filter === "all" ? allStats : allStats.filter((s) => s.quizFile === filter);
+
+        if (rows.length === 0) {
+          body.innerHTML = "";
+          emptyMsg.style.display = "block";
+          return;
+        }
+        emptyMsg.style.display = "none";
+
+        body.innerHTML = rows
+          .map((s) => {
+            const typeLabel = s.type === "exam" ? "ข้อสอบ" : "แบบฝึกหัด";
+            const scoreText =
+              s.score != null && s.total != null ? `${s.score} / ${s.total}` : "-";
+            return `<tr>
+              <td>${ExamSiloStats.formatDate(s.date)}</td>
+              <td>${escapeHtml(s.quizName)}</td>
+              <td><span class="badge ${s.type}">${typeLabel}</span></td>
+              <td>${ExamSiloStats.formatDuration(s.timeSeconds)}</td>
+              <td>${scoreText}</td>
+            </tr>`;
+          })
+          .join("");
+      }
+
+      function escapeHtml(str) {
+        const div = document.createElement("div");
+        div.textContent = str == null ? "" : String(str);
+        return div.innerHTML;
+      }
+
+      document.getElementById("clearBtn").addEventListener("click", () => {
+        if (confirm("ต้องการล้างสถิติทั้งหมดหรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้")) {
+          ExamSiloStats.clearAllStats();
+          loadAndRender();
+        }
+      });
+
+      loadAndRender();
+    </script>
+  </body>
+</html>

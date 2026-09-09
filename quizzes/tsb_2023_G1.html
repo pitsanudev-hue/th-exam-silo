@@ -460,6 +460,7 @@
       </div>
     </div>
 
+    <script src="../assets/stats.js"></script>
     <script>
       /* ============ QUESTION DATA ============ */
       const spellingData = [
@@ -1051,7 +1052,8 @@
       }
 
       /* ============ TIMER ============ */
-      let totalSeconds = 90 * 60; // 90 mins for TSB
+      const EXAM_DURATION_SECONDS = 90 * 60; // 90 mins for TSB
+      let totalSeconds = EXAM_DURATION_SECONDS;
       let timerInterval = null;
       function formatTime(s) {
         const h = Math.floor(s / 3600);
@@ -1183,7 +1185,18 @@
           markQuestion(n, given, isCorrect, badgeLabel, badgeClass);
         }
 
-        computeTotalsAndRender();
+        const totalCorrect = computeTotalsAndRender();
+
+        if (window.ExamSiloStats) {
+          ExamSiloStats.recordQuizResult({
+            quizFile: "tsb_2023_G1.html",
+            quizName: document.title,
+            type: "exam",
+            timeSeconds: EXAM_DURATION_SECONDS - totalSeconds,
+            score: totalCorrect,
+            total: 80,
+          });
+        }
 
         examGraded = true;
         document.getElementById("resultsPanel").style.display = "block";

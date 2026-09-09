@@ -255,6 +255,7 @@
       <p>คิดเป็น: <span id="percentage">0</span>%</p>
     </div>
 
+    <script src="../assets/stats.js"></script>
     <script>
       const examData = [
         // PART 1: Speaking
@@ -1205,10 +1206,26 @@
         document.getElementById("percentage").innerText = percentage;
         document.getElementById("resultModal").style.display = "block";
 
+        if (window.ExamSiloStats) {
+          const elapsedSeconds = Math.round((Date.now() - examStartTime) / 1000);
+          ExamSiloStats.recordQuizResult({
+            quizFile: "teset_2025_G3_exam.html",
+            quizName: document.title,
+            type: "exam",
+            timeSeconds: elapsedSeconds,
+            score: score,
+            total: totalQuestions,
+          });
+        }
+
         window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
       }
 
-      window.onload = renderQuiz;
+      let examStartTime = Date.now();
+      window.onload = function () {
+        renderQuiz();
+        examStartTime = Date.now();
+      };
     </script>
   </body>
 </html>

@@ -156,6 +156,7 @@
 
     <div class="container" id="quiz-container"></div>
 
+    <script src="../assets/stats.js"></script>
     <script>
       function getRandomInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -295,6 +296,14 @@
               stopTimer();
               const finalMins = Math.floor(seconds / 60);
               const finalSecs = seconds % 60;
+              if (window.ExamSiloStats) {
+                ExamSiloStats.recordQuizResult({
+                  quizFile: "problem_resolve_math.html",
+                  quizName: document.title,
+                  type: "drill",
+                  timeSeconds: seconds,
+                });
+              }
               alert(
                 `ยอดเยี่ยมมาก! คุณทำชุดโจทย์ปัญหาแก้สมการ ครบ ${totalItems} ข้อแล้ว\nเวลาที่ใช้ไปทั้งหมด: ${finalMins} นาที ${finalSecs} วินาที`,
               );

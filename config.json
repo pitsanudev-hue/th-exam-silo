@@ -1,5 +1,62 @@
 [
-  { "name": "แบบฝึกหัด บวก-ลบ-คูณ-หาร (100 ข้อ)", "file": "math_all_operators_quiz.html", "category": "คณิตศาสตร์" },
-  { "name": "แบบฝึกหัด บวกเลขเร็ว", "file": "math_add.html", "category": "คณิตศาสตร์" },
-  { "name": "แบบฝึกหัด ภาษาไทย ชุดที่ 1", "file": "thai_01.html", "category": "ภาษาไทย" }
+  {
+    "name": "แบบฝึกหัดคิดเลขเร็ว (การบวก / การลบ)",
+    "file": "quick_math_add_sub.html",
+    "category": "คณิตศาสตร์"
+  },
+  {
+    "name": "แบบฝึกหัดคิดเลขเร็ว (การคูณ / การหาร)",
+    "file": "quick_math_pop.html",
+    "category": "คณิตศาสตร์"
+  },
+  {
+    "name": "แบบฝึกหัดคิดเลขเร็ว (สุ่มโจทย์ใหม่ทุกครั้งที่ Refresh)",
+    "file": "quick_math_mult_div.html",
+    "category": "คณิตศาสตร์"
+  },
+  {
+    "name": "แบบฝึกหัดคิดเลขเร็ว (บวก ลบ คูณ หาร)",
+    "file": "quick_math_all.html",
+    "category": "คณิตศาสตร์"
+  },
+  {
+    "name": "แบบฝึกหัดคิดเลขเร็ว (ตัวเลข 3 ตัว คละ บวก ลบ คูณ หาร)",
+    "file": "quick_math_advance_all.html",
+    "category": "คณิตศาสตร์"
+  },
+  {
+    "name": "แบบฝึกหัดแก้สมการตัวแปรเดียว (หาค่า X) - ป.4",
+    "file": "equation_math.html",
+    "category": "คณิตศาสตร์"
+  },
+  {
+    "name": "แบบฝึกหัด ตัวประกอบ ห.ร.ม. และ ค.ร.น. - ป.4",
+    "file": "factor_lcd_gcd.html",
+    "category": "คณิตศาสตร์"
+  },
+  {
+    "name": "แบบฝึกหัด แบบรูปและความสัมพันธ์ (Sequences) - ป.4",
+    "file": "pattern_math.html",
+    "category": "คณิตศาสตร์"
+  },
+  {
+    "name": "แบบฝึกหัดโจทย์ปัญหาแก้สมการ - ป.4",
+    "file": "problem_resolve_math.html",
+    "category": "คณิตศาสตร์"
+  },
+  {
+    "name": "TESET 2025 - English Practice Exam (ป.4-ป.6)",
+    "file": "teset_2025_exam.html",
+    "category": "ภาษาอังกฤษ"
+  },
+  {
+    "name": "TESET 2025 - Thailand English Skills Evaluation Test (ป.1 - ป.3)",
+    "file": "teset_2025_G3_exam.html",
+    "category": "ภาษาอังกฤษ"
+  },
+  {
+    "name": "TSB 2023 - Thailand Spelling Bee Practice Exam (Level 1: ป.1-ป.2)",
+    "file": "tsb_2023_G1.html",
+    "category": "ภาษาอังกฤษ"
+  }
 ]
