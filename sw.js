@@ -1,4 +1,4 @@
-const CACHE_NAME = "quiz-hub-v3";
+const CACHE_NAME = "quiz-hub-v4";
 
 // ระบบจะแคชไฟล์ทั้งหมดอัตโนมัติเมื่อเปิดครั้งแรก
 self.addEventListener("install", (e) => {
@@ -9,7 +9,15 @@ self.addEventListener("install", (e) => {
         "./index.html",
         "./stats.html",
         "./manifest.json",
+        "./favicon.ico",
         "./assets/stats.js",
+        "./assets/icons/icon-16.png",
+        "./assets/icons/icon-32.png",
+        "./assets/icons/icon-48.png",
+        "./assets/icons/icon-180.png",
+        "./assets/icons/icon-192.png",
+        "./assets/icons/icon-512.png",
+        "./assets/icons/apple-touch-icon.png",
         "./quizzes/quick_math_add_sub.html",
         "./quizzes/quick_math_pop.html",
         "./quizzes/quick_math_mult_div.html",
