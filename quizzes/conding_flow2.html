@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>เกม Coding: Nested If ซับซ้อนการใช้เงิน</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        font-family: "Sarabun", sans-serif;
+      }
+      body {
+        background-color: #f4f7f6;
+        padding: 20px;
+        margin: 0;
+      }
+      h1 {
+        text-align: center;
+        color: #1a365d;
+      }
+      p.subtitle {
+        text-align: center;
+        color: #4a5568;
+        max-width: 800px;
+        margin: 0 auto 20px auto;
+      }
+
+      .container {
+        display: flex;
+        gap: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .panel {
+        flex: 1;
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      }
+      .panel h2 {
+        margin-top: 0;
+        font-size: 1.1rem;
+        color: #2d3748;
+        border-bottom: 2px solid #edf2f7;
+        padding-bottom: 10px;
+      }
+
+      #options-panel {
+        border-top: 5px solid #4299e1;
+      }
+      #drop-panel {
+        border-top: 5px solid #48bb78;
+      }
+
+      .drag-item {
+        background-color: #ebf8ff;
+        border: 2px solid #3182ce;
+        border-radius: 8px;
+        padding: 10px 14px;
+        margin-bottom: 8px;
+        cursor: grab;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #2b6cb0;
+        transition: all 0.2s;
+      }
+      .drag-item:active {
+        cursor: grabbing;
+        opacity: 0.6;
+      }
+
+      /* ตกแต่งบล็อกเงื่อนไขซ้อนให้เห็นชัดเจน */
+      .indent-1 {
+        margin-left: 0px;
+        border-left-color: #3182ce;
+      }
+      .indent-2 {
+        margin-left: 15px;
+        border-left-color: #dd6b20;
+        background-color: #fffaf0;
+        color: #dd6b20;
+      }
+      .indent-3 {
+        margin-left: 30px;
+        border-left-color: #38a169;
+        background-color: #f0fff4;
+        color: #2f855a;
+      }
+
+      .drop-zone {
+        min-height: 500px;
+        border: 2px dashed #cbd5e0;
+        border-radius: 8px;
+        padding: 10px;
+        background-color: #f7fafc;
+      }
+
+      .btn-container {
+        text-align: center;
+        margin-top: 20px;
+      }
+      button {
+        background-color: #ed8936;
+        color: white;
+        border: none;
+        padding: 12px 32px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        border-radius: 30px;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(237, 137, 54, 0.3);
+        transition: 0.2s;
+      }
+      button:hover {
+        background-color: #dd6b20;
+        transform: translateY(-2px);
+      }
+      #result {
+        text-align: center;
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-top: 15px;
+      }
+      .correct {
+        color: #2f855a;
+      }
+      .wrong {
+        color: #e53e3e;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🧠 เกมแก้ปัญหา: เงื่อนไขซ้อนเงื่อนไข (Nested If)</h1>
+    <p class="subtitle">
+      ให้นักเรียนจัดลำดับอัลกอริทึมการใช้เงิน 100 บาท โดยเรียงบล็อกเงื่อนไขซ้อน (Nested If)
+      ทางฝั่งขวาให้ถูกต้องตามตรรกะ
+    </p>
+
+    <div class="container">
+      <!-- ฝั่งซ้าย: ตัวเลือกที่สลับลำดับไว้ -->
+      <div class="panel" id="options-panel">
+        <h2>🧩 ตัวเลือกบล็อกคำสั่ง (สลับตำแหน่งอยู่)</h2>
+        <div id="options" class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)">
+          <div class="drag-item indent-3" draggable="true" ondragstart="drag(event)" id="step-5">
+            └─ ถ้าเป็นวันศุกร์ ➔ ซื้อไอศกรีม 20 บาท + ข้าวธรรมดา 30 บาท
+          </div>
+          <div class="drag-item indent-1" draggable="true" ondragstart="drag(event)" id="step-1">
+            1. รับเงินมา 100 บาท จ่ายค่ารถ 20 บาท (เหลือ 80 บาท)
+          </div>
+          <div class="drag-item indent-3" draggable="true" ondragstart="drag(event)" id="step-3">
+            └─ ถ้าเงินเหลือหลังซื้อร่ม < 50 บาท ➔ ซื้อข้าวธรรมดา 30 บาท
+          </div>
+          <div class="drag-item indent-2" draggable="true" ondragstart="drag(event)" id="step-4">
+            ├─ ถ้าฝนไม่ตก ➔ ไม่ต้องซื้อร่ม
+          </div>
+          <div class="drag-item indent-1" draggable="true" ondragstart="drag(event)" id="step-7">
+            3. เงินที่เหลือทั้งหมดนำไปหยอดกระปุกออมสิน
+          </div>
+          <div class="drag-item indent-2" draggable="true" ondragstart="drag(event)" id="step-2">
+            ├─ ถ้าฝนตก ➔ ซื้อร่ม 30 บาท (เหลือ 50 บาท)
+          </div>
+          <div class="drag-item indent-3" draggable="true" ondragstart="drag(event)" id="step-6">
+            └─ ถ้าไม่ใช่วันศุกร์ ➔ ซื้อข้าวธรรมดา 30 บาท
+          </div>
+        </div>
+      </div>
+
+      <!-- ฝั่งขวา: พื้นที่วางลำดับ -->
+      <div class="panel" id="drop-panel">
+        <h2>📋 ลำดับอัลกอริทึม (ลากมาวางเรียงที่นี่)</h2>
+        <div id="target" class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+      </div>
+    </div>
+
+    <div class="btn-container">
+      <button onclick="checkAnswer()">ตรวจคำตอบ 🎯</button>
+      <div id="result"></div>
+    </div>
+
+    <script>
+      // ลำดับที่ถูกต้องของโครงสร้าง Nested If
+      const correctOrder = [
+        "step-1", // เริ่มต้น
+        "step-2", // ถ้าฝนตก
+        "step-3", // ซ้อนในฝนตก: เช็คเงินเหลือซื้อข้าว
+        "step-4", // ถ้าฝนไม่ตก
+        "step-5", // ซ้อนในฝนไม่ตก: ถ้าเป็นวันศุกร์
+        "step-6", // ซ้อนในฝนไม่ตก: ถ้าไม่ใช่วันศุกร์
+        "step-7", // สรุปหยอดกระปุก
+      ];
+
+      function allowDrop(ev) {
+        ev.preventDefault();
+      }
+      function drag(ev) {
+        ev.dataTransfer.setData("text", ev.target.id);
+      }
+
+      function drop(ev) {
+        ev.preventDefault();
+        var data = ev.dataTransfer.getData("text");
+        var draggedElement = document.getElementById(data);
+        var dropZone = ev.target.closest(".drop-zone");
+        if (dropZone) {
+          dropZone.appendChild(draggedElement);
+        }
+      }
+
+      function checkAnswer() {
+        const targetZone = document.getElementById("target");
+        const children = targetZone.children;
+        const resultDiv = document.getElementById("result");
+
+        if (children.length < correctOrder.length) {
+          resultDiv.className = "wrong";
+          resultDiv.innerHTML = "⚠️ กรุณาลากบล็อกคำสั่งมาวางทางฝั่งขวาให้ครบทั้ง 7 บล็อกครับ!";
+          return;
+        }
+
+        let isCorrect = true;
+        for (let i = 0; i < children.length; i++) {
+          if (children[i].id !== correctOrder[i]) {
+            isCorrect = false;
+            break;
+          }
+        }
+
+        if (isCorrect) {
+          resultDiv.className = "correct";
+          resultDiv.innerHTML =
+            "🎉 ถูกต้องเก่งมาก! ยอดเยี่ยมมากกับการเข้าใจตรรกะเงื่อนไขซ้อนเงื่อนไข (Nested If)";
+        } else {
+          resultDiv.className = "wrong";
+          resultDiv.innerHTML =
+            "❌ ยังไม่ถูกต้อง! ลองสังเกตสีและย่อหน้าของเงื่อนไขซ้อน แล้วเรียงใหม่อีกครั้งนะ";
+        }
+      }
+    </script>
+  </body>
+</html>
