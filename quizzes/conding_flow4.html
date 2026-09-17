@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TEDET Advanced Algorithm Challenge - ฝึกคิดแบบโปรแกรมเมอร์</title>
+    <title>TEDET Algorithm Puzzle - เกมเรียงลำดับอัลกอริทึม</title>
     <style>
         * {
             box-sizing: border-box;
@@ -85,7 +85,7 @@
             border-radius: 8px;
             padding: 30px;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            max-width: 950px;
+            max-width: 900px;
             margin: 0 auto;
         }
 
@@ -112,6 +112,9 @@
             margin-top: 20px;
             margin-bottom: 10px;
             color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .problem-body {
@@ -121,11 +124,21 @@
             padding: 15px 20px;
             border-left: 4px solid #0284c7;
             border-radius: 4px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             white-space: pre-line;
         }
 
-        /* Puzzle Container */
+        .answer-box {
+            background-color: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #166534;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+
+        /* Drag and Drop Puzzle Section */
         .puzzle-container {
             border: 2px dashed #cbd5e1;
             background-color: #fafafa;
@@ -136,11 +149,8 @@
 
         .puzzle-instruction {
             font-size: 0.95rem;
-            color: #475569;
+            color: #64748b;
             margin-bottom: 15px;
-            background-color: #f1f5f9;
-            padding: 10px 15px;
-            border-radius: 6px;
         }
 
         .draggable-list {
@@ -153,13 +163,19 @@
             background-color: #ffffff;
             border: 1px solid #cbd5e1;
             border-radius: 6px;
-            padding: 12px 16px;
-            margin-bottom: 12px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            cursor: grab;
             display: flex;
             align-items: center;
             justify-content: space-between;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            transition: transform 0.15s, box-shadow 0.15s;
+            transition: transform 0.15s, box-shadow 0.15s, border-color 0.2s, background-color 0.2s;
+            user-select: none;
+        }
+
+        .draggable-item:active {
+            cursor: grabbing;
         }
 
         .draggable-item.dragging {
@@ -177,35 +193,12 @@
             align-items: center;
             gap: 12px;
             flex-grow: 1;
-            font-family: 'Courier New', Courier, monospace; /* Pseudo-code look */
-            font-size: 0.98rem;
-            color: #0f172a;
         }
 
         .drag-handle {
             color: #94a3b8;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             cursor: grab;
-            user-select: none;
-        }
-
-        /* Input Variable Styling */
-        .algo-input {
-            width: 70px;
-            padding: 4px 8px;
-            border: 2px solid #0284c7;
-            border-radius: 4px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 0.95rem;
-            color: #0369a1;
-            outline: none;
-            background-color: #f0f9ff;
-        }
-
-        .algo-input:focus {
-            border-color: #16a34a;
-            background-color: #fff;
         }
 
         .btn-controls {
@@ -245,11 +238,10 @@
         /* Result Feedback */
         .feedback {
             margin-top: 15px;
-            padding: 14px 18px;
+            padding: 12px 16px;
             border-radius: 6px;
             font-weight: bold;
             display: none;
-            line-height: 1.5;
         }
 
         .feedback.success {
@@ -266,11 +258,11 @@
             border: 1px solid #fca5a5;
         }
 
+        /* Responsive for Touch Screens */
         .touch-btn-group {
             display: flex;
             flex-direction: column;
             gap: 2px;
-            margin-left: 10px;
         }
 
         .btn-mini {
@@ -281,6 +273,9 @@
             font-size: 0.75rem;
             cursor: pointer;
         }
+        .btn-mini:hover {
+            background: #e2e8f0;
+        }
     </style>
 </head>
 <body>
@@ -288,7 +283,7 @@
     <!-- Side Menu -->
     <div id="sidebar">
         <div class="sidebar-header">
-            <h2>🧩 TEDET Logic Master</h2>
+            <h2>🧩 TEDET Coding Hub</h2>
         </div>
         <div id="menu-container"></div>
     </div>
@@ -301,7 +296,7 @@
     </div>
 
     <script>
-        // Data Structure with Wording Algorithm & Blank Variables
+        // Data Structure for Problems & Algorithms
         const problemData = [
             {
                 category: "1. Math & Carbon Footprint Calculation",
@@ -311,10 +306,11 @@
                         title: "ข้อ 01: คำนวณลดคาร์บอนจากการขี่จักรยาน",
                         year: "ปี 2568 ข้อ 4",
                         question: "การเดินทางด้วยจักรยานปล่อยคาร์บอน 0 g/km แต่รถยนต์ปล่อย 150 g/km เจสันเดินทางไป-กลับทำงานวันละ 24 km หากเปลี่ยนไปขี่จักรยานแทนรถยนต์เป็นเวลา 5 วัน จะช่วยลดคาร์บอนได้กี่กิโลกรัม?",
-                        algorithmSteps: [
-                            { id: "s1", template: "ระยะทางรวม = [input_1] km/วัน × [input_2] วัน", answers: ["24", "5"] },
-                            { id: "s2", template: "คาร์บอนที่ลดได้ (กรัม) = ระยะทางรวม × [input_1] g/km", answers: ["150"] },
-                            { id: "s3", template: "แปลงกรัมเป็นกิโลกรัม = คาร์บอนที่ลดได้ (กรัม) ÷ [input_1]", answers: ["1000"] }
+                        answer: "18 kg",
+                        algorithm: [
+                            "คำนวณระยะทางรวม = ระยะทางต่อวัน × จำนวนวัน = 24 × 5 = 120 km",
+                            "คำนวณคาร์บอนที่ลดได้ (กรัม) = 120 × 150 = 18,000 g",
+                            "แปลงคาร์บอนจากกรัมเป็นกิโลกรัม = 18,000 ÷ 1,000 = 18 kg"
                         ]
                     },
                     {
@@ -322,11 +318,12 @@
                         title: "ข้อ 02: คำนวณกำไรและเงินคงเหลือจากการขายของ",
                         year: "ปี 2567 ข้อ 6",
                         question: "แมทธิวยืมเงินแม่ซื้อของเล่น 87 ชิ้น ราคาชิ้นละ 12 บาท เขาเก็บไว้เอง 5 ชิ้น แล้วนำของเล่นที่เหลือไปขายชิ้นละ 15 บาท เมื่อนำเงินจากการขายไปคืนแม่เต็มจำนวนที่ยืมมา แมทธิวจะเหลือเงินกี่บาท?",
-                        algorithmSteps: [
-                            { id: "s1", template: "เงินต้นที่ยืม = [input_1] ชิ้น × [input_2] บาท/ชิ้น", answers: ["87", "12"] },
-                            { id: "s2", template: "จำนวนของเล่นที่ขาย = [input_1] - [input_2] (เก็บไว้เอง)", answers: ["87", "5"] },
-                            { id: "s3", template: "รายรับจากการขาย = จำนวนของเล่นที่ขาย × [input_1] บาท", answers: ["15"] },
-                            { id: "s4", template: "เงินคงเหลือ = รายรับจากการขาย - เงินต้นที่ยืม", answers: [] }
+                        answer: "186 บาท",
+                        algorithm: [
+                            "คำนวณเงินต้นที่ยืมแม่ = 87 × 12 = 1,044 บาท",
+                            "คำนวณจำนวนชิ้นของเล่นที่จะนำไปขาย = 87 - 5 = 82 ชิ้น",
+                            "คำนวณรายรับทั้งหมดจากการขาย = 82 × 15 = 1,230 บาท",
+                            "คำนวณเงินคงเหลือหลังคืนแม่ = รายรับ - เงินยืม = 1,230 - 1,044 = 186 บาท"
                         ]
                     },
                     {
@@ -334,11 +331,12 @@
                         title: "ข้อ 03: ซื้อน้ำส้มให้พอดีด้วยขวดขนาดต่าง ๆ",
                         year: "ปี 2568 ข้อ 29",
                         question: "มีคนทั้งหมด 20 คน (รวมจีมิน) แต่ละคนต้องการน้ำส้มคนละ 330 mL (รวม 6,600 mL) มีน้ำส้มขาย 3 ขนาด: ใหญ่ (1,200 mL), กลาง (750 mL), และเล็ก (450 mL) ต้องการซื้อให้ได้ปริมาณพอดี 6,600 mL โดยใช้จำนวนขวดน้อยที่สุด ต้องซื้อกี่ขวด?",
-                        algorithmSteps: [
-                            { id: "s1", template: "คำนวณปริมาตรรวมที่ต้องการ = [input_1] คน × [input_2] mL/คน", answers: ["20", "330"] },
-                            { id: "s2", template: "วนลูปเลือกซื้อขวดใหญ่ ([input_1] mL) ให้ได้ปริมาณมากที่สุดก่อน", answers: ["1200"] },
-                            { id: "s3", template: "คำนวณปริมาตรที่ยังขาดอยู่ = ปริมาตรรวม - (จำนวนขวดใหญ่ × [input_1])", answers: ["1200"] },
-                            { id: "s4", template: "เลือกขวดกลาง ([input_1] mL) และขวดเล็ก ([input_2] mL) เติมส่วนที่เหลือให้พอดี", answers: ["750", "450"] }
+                        answer: "7 ขวด",
+                        algorithm: [
+                            "วนลูปกำหนดจำนวนขวดใหญ่ (L) จากมากไปน้อย (5, 4, 3, ...)",
+                            "คำนวณปริมาตรน้ำส้มที่ยังขาดอยู่ R = 6,600 - (L × 1,200)",
+                            "หาคู่จำนวนขวดกลาง (M) และขวดเล็ก (S) ที่ทำให้ (M × 750) + (S × 450) = R",
+                            "เลือกชุดคำตอบที่ผลรวมขวด (L + M + S) มีค่าน้อยที่สุด (L=3, M=4, S=0 รวม 7 ขวด)"
                         ]
                     }
                 ]
@@ -351,10 +349,10 @@
                         title: "ข้อ 04: คำนวณเวลาตื่นนอนล่วงหน้า",
                         year: "ปี 2568 ข้อ 5",
                         question: "แจ็คสันมีนัดเวลา 10:00 น. ต้องใช้อาบน้ำแต่งตัว 20 นาที, กินข้าว 15 นาที, เดินทาง 25 นาที เขาต้องตื่นนอนอย่างช้าที่สุดเวลากี่นาฬิกาจึงจะทันนัด?",
-                        algorithmSteps: [
-                            { id: "s1", template: "เวลารวมกิจกรรม = [input_1] นาที (อาบน้ำ) + [input_2] นาที (กินข้าว) + [input_3] นาที (เดินทาง)", answers: ["20", "15", "25"] },
-                            { id: "s2", template: "แปลงเวลารวมกิจกรรมจากนาทีให้เป็นชั่วโมง = [input_1] นาที ÷ [input_2] = 1 ชั่วโมง", answers: ["60", "60"] },
-                            { id: "s3", template: "เวลาตื่นนอน = เวลานัด ([input_1]:00) - เวลารวมกิจกรรม (1 ชั่วโมง)", answers: ["10"] }
+                        answer: "09:00 น.",
+                        algorithm: [
+                            "รวมเวลาของกิจกรรมทั้งหมดก่อนไปตามนัด = 20 + 15 + 25 = 60 นาที (1 ชั่วโมง)",
+                            "คำนวณเวลาตื่นนอนย้อนกลับ = เวลานัด - เวลารวมกิจกรรม = 10:00 - 1:00 = 09:00 น."
                         ]
                     },
                     {
@@ -362,12 +360,13 @@
                         title: "ข้อ 05: คำนวณเวลารอบการแสดงและเวลาพัก",
                         year: "ปี 2567 ข้อ 21",
                         question: "การแสดงแต่ละรอบเริ่มและจบตามลำดับ:\n- รอบที่ 1: 11:00 - 12:10 น.\n- รอบที่ 2: 12:20 - 13:30 น.\n- รอบที่ 3: 13:40 - 14:50 น.\nจงหาเวลาสิ้นสุดของการแสดงรอบที่ 5",
-                        algorithmSteps: [
-                            { id: "s1", template: "คำนวณเวลาแสดงต่อรอบ = 12:10 - 11:00 = [input_1] นาที", answers: ["70"] },
-                            { id: "s2", template: "คำนวณเวลาพักระหว่างรอบ = 12:20 - 12:10 = [input_1] นาที", answers: ["10"] },
-                            { id: "s3", template: "เวลาคาบรวมต่อรอบ = เวลาแสดง ([input_1] นาที) + เวลาพัก ([input_2] นาที)", answers: ["70", "10"] },
-                            { id: "s4", template: "เวลาเริ่มแสดงรอบที่ N = เวลาเริ่มแรก + (N - [input_1]) × เวลาคาบรวม", answers: ["1"] },
-                            { id: "s5", template: "เวลาจบการแสดงรอบที่ 5 = เวลาเริ่มรอบที่ 5 + เวลาแสดง ([input_1] นาที)", answers: ["70"] }
+                        answer: "17:30 น.",
+                        algorithm: [
+                            "คำนวณระยะเวลาการแสดงต่อหนึ่งรอบ = 11:00 ถึง 12:10 คือ 70 นาที",
+                            "คำนวณระยะเวลาพักระหว่างรอบ = 12:10 ถึง 12:20 คือ 10 นาที",
+                            "คำนวณเวลารวมต่อ 1 รอบการแสดงพร้อมพัก = 70 + 10 = 80 นาที",
+                            "คำนวณเวลาเริ่มแสดงของรอบที่ N = เวลาเริ่มรอบแรก + (N-1) × 80 นาที",
+                            "คำนวณเวลาสิ้นสุดรอบที่ 5 = เวลาเริ่มรอบที่ 5 (16:20) + เวลาแสดง (70 นาที) = 17:30 น."
                         ]
                     }
                 ]
@@ -380,10 +379,11 @@
                         title: "ข้อ 06: การเดินตามเข็มนาฬิกาซ้ำรอบ",
                         year: "ปี 2567 ข้อ 12",
                         question: "มีจุดหมายเลข 0 ถึง 9 บนวงกลม (10 จุด) เริ่มจากจุด 0 ลากข้ามทีละ 3 จุดตามเข็มนาฬิกา (ครั้งที่ 1 ไปที่หมายเลข 3) ถามว่าการลากครั้งที่ 2024 จะหยุดที่หมายเลขใด?",
-                        algorithmSteps: [
-                            { id: "s1", template: "คำนวณระยะทางรวม = จำนวนครั้งที่ลาก (N) × [input_1] จุด/ครั้ง", answers: ["3"] },
-                            { id: "s2", template: "กำหนดการหารเอาเศษด้วยจำนวนจุดทั้งหมดบนวงกลม = ระยะทางรวม mod [input_1]", answers: ["10"] },
-                            { id: "s3", template: "แทนค่า N = [input_1] เพื่อคำนวณหาตำแหน่งสุดท้าย", answers: ["2024"] }
+                        answer: "หมายเลข 2",
+                        algorithm: [
+                            "สร้างสูตรคำนวณตำแหน่งจากการลาก N ครั้ง = (N × 3) mod 10",
+                            "แทนค่าจำนวนครั้งที่ลาก N = 2024 ลงในสูตร (2024 × 3) = 6,072",
+                            "นำผลคูณไปหาเศษจากการหารด้วย 10: 6,072 mod 10 = 2"
                         ]
                     },
                     {
@@ -391,10 +391,12 @@
                         title: "ข้อ 07: ลำดับตัวเลขสะท้อนกลับ",
                         year: "ปี 2566 ข้อ 23",
                         question: "เขียนลำดับตัวเลขรูปแบบสะท้อน: 1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2, 1, 2, 3... จงหาตัวเลขสามหลักที่เกิดจากตำแหน่งที่ 2021, 2022, 2023 เรียงต่อกัน",
-                        algorithmSteps: [
-                            { id: "s1", template: "นับจำนวนตัวเลขต่อ 1 รอบลำดับซ้ำสมบูรณ์ = [input_1] ตัวเลข", answers: ["16"] },
-                            { id: "s2", template: "หาดัชนีตำแหน่งด้วยสมการ = ตำแหน่งที่ต้องการ mod [input_1]", answers: ["16"] },
-                            { id: "s3", template: "ดึงตัวเลขจากลำดับตำแหน่งที่ได้ มาเขียนต่อกันให้เป็นเลขสามหลัก", answers: [] }
+                        answer: "234",
+                        algorithm: [
+                            "หาความยาวของชุดลำดับตัวเลขที่ซ้ำกันครบ 1 รอบ = 16 ตัวเลข (1 ถึง 9 และ 8 ถึง 2)",
+                            "นำตำแหน่งที่ต้องการหาไปหารเอาเศษด้วยความยาวรอบ (Pos mod 16)",
+                            "คำนวณเศษตำแหน่งที่ 2021, 2022, 2023 จะตรงกับดัชนีตำแหน่งที่ 5, 6, 7 ของชุดรูปแบบ",
+                            "ดึงค่าตัวเลขจากดัชนีที่ได้มาเรียงต่อกัน จะได้เป็นเลขสามหลัก '234'"
                         ]
                     },
                     {
@@ -402,11 +404,12 @@
                         title: "ข้อ 08: ลำดับการรวมตัวเลขเป็นพาวเวอร์ของสอง",
                         year: "ปี 2567 ข้อ 30",
                         question: "โปรแกรมจะรวมเลขที่เหมือนกันและติดกันสองตัว ให้กลายเป็นตัวเลขที่มากกว่าเดิมอยู่ 1 (เช่น '11' → '2', '22' → '3') หากต้องการผลลัพธ์สุดท้ายเป็นเลข '6' เพียงตัวเดียว ต้องใส่เลข '1' ทั้งหมดกี่ตัว?",
-                        algorithmSteps: [
-                            { id: "s1", template: "วิเคราะห์เงื่อนไข: การสร้างเลข K ต้องใช้เลข (K - [input_1]) จำนวน 2 ตัว", answers: ["1"] },
-                            { id: "s2", template: "สร้างสมการความสัมพันธ์เชิงเวียนเกิด f(K) = [input_1] × f(K - 1)", answers: ["2"] },
-                            { id: "s3", template: "แปลงสมการเป็นรูปเลขยกกำลัง f(K) = 2^(K - [input_1])", answers: ["1"] },
-                            { id: "s4", template: "แทนค่าเป้าหมาย K = [input_1] เพื่อหาจำนวนเลข '1' ทั้งหมด", answers: ["6"] }
+                        answer: "32 ตัว",
+                        algorithm: [
+                            "วิเคราะห์ความสัมพันธ์: การสร้างเลข K 1 ตัว ต้องใช้เลข (K-1) ติดกัน 2 ตัว",
+                            "สร้างสูตรการเติบโตแบบเอ็กโพเนนเชียล f(K) = 2 × f(K-1) โดย f(1) = 1",
+                            "แปลงสมการให้อยู่ในรูปเลขยกกำลัง: f(K) = 2^(K-1)",
+                            "แทนค่า K = 6 เพื่อหาจำนวนเลข '1' ทั้งหมด: 2^(6-1) = 2^5 = 32 ตัว"
                         ]
                     }
                 ]
@@ -419,10 +422,11 @@
                         title: "ข้อ 09: หาผลต่างสูงสุด-ต่ำสุดจากการคูณ",
                         year: "ปี 2567 ข้อ 17",
                         question: "มีบัตรตัวเลข 2, 5, 6, 8 นำมาสร้างประโยคสัญลักษณ์ 'จำนวนสองหลัก × จำนวนสองหลัก' จงหาผลต่างของผลคูณที่มากที่สุดกับผลคูณที่น้อยที่สุด",
-                        algorithmSteps: [
-                            { id: "s1", template: "สร้างผลคูณสูงสุด: เลือกตัวเลขมากสุด [input_1] และ [input_2] เป็นหลักสิบ", answers: ["8", "6"] },
-                            { id: "s2", template: "สร้างผลคูณต่ำสุด: เลือกตัวเลขน้อยสุด [input_1] และ [input_2] เป็นหลักสิบ", answers: ["2", "5"] },
-                            { id: "s3", template: "คำนวณผลต่าง = ผลคูณสูงสุด - ผลคูณต่ำสุด", answers: [] }
+                        answer: "3,822",
+                        algorithm: [
+                            "หาผลคูณสูงสุด: เลือกเลขมากสุด (8, 6) เป็นหลักสิบ แล้วเปรียบเทียบ (82 × 65) กับ (85 × 62) ได้ค่าสูงสุด = 5,330",
+                            "หาผลคูณต่ำสุด: เลือกเลขน้อยสุด (2, 5) เป็นหลักสิบ แล้วเปรียบเทียบ (26 × 58) กับ (28 × 56) ได้ค่าน้อยสุด = 1,508",
+                            "นำผลคูณสูงสุดลบด้วยผลคูณต่ำสุด = 5,330 - 1,508 = 3,822"
                         ]
                     },
                     {
@@ -430,17 +434,19 @@
                         title: "ข้อ 10: เติมตัวเลขในตารางให้ได้ผลบวกตามเงื่อนไข",
                         year: "ปี 2568 ข้อ 30",
                         question: "เติมตัวเลข 1 ถึง 9 ไม่ซ้ำกัน ลงในช่อง 7 ช่องด้านซ้ายเพื่อบวกกัน: □ + □ + □ + □ + □ + □ + □ = จำนวนสองหลัก จงหาจำนวนสองหลักทางขวาที่เป็นไปได้",
-                        algorithmSteps: [
-                            { id: "s1", template: "คำนวณผลรวมของเลขทั้งหมดตั้งแต่ 1 ถึง [input_1] = 45", answers: ["9"] },
-                            { id: "s2", template: "เปลี่ยนมุมมอง: เลือกเลข 7 ช่อง เท่ากับการเลือกตัดเลขออก [input_1] ตัว", answers: ["2"] },
-                            { id: "s3", template: "ตรวจสอบคำตอบ: ผลรวม 7 ตัวที่เหลือ ต้องไม่เกิดตัวเลขซ้ำกับในประโยคสัญลักษณ์", answers: [] }
+                        answer: "36",
+                        algorithm: [
+                            "คำนวณผลรวมของเลขทั้งหมด 1 ถึง 9 = 45",
+                            "เปลี่ยนมุมมอง: การเลือกเลข 7 ตัวจาก 9 ตัว เท่ากับการเลือกตัดเลขออก 2 ตัว",
+                            "ทดสอบตัดเลข 2 ตัวออก แล้วเช็กว่าผลรวมของเลข 7 ตัวที่เหลือ ไม่เกิดเลขซ้ำกับตัวเลขในสมการ",
+                            "สรุปผลรวมที่สอดคล้อง: ตัดเลข 6 และเลขตัวอื่นที่ทำให้ผลรวมได้ 36 (ไม่มีเลขซ้ำในสมการ)"
                         ]
                     }
                 ]
             }
         ];
 
-        let currentProblem = null;
+        let currentAlgorithmCorrect = [];
         let dragSrcEl = null;
 
         // Render Side Menu
@@ -470,58 +476,64 @@
             });
         }
 
-        // Shuffle Array
+        // Shuffle Array (Fisher-Yates)
         function shuffle(array) {
+            let currentIndex = array.length, randomIndex;
             let arr = [...array];
-            for (let i = arr.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [arr[i], arr[j]] = [arr[j], arr[i]];
+            while (currentIndex !== 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [arr[currentIndex], arr[randomIndex]] = [arr[randomIndex], arr[currentIndex]];
             }
             return arr;
         }
 
         // Load Problem into Main View
         function loadProblem(problemId) {
+            let currentProb = null;
             problemData.forEach(cat => {
                 cat.problems.forEach(p => {
-                    if (p.id === problemId) currentProblem = p;
+                    if (p.id === problemId) currentProb = p;
                 });
             });
 
-            if (!currentProblem) return;
+            if (!currentProb) return;
 
             // Highlight menu
             document.querySelectorAll('.problem-item').forEach(el => el.classList.remove('active'));
             document.getElementById(`menu-${problemId}`).classList.add('active');
 
-            // Shuffle Steps for Puzzle
-            let shuffledSteps = shuffle(currentProblem.algorithmSteps);
-            if (currentProblem.algorithmSteps.length > 1) {
-                while (JSON.stringify(shuffledSteps.map(s => s.id)) === JSON.stringify(currentProblem.algorithmSteps.map(s => s.id))) {
-                    shuffledSteps = shuffle(currentProblem.algorithmSteps);
+            // Save correct sequence
+            currentAlgorithmCorrect = [...currentProb.algorithm];
+
+            // Shuffle for puzzle (Ensure it's actually shuffled if length > 1)
+            let shuffledAlgo = shuffle(currentProb.algorithm);
+            if (currentProb.algorithm.length > 1) {
+                while (JSON.stringify(shuffledAlgo) === JSON.stringify(currentProb.algorithm)) {
+                    shuffledAlgo = shuffle(currentProb.algorithm);
                 }
             }
 
             // Render Card
             const card = document.getElementById('problem-card');
             card.innerHTML = `
-                <span class="badge">${currentProblem.year}</span>
-                <h1>${currentProblem.title}</h1>
+                <span class="badge">${currentProb.year}</span>
+                <h1>${currentProb.title}</h1>
                 
-                <div class="section-title">📌 โจทย์คณิตศาสตร์:</div>
-                <div class="problem-body">${currentProblem.question}</div>
+                <div class="section-title">📌 โจทย์:</div>
+                <div class="problem-body">${currentProb.question}</div>
 
-                <div class="section-title">🧠 Advanced Algorithm Challenge</div>
+                <div class="answer-box">
+                    💡 เฉลยคำตอบคณิตศาสตร์: ${currentProb.answer}
+                </div>
+
+                <div class="section-title">🎮 ภารกิจ Algorithm Puzzle: ลากเรียงลำดับขั้นตอนให้ถูกต้อง</div>
                 
                 <div class="puzzle-container">
-                    <div class="puzzle-instruction">
-                        <b>คำชี้แจง:</b><br>
-                        1. 🖐️ <b>ลากสลับแถบ</b> เพื่อเรียงลำดับขั้นตอน Algorithm เชิงตรรกะให้ถูกต้องก่อน-หลัง<br>
-                        2. ✏️ <b>พิมพ์เติมตัวเลข</b> ลงในช่อง <code>[ ? ]</code> ให้ตรงตามตัวแปรในโจทย์
-                    </div>
+                    <p class="puzzle-instruction">💡 คลิกค้างที่แถบเพื่อ **ลากสลับลำดับ** หรือกดปุ่ม 🔼 🔽 ด้านขวา เพื่อเรียงขั้นตอนการแก้โจทย์ให้ถูกต้องตามลำดับก่อน-หลัง</p>
                     
                     <ul class="draggable-list" id="algo-list">
-                        ${shuffledSteps.map(stepObj => createDraggableItemHTML(stepObj)).join('')}
+                        ${shuffledAlgo.map((stepText, idx) => createDraggableItemHTML(stepText)).join('')}
                     </ul>
 
                     <div class="btn-controls">
@@ -536,22 +548,12 @@
             addDragAndDropListeners();
         }
 
-        // Parse Wording Template with Input Boxes
-        function createDraggableItemHTML(stepObj) {
-            let htmlText = stepObj.template;
-            let inputCount = 0;
-
-            // Replace [input_X] with actual HTML <input>
-            htmlText = htmlText.replace(/\[input_\d+\]/g, () => {
-                inputCount++;
-                return `<input type="text" class="algo-input" data-stepid="${stepObj.id}" placeholder="?" autocomplete="off">`;
-            });
-
+        function createDraggableItemHTML(text) {
             return `
-                <li class="draggable-item" draggable="true" data-id="${stepObj.id}">
+                <li class="draggable-item" draggable="true">
                     <div class="item-content">
                         <span class="drag-handle">☰</span>
-                        <span class="step-text">${htmlText}</span>
+                        <span class="step-text">${text}</span>
                     </div>
                     <div class="touch-btn-group">
                         <button class="btn-mini" onclick="moveUp(this)">▲</button>
@@ -576,11 +578,6 @@
         }
 
         function handleDragStart(e) {
-            // Disable drag if clicking inside input box
-            if (e.target.tagName.toLowerCase() === 'input') {
-                e.preventDefault();
-                return;
-            }
             dragSrcEl = this;
             this.classList.add('dragging');
             e.dataTransfer.effectAllowed = 'move';
@@ -604,21 +601,8 @@
         function handleDrop(e) {
             if (e.stopPropagation) e.stopPropagation();
             if (dragSrcEl !== this) {
-                // Save input values before swapping innerHTML
-                saveInputValues(dragSrcEl);
-                saveInputValues(this);
-
-                const tempHTML = dragSrcEl.innerHTML;
                 dragSrcEl.innerHTML = this.innerHTML;
-                this.innerHTML = tempHTML;
-
-                // Restore data-id attributes
-                const tempId = dragSrcEl.getAttribute('data-id');
-                dragSrcEl.setAttribute('data-id', this.getAttribute('data-id'));
-                this.setAttribute('data-id', tempId);
-
-                restoreInputValues(dragSrcEl);
-                restoreInputValues(this);
+                this.innerHTML = e.dataTransfer.getData('text/html');
             }
             return false;
         }
@@ -627,20 +611,11 @@
             document.querySelectorAll('.draggable-item').forEach(item => {
                 item.classList.remove('dragging', 'over');
             });
+            // Re-bind click events for buttons in moved items
             addDragAndDropListeners();
         }
 
-        function saveInputValues(itemEl) {
-            const inputs = itemEl.querySelectorAll('input');
-            inputs.forEach(i => i.setAttribute('value', i.value));
-        }
-
-        function restoreInputValues(itemEl) {
-            const inputs = itemEl.querySelectorAll('input');
-            inputs.forEach(i => i.value = i.getAttribute('value') || '');
-        }
-
-        // Button Controls for Touch / Mobile
+        // Button Controls for Mobile / Convenience
         function moveUp(btn) {
             const item = btn.closest('.draggable-item');
             const prev = item.previousElementSibling;
@@ -657,60 +632,39 @@
             }
         }
 
-        // Validation Algorithm (Order + Variable Filling)
+        // Check Answer Algorithm
         function checkAnswer() {
+            const currentItems = document.querySelectorAll('#algo-list .step-text');
+            const userOrder = Array.from(currentItems).map(el => el.innerText.trim());
             const feedback = document.getElementById('feedback');
-            const currentItems = document.querySelectorAll('#algo-list .draggable-item');
-            
-            // 1. Check Sequence Order
-            const userOrderIds = Array.from(currentItems).map(el => el.getAttribute('data-id'));
-            const correctOrderIds = currentProblem.algorithmSteps.map(s => s.id);
 
-            let isSequenceCorrect = true;
-            for (let i = 0; i < correctOrderIds.length; i++) {
-                if (userOrderIds[i] !== correctOrderIds[i]) {
-                    isSequenceCorrect = false;
-                    break;
+            let isCorrect = true;
+            if (userOrder.length !== currentAlgorithmCorrect.length) {
+                isCorrect = false;
+            } else {
+                for (let i = 0; i < userOrder.length; i++) {
+                    if (userOrder[i] !== currentAlgorithmCorrect[i].trim()) {
+                        isCorrect = false;
+                        break;
+                    }
                 }
             }
 
-            // 2. Check Variable Inputs
-            let isVariablesCorrect = true;
-            currentProblem.algorithmSteps.forEach(stepObj => {
-                if (stepObj.answers.length > 0) {
-                    const stepEl = document.querySelector(`.draggable-item[data-id="${stepObj.id}"]`);
-                    if (stepEl) {
-                        const inputs = stepEl.querySelectorAll('input');
-                        inputs.forEach((inputEl, idx) => {
-                            const val = inputEl.value.trim();
-                            if (val !== stepObj.answers[idx]) {
-                                isVariablesCorrect = false;
-                            }
-                        });
-                    }
-                }
-            });
-
-            // Feedback Logic
-            if (isSequenceCorrect && isVariablesCorrect) {
+            if (isCorrect) {
                 feedback.className = "feedback success";
-                feedback.innerHTML = "🎉 <b>ยอดเยี่ยมมากครับ!</b> คุณเรียงลำดับขั้นตอน Algorithm และแทนค่าตัวแปรได้ถูกต้องทั้งหมด!";
-            } else if (!isSequenceCorrect && isVariablesCorrect) {
-                feedback.className = "feedback error";
-                feedback.innerHTML = "⚠️ <b>แทนค่าตัวเลขถูกแล้ว แต่ลำดับยังไม่ถูกต้อง!</b> ลองพิจารณาดูว่าขั้นตอนไหนควรทำก่อน-หลังนะครับ";
-            } else if (isSequenceCorrect && !isVariablesCorrect) {
-                feedback.className = "feedback error";
-                feedback.innerHTML = "⚠️ <b>เรียงลำดับขั้นตอนถูกแล้ว แต่ตัวเลขในช่อง [ ? ] ยังไม่ถูกต้อง!</b> ลองเช็กตัวเลขจากโจทย์อีกครั้งนะครับ";
+                feedback.innerHTML = "🎉 **ถูกต้องแล้วครับ!** น้องๆ เรียงลำดับขั้นตอน Algorithm ได้สมบูรณ์แบบมากครับ!";
             } else {
                 feedback.className = "feedback error";
-                feedback.innerHTML = "❌ <b>ยังไม่ถูกต้องครับ!</b> ลองทบทวนทั้งลำดับขั้นตอนและการแทนค่าตัวเลขใหม่อีกครั้งนะครับ";
+                feedback.innerHTML = "❌ **ยังไม่ถูกต้องครับ** ลองพิจารณาว่าขั้นตอนไหนควรทำก่อน-หลัง แล้วลองเรียงใหม่อีกครั้งนะครับ!";
             }
         }
 
         // Reset Puzzle
         function resetPuzzle() {
-            if (currentProblem) {
-                loadProblem(currentProblem.id);
+            const activeMenu = document.querySelector('.problem-item.active');
+            if (activeMenu) {
+                const probId = activeMenu.id.replace('menu-', '');
+                loadProblem(probId);
             }
         }
 
