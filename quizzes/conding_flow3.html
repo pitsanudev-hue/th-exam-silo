@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>เกม Coding: อัลกอริทึมคำนวณผ่อนโทรศัพท์</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        font-family: "Sarabun", sans-serif;
+      }
+      body {
+        background-color: #f3f4f6;
+        padding: 20px;
+        margin: 0;
+      }
+      h1 {
+        text-align: center;
+        color: #1f2937;
+      }
+      p.subtitle {
+        text-align: center;
+        color: #4b5563;
+        max-width: 800px;
+        margin: 0 auto 20px auto;
+      }
+
+      .container {
+        display: flex;
+        gap: 20px;
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+      .panel {
+        flex: 1;
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      }
+      .panel h2 {
+        margin-top: 0;
+        font-size: 1.1rem;
+        color: #374151;
+        border-bottom: 2px solid #e5e7eb;
+        padding-bottom: 10px;
+      }
+
+      #options-panel {
+        border-top: 5px solid #6366f1;
+      }
+      #drop-panel {
+        border-top: 5px solid #10b981;
+      }
+
+      .drag-item {
+        background-color: #f5f3ff;
+        border: 2px solid #6366f1;
+        border-radius: 8px;
+        padding: 12px 16px;
+        margin-bottom: 10px;
+        cursor: grab;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #4338ca;
+        transition: all 0.2s;
+      }
+      .drag-item:active {
+        cursor: grabbing;
+        opacity: 0.6;
+      }
+
+      /* ประเภทของบล็อก */
+      .var-block {
+        background-color: #e0f2fe;
+        border-color: #0284c7;
+        color: #0369a1;
+      } /* ตัวแปร/ข้อมูลเข้า */
+      .calc-block {
+        background-color: #fef3c7;
+        border-color: #d97706;
+        color: #b45309;
+      } /* คำนวณ */
+      .out-block {
+        background-color: #dcfce7;
+        border-color: #16a34a;
+        color: #15803d;
+      } /* แสดงผล */
+
+      .drop-zone {
+        min-height: 420px;
+        border: 2px dashed #d1d5db;
+        border-radius: 8px;
+        padding: 10px;
+        background-color: #f9fafb;
+      }
+
+      .btn-container {
+        text-align: center;
+        margin-top: 20px;
+      }
+      button {
+        background-color: #6366f1;
+        color: white;
+        border: none;
+        padding: 12px 32px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        border-radius: 30px;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        transition: 0.2s;
+      }
+      button:hover {
+        background-color: #4f46e5;
+        transform: translateY(-2px);
+      }
+      #result {
+        text-align: center;
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-top: 15px;
+      }
+      .correct {
+        color: #15803d;
+      }
+      .wrong {
+        color: #b91c1c;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>📱 เกมแก้ปัญหาคณิตศาสตร์: คำนวณค่าผ่อนโทรศัพท์</h1>
+    <p class="subtitle">
+      ให้นักเรียนเปลี่ยนโจทย์ปัญหาเป็นขั้นตอนโปรแกรม (Algorithm)
+      โดยเรียงบล็อกการทำงานจากฝั่งซ้ายไปฝั่งขวาให้ถูกต้อง
+    </p>
+
+    <div class="container">
+      <!-- ฝั่งซ้าย: ตัวเลือกที่สลับลำดับไว้ -->
+      <div class="panel" id="options-panel">
+        <h2>🧩 ตัวเลือกขั้นตอน (ลากจากที่นี่)</h2>
+        <div id="options" class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)">
+          <div
+            class="drag-item calc-block"
+            draggable="true"
+            ondragstart="drag(event)"
+            id="step-calc-month">
+            4ำนวณค่างวดต่อเดือน = (ยอดเงินที่เหลือ ÷ 12)
+          </div>
+          <div
+            class="drag-item var-block"
+            draggable="true"
+            ondragstart="drag(event)"
+            id="step-input-price">
+            กำหนด ราคาโทรศัพท์ = 8,200 บาท
+          </div>
+          <div
+            class="drag-item out-block"
+            draggable="true"
+            ondragstart="drag(event)"
+            id="step-output">
+            5. แสดงผลลัพธ์ "ต้องผ่อนเดือนละ 475 บาท"
+          </div>
+          <div
+            class="drag-item var-block"
+            draggable="true"
+            ondragstart="drag(event)"
+            id="step-input-cash">
+            กำหนด เงินสดจ่ายไปก่อน = 2,500 บาท
+          </div>
+          <div
+            class="drag-item calc-block"
+            draggable="true"
+            ondragstart="drag(event)"
+            id="step-calc-remain">
+            คำนวณยอดเงินที่เหลือ = (ราคาโทรศัพท์ - เงินสด)
+          </div>
+        </div>
+      </div>
+
+      <!-- ฝั่งขวา: พื้นที่วางลำดับ -->
+      <div class="panel" id="drop-panel">
+        <h2>📋 ลำดับอัลกอริทึมที่ถูกต้อง (วางที่นี่)</h2>
+        <div id="target" class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+      </div>
+    </div>
+
+    <div class="btn-container">
+      <button onclick="checkAnswer()">ตรวจคำตอบ 🎯</button>
+      <div id="result"></div>
+    </div>
+
+    <script>
+      // ลำดับที่ถูกต้องของทั้ง 5 ขั้นตอน
+      const correctOrder = [
+        "step-input-price", // 1. กำหนด ราคาโทรศัพท์
+        "step-input-cash", // 2. กำหนด เงินสดจ่ายไปก่อน
+        "step-calc-remain", // 3. คำนวณยอดเงินที่เหลือ
+        "step-calc-month", // 4. คำนวณค่างวดต่อเดือน
+        "step-output", // 5. แสดงผลลัพธ์
+      ];
+
+      function allowDrop(ev) {
+        ev.preventDefault();
+      }
+      function drag(ev) {
+        ev.dataTransfer.setData("text", ev.target.id);
+      }
+
+      function drop(ev) {
+        ev.preventDefault();
+        var data = ev.dataTransfer.getData("text");
+        var draggedElement = document.getElementById(data);
+        var dropZone = ev.target.closest(".drop-zone");
+        if (dropZone) {
+          dropZone.appendChild(draggedElement);
+        }
+      }
+
+      function checkAnswer() {
+        const targetZone = document.getElementById("target");
+        const children = targetZone.children;
+        const resultDiv = document.getElementById("result");
+
+        if (children.length < correctOrder.length) {
+          resultDiv.className = "wrong";
+          resultDiv.innerHTML = "⚠️ กรุณาลากบล็อกขั้นตอนมาวางทางฝั่งขวาให้ครบทั้ง 5 ขั้นตอนครับ!";
+          return;
+        }
+
+        let isCorrect = true;
+        for (let i = 0; i < children.length; i++) {
+          if (children[i].id !== correctOrder[i]) {
+            isCorrect = false;
+            break;
+          }
+        }
+
+        if (isCorrect) {
+          resultDiv.className = "correct";
+          resultDiv.innerHTML =
+            "🎉 ยอดเยี่ยมมาก! แปลงโจทย์ปัญหาคณิตศาสตร์เป็นอัลกอริทึมได้ถูกต้องตรงตามลำดับ!";
+        } else {
+          resultDiv.className = "wrong";
+          resultDiv.innerHTML =
+            "❌ ยังไม่ถูกต้อง! ลองทบทวนดูว่าต้องนำเงินสดไปหักออกจากราคาโทรศัพท์ก่อนหาร 12 หรือไม่นะ";
+        }
+      }
+    </script>
+  </body>
+</html>
