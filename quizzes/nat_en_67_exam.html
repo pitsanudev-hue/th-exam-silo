@@ -386,7 +386,7 @@
         function loadDefaultPdf() {
             const pdfFrame = document.getElementById('pdf-frame');
             // Try loading from relative local path or fallback
-            pdfFrame.src = './assets/pdf/205010.pdf';
+            pdfFrame.src = '../assets/pdf/205010.pdf';
 
             // Check if iframe fails or is blocked
             pdfFrame.onerror = function() {
