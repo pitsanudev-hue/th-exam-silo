@@ -1,4 +1,4 @@
-const CACHE_NAME = "quiz-hub-v4";
+const CACHE_NAME = "quiz-hub-v5";
 
 // ระบบจะแคชไฟล์ทั้งหมดอัตโนมัติเมื่อเปิดครั้งแรก
 self.addEventListener("install", (e) => {
@@ -30,6 +30,10 @@ self.addEventListener("install", (e) => {
         "./quizzes/teset_2025_exam.html",
         "./quizzes/teset_2025_G3_exam.html",
         "./quizzes/tsb_2023_G1.html",
+        "./quizzes/nat_en_67_exam.html",
+        "./assets/pdf/205010.pdf",
+        "./assets/pdfjs/build/pdf.mjs",
+        "./assets/pdfjs/build/pdf.worker.mjs",
       ]);
     }),
   );

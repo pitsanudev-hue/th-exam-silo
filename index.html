@@ -250,7 +250,7 @@
       // ฟังก์ชันสำรองกรณี Offline
       async function loadFromCache(container) {
         if ("caches" in window) {
-          const cache = await caches.open("quiz-hub-v4");
+          const cache = await caches.open("quiz-hub-v5");
           const keys = await cache.keys();
           const cachedHtmlFiles = keys
             .map((req) => req.url)
