@@ -1,4 +1,4 @@
-const CACHE_NAME = "quiz-hub-v5";
+const CACHE_NAME = "quiz-hub-v6";
 
 // ระบบจะแคชไฟล์ทั้งหมดอัตโนมัติเมื่อเปิดครั้งแรก
 self.addEventListener("install", (e) => {
@@ -9,6 +9,7 @@ self.addEventListener("install", (e) => {
         "./index.html",
         "./stats.html",
         "./manifest.json",
+        "./config.json",
         "./favicon.ico",
         "./assets/stats.js",
         "./assets/icons/icon-16.png",

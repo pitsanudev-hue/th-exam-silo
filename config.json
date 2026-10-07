@@ -58,5 +58,35 @@
     "name": "TSB 2023 - Thailand Spelling Bee Practice Exam (Level 1: ป.1-ป.2)",
     "file": "tsb_2023_G1.html",
     "category": "ภาษาอังกฤษ"
+  },
+  {
+    "name": "ระบบทำข้อสอบออนไลน์ สวช. 205010",
+    "file": "nat_en_67_exam.html",
+    "category": "ภาษาอังกฤษ"
+  },
+  {
+    "name": "ระบบทำข้อสอบออนไลน์ TESET 2026 (ป.4-ป.6)",
+    "file": "teset_2026_exam.html",
+    "category": "ภาษาอังกฤษ"
+  },
+  {
+    "name": "เกม Coding: บริหารเงินประจำวัน",
+    "file": "coding_flow1.html",
+    "category": "วิทยาการคำนวณ"
+  },
+  {
+    "name": "TEDET Advanced Algorithm Challenge - ฝึกคิดแบบโปรแกรมเมอร์",
+    "file": "coding_flow2.html",
+    "category": "วิทยาการคำนวณ"
+  },
+  {
+    "name": "เกม Coding: อัลกอริทึมคำนวณผ่อนโทรศัพท์",
+    "file": "coding_flow3.html",
+    "category": "วิทยาการคำนวณ"
+  },
+  {
+    "name": "TEDET Algorithm Puzzle - เกมเรียงลำดับอัลกอริทึม",
+    "file": "coding_flow4.html",
+    "category": "วิทยาการคำนวณ"
   }
 ]
