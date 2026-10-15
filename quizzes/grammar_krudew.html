@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>ทวน Grammar ก่อนสอบ (80 ข้อ)</title>
+    <style>
+      :root {
+        --primary: #ec4899;
+        --primary-dark: #be185d;
+        --bg: #fdf2f8;
+        --card: #ffffff;
+        --ok: #10b981;
+        --bad: #ef4444;
+        --border: #fbcfe8;
+        --text: #1f2937;
+        --muted: #6b7280;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        padding-bottom: 120px;
+      }
+      header.top {
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        color: #fff;
+        padding: 18px 16px 60px;
+        text-align: center;
+      }
+      header.top h1 { margin: 0 0 4px; font-size: 1.4rem; }
+      header.top p { margin: 2px 0; font-size: 0.85rem; opacity: 0.9; }
+      .info-card {
+        max-width: 760px;
+        margin: -46px auto 20px;
+        background: var(--card);
+        border-radius: 14px;
+        box-shadow: 0 6px 20px rgba(190, 24, 93, 0.12);
+        padding: 16px;
+        position: relative;
+        z-index: 2;
+      }
+      .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+      .info-grid label { display: block; font-size: 0.75rem; color: var(--muted); margin-bottom: 4px; }
+      .info-grid input { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.95rem; }
+      .timer-bar {
+        max-width: 760px; margin: 0 auto 20px; background: var(--card); border-radius: 14px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.05); padding: 14px 16px; display: flex; align-items: center; justify-content: space-between;
+      }
+      .timer-bar .time { font-size: 1.6rem; font-weight: 700; color: var(--primary-dark); }
+      .btn {
+        border: none; border-radius: 10px; padding: 12px 20px; font-size: 1rem; font-weight: 600;
+        cursor: pointer; color: #fff; background: var(--primary); transition: transform 0.1s;
+      }
+      .btn:active { transform: scale(0.97); }
+      .btn.secondary { background: #8a93a6; }
+      .btn.big { padding: 16px 28px; font-size: 1.1rem; border-radius: 12px; }
+      main { max-width: 760px; margin: 0 auto; padding: 0 16px; }
+      .qcard { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; margin-bottom: 12px; }
+      .qcard .qtext { font-size: 1.05rem; line-height: 1.5; margin-bottom: 12px; font-weight: 600; }
+      .opt {
+        display: flex; align-items: center; gap: 10px; border: 1px solid var(--border); border-radius: 10px;
+        padding: 12px; margin-bottom: 8px; cursor: pointer;
+      }
+      .opt input { width: 20px; height: 20px; accent-color: var(--primary); }
+      .opt.selected { border-color: var(--primary); background: #fdf2f8; }
+      .opt.correct-answer { border-color: var(--ok); background: #eaf7ee; }
+      .opt.wrong-answer { border-color: var(--bad); background: #fdeceb; }
+      .hint-box {
+        margin-top: 10px; background: #fffbeb; border-left: 4px solid #f59e0b; padding: 10px; border-radius: 6px;
+        font-size: 0.9rem; color: #92400e; font-weight: 500;
+      }
+      .progress-bar { position: fixed; left: 0; right: 0; bottom: 0; background: var(--card); border-top: 1px solid var(--border); padding: 10px 16px; }
+      .progress-bar .row { max-width: 760px; margin: 0 auto; display: flex; align-items: center; gap: 12px; }
+      .progress-track { flex: 1; height: 10px; background: #e5e8f0; border-radius: 6px; overflow: hidden; }
+      .progress-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.2s; }
+      #resultsPanel { display: none; }
+      .score-hero { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; border-radius: 16px; padding: 24px; text-align: center; margin-bottom: 16px; }
+      .score-hero .big { font-size: 2.6rem; font-weight: 800; }
+    </style>
+  </head>
+  <body>
+    <header class="top">
+      <h1>ทวน Grammar ก่อนสอบ</h1>
+      <p>แบบทดสอบภาษาอังกฤษ 80 ข้อ สำหรับฝึกทำบนแท็บเล็ต</p>
+    </header>
+
+    <main>
+      <div class="info-card">
+        <div class="info-grid">
+          <div><label>ชื่อ-นามสกุล นักเรียน</label><input type="text" placeholder="ระบุชื่อ..." /></div>
+          <div><label>วันที่</label><input type="date" id="studentDate" /></div>
+        </div>
+      </div>
+
+      <div class="timer-bar">
+        <div>
+          <div style="font-size: 0.8rem; color: var(--muted)">เวลาที่เหลือ</div>
+          <div class="time" id="timeDisplay">01:30:00</div>
+        </div>
+        <div style="display: flex; gap: 8px">
+          <button class="btn" id="startBtn" onclick="startTimer()">เริ่มจับเวลา</button>
+          <button class="btn secondary" id="pauseBtn" onclick="pauseTimer()" disabled>หยุดชั่วคราว</button>
+        </div>
+      </div>
+
+      <form id="examForm">
+        <div id="quiz-container"></div>
+        <div style="text-align: center; margin: 30px 0">
+          <button type="button" class="btn big" id="submitBtn" onclick="gradeExam()">ส่งคำตอบและตรวจคะแนน</button>
+        </div>
+      </form>
+
+      <div id="resultsPanel">
+        <div class="score-hero">
+          <div style="font-size: 0.9rem; opacity: 0.85">คะแนนรวม</div>
+          <div class="big" id="totalScore">0 / 80</div>
+          <div id="totalPercent" style="opacity: 0.9"></div>
+        </div>
+        <div style="text-align: center; display: flex; gap: 10px; justify-content: center;">
+          <button type="button" class="btn secondary" id="retryBtn" onclick="startRetry()">🔁 ทำซ้ำข้อที่ผิด</button>
+          <button type="button" class="btn" id="revealBtn" onclick="revealAllAnswers()">📖 ดูเฉลยคำตอบ</button>
+        </div>
+      </div>
+    </main>
+
+    <div class="progress-bar">
+      <div class="row">
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="count" id="progressCount" style="font-size: 0.85rem; color: var(--muted)">0 / 80 ข้อ</div>
+      </div>
+    </div>
+
+    <script>
+      const quizData = [
+        // Page 1 (1-5)
+        { id: 1, q: "The box of chocolates _____ on the table.", options: { A: "are", B: "be", C: "is", D: "being" }, answer: "C", hint: "ผันกริยาตาม N. หน้า of" },
+        { id: 2, q: "Each of the students _____ a textbook.", options: { A: "has", B: "have", C: "having", D: "to have" }, answer: "A", hint: "Each = ทีละคน → V. เอกพจน์" },
+        { id: 3, q: "The teacher, as well as her students, _____ ready.", options: { A: "be", B: "are", C: "being", D: "is" }, answer: "D", hint: "as well as / together with / along with → ผัน V. ตามประธานตัวหน้า" },
+        { id: 4, q: "Neither the manager nor the employees _____ available.", options: { A: "is", B: "are", C: "be", D: "being" }, answer: "B", hint: "Neither...nor / Either...or → ผันตาม N. หลัง nor หรือ or" },
+        { id: 5, q: "A number of tourists _____ waiting outside the museum.", options: { A: "is", B: "are", C: "be", D: "being" }, answer: "B", hint: "A number of = หลาย... → V. พหูพจน์" },
+
+        // Page 2 (6-10)
+        { id: 6, q: "The number of traffic accidents _____ increasing.", options: { A: "are", B: "be", C: "being", D: "is" }, answer: "D", hint: "The number of = จำนวนของ... → V. เอกพจน์" },
+        { id: 7, q: "Swimming every morning _____ me feel refreshed.", options: { A: "make", B: "making", C: "makes", D: "to make" }, answer: "C", hint: "V.ing ขึ้นต้นประโยค → V. เอกพจน์" },
+        { id: 8, q: "There _____ several mistakes in this report.", options: { A: "is", B: "be", C: "being", D: "are" }, answer: "D", hint: "There is / There are ให้ดูคำนามที่ตามหลังช่องว่าง" },
+        { id: 9, q: "Five hundred baht _____ enough for this meal.", options: { A: "are", B: "be", C: "being", D: "is" }, answer: "D", hint: "เงิน เวลา ระยะทาง → V. เอกพจน์" },
+        { id: 10, q: "Everyone in these rooms _____ an ID badge.", options: { A: "have", B: "has", C: "having", D: "to have" }, answer: "B", hint: "คำพวก every, some, no และมี body, thing, one ลงท้าย → V. เอกพจน์" },
+
+        // Page 3 (11-15)
+        { id: 11, q: "She _____ her grandmother yesterday.", options: { A: "visit", B: "visits", C: "visited", D: "visiting" }, answer: "C", hint: "yesterday = เมื่อวาน → Past Simple (V.2)" },
+        { id: 12, q: "We _____ to Chiang Mai last week.", options: { A: "went", B: "go", C: "gone", D: "going" }, answer: "A", hint: "last + ช่วงเวลา = ...ที่ผ่านมา → Past Simple (V.2)" },
+        { id: 13, q: "He _____ a new phone two days ago.", options: { A: "buy", B: "buying", C: "buys", D: "bought" }, answer: "D", hint: "ระยะเวลา + ago → ...ที่แล้ว → Past Simple (V.2)" },
+        { id: 14, q: "I _____ at home yesterday.", options: { A: "am", B: "was", C: "were", D: "are" }, answer: "B", hint: "V.2 ของ V. to be คือ was/were | I / He / She / It + was" },
+        { id: 15, q: "They _____ watch TV last night.", options: { A: "weren't", B: "doesn't", C: "aren't", D: "didn't" }, answer: "D", hint: "V.2 ของ V. to do = did" },
+
+        // Page 4 (16-20)
+        { id: 16, q: "He had locked the door before he _____ the house.", options: { A: "leave", B: "left", C: "leaving", D: "leaves" }, answer: "B", hint: "had + V.3 + before → V.2" },
+        { id: 17, q: "After she had finished her homework, she _____ to bed.", options: { A: "go", B: "gone", C: "went", D: "going" }, answer: "C", hint: "เจอ After + had + V.3 → อีกประโยค V.2" },
+        { id: 18, q: "By the time we _____ at the station, the train had already left.", options: { A: "arrive", B: "arriving", C: "arrives", D: "arrived" }, answer: "D", hint: "เจอ By the time + V.2 → อีกประโยค had + V.3" },
+        { id: 19, q: "I was sleeping when the phone _____.", options: { A: "rings", B: "rang", C: "ringing", D: "has rung" }, answer: "B", hint: "was/were + V.ing + when → V.2" },
+        { id: 20, q: "While she was cooking, she _____ a loud noise.", options: { A: "heard", B: "hears", C: "hearing", D: "has heard" }, answer: "A", hint: "while + was/were + V.ing, → V.2" },
+
+        // Page 5 (21-25)
+        { id: 21, q: "She has _____ a letter to her friend.", options: { A: "write", B: "wrote", C: "written", D: "writing" }, answer: "C", hint: "หลัง have/has + V.3" },
+        { id: 22, q: "He _____ finished his homework.", options: { A: "has", B: "have", C: "having", D: "to have" }, answer: "A", hint: "He / She / It / นามเอกพจน์ → has + V.3" },
+        { id: 23, q: "The students _____ completed the assignment.", options: { A: "has", B: "having", C: "to have", D: "have" }, answer: "D", hint: "I / You / We / They / นามพหูพจน์ → have + V.3" },
+        { id: 24, q: "We have _____ friends for ten years.", options: { A: "be", B: "been", C: "was", D: "were" }, answer: "B", hint: "V.3 ของ V. to be → been" },
+        { id: 25, q: "She has _____ all her homework.", options: { A: "do", B: "did", C: "done", D: "doing" }, answer: "C", hint: "V.3 ของ V. to do → done" },
+
+        // Page 6 (26-30)
+        { id: 26, q: "Ms. Wilson has worked in the accounting department _____ 2020.", options: { A: "for", B: "since", C: "during", D: "until" }, answer: "B", hint: "since = ตั้งแต่ + จุดเจาะจง" },
+        { id: 27, q: "They have lived in the same apartment in Bangkok _____ five years.", options: { A: "since", B: "during", C: "until", D: "for" }, answer: "D", hint: "for = เป็นเวลา + ระยะเวลา" },
+        { id: 28, q: "She _____ the annual report already.", options: { A: "finishes", B: "has finished", C: "will finish", D: "finish" }, answer: "B", hint: "already = ทำเสร็จแล้ว → have/has + V.3" },
+        { id: 29, q: "So far, our team _____ three projects.", options: { A: "completing", B: "complete", C: "has completed", D: "completes" }, answer: "C", hint: "so far = จนถึงตอนนี้ → have/has + V.3" },
+        { id: 30, q: "This is the most useful advice I have ever _____.", options: { A: "heard", B: "hears", C: "hearing", D: "hear" }, answer: "A", hint: "the best/most → + have/has + ever + V.3" },
+
+        // Page 7 (31-35)
+        { id: 31, q: "She will _____ you tomorrow.", options: { A: "calls", B: "called", C: "call", D: "calling" }, answer: "C", hint: "will + V.1 ไม่เติม s, es, ing, ed ไม่เปลี่ยนรูป" },
+        { id: 32, q: "They will _____ busy tomorrow.", options: { A: "are", B: "is", C: "been", D: "be" }, answer: "D", hint: "V.1 หลัง will ที่เป็น V. to be → be" },
+        { id: 33, q: "I will _____ my homework after dinner.", options: { A: "did", B: "do", C: "does", D: "done" }, answer: "B", hint: "V.1 หลัง will ที่เป็น V. to do → do" },
+        { id: 34, q: "We _____ our grandparents next week.", options: { A: "will visit", B: "visited", C: "visiting", D: "have visited" }, answer: "A", hint: "next + ช่วงเวลา = ...หน้า → will + V.1" },
+        { id: 35, q: "The new shop _____ in two days.", options: { A: "opened", B: "opening", C: "has opened", D: "will open" }, answer: "D", hint: "in + ระยะเวลา = ในอีก... → will + V.1" },
+
+        // Page 8 (36-40)
+        { id: 36, q: "Don't worry. I _____ you soon.", options: { A: "helped", B: "will help", C: "helping", D: "have helped" }, answer: "B", hint: "soon = เร็ว ๆ นี้ → will + V.1" },
+        { id: 37, q: "I think our team _____ the match tomorrow.", options: { A: "win", B: "won", C: "will win", D: "winning" }, answer: "C", hint: "I think = การคาดการณ์อนาคต → will + V.1" },
+        { id: 38, q: "I promise I _____ your secret to anyone from now on.", options: { A: "won't tell", B: "told", C: "telling", D: "to tell" }, answer: "A", hint: "I promise = ให้คำมั่น → will + V.1" },
+        { id: 39, q: "I believe you _____ the exam next month.", options: { A: "passed", B: "have passed", C: "passing", D: "will pass" }, answer: "D", hint: "I believe = เชื่อว่า → will + V.1" },
+        { id: 40, q: "Look at those dark clouds! It _____.", options: { A: "rain", B: "rains", C: "is going to rain", D: "raining" }, answer: "C", hint: "มีหลักฐานให้เห็นว่าจะเกิด → be + going to + V.1" },
+
+        // Page 9 (41-45)
+        { id: 41, q: "If it rains tomorrow, we _____ at home.", options: { A: "stayed", B: "would stay", C: "had stayed", D: "will stay" }, answer: "D", hint: "If + V.1 → will + V.1 (เป็นไปได้ในอนาคต)" },
+        { id: 42, q: "If I had more money, I _____ a new laptop.", options: { A: "buy", B: "would buy", C: "were bought", D: "bought" }, answer: "B", hint: "If + V.2 → would + V.1 (สมมติสถานการณ์ปัจจุบัน)" },
+        { id: 43, q: "If I _____ you, I would accept the offer.", options: { A: "am", B: "were", C: "will be", D: "had been" }, answer: "B", hint: "V.2 หลัง if ถ้าเป็น V. to be → were (ทุกประธาน)" },
+        { id: 44, q: "If she had studied harder, she _____ the exam.", options: { A: "passed", B: "passes", C: "had passed", D: "would have passed" }, answer: "D", hint: "If + had V.3 → would have + V.3" },
+        { id: 45, q: "Unless you _____ now, you will miss the bus.", options: { A: "leave", B: "don't leave", C: "will leave", D: "won't leave" }, answer: "A", hint: "Unless = ถ้าไม่ → ไม่เติม not ซ้ำ" },
+
+        // Page 10 (46-50)
+        { id: 46, q: "You will pass the course provided that you _____ all the assignments.", options: { A: "completed", B: "completing", C: "had completed", D: "complete" }, answer: "D", hint: "provided that = if (ใช้สูตรเดียวกับ if)" },
+        { id: 47, q: "You can borrow my car as long as you _____ it before six.", options: { A: "returned", B: "returning", C: "return", D: "had returned" }, answer: "C", hint: "as long as = if (ใช้ตามประเภท if)" },
+        { id: 48, q: "_____ I in your position, I would refuse the offer.", options: { A: "Had", B: "Should", C: "Were", D: "Did" }, answer: "C", hint: "If + S. + were → Were + S. (inversion)" },
+        { id: 49, q: "I wish I _____ more free time now.", options: { A: "have", B: "will have", C: "had", D: "having" }, answer: "C", hint: "wish + V.2 → ปรารถนาในปัจจุบัน (now)" },
+        { id: 50, q: "I wish I _____ harder for yesterday's exam.", options: { A: "had studied", B: "study", C: "will study", D: "studying" }, answer: "A", hint: "wish + had + V.3 → เสียดายอดีต (yesterday)" },
+
+        // Page 11 (51-55)
+        { id: 51, q: "She completed the task as _____ as her colleague.", options: { A: "quicker", B: "quickest", C: "quick", D: "quickly" }, answer: "D", hint: "as...as (เท่ากัน) → ใช้ adj./adv. รูปเดิม" },
+        { id: 52, q: "This route is not _____ as the highway.", options: { A: "longer", B: "as long", C: "more long", D: "longest" }, answer: "B", hint: "not as/so...as (ไม่...เท่า) → ใช้ adj./adv. รูปเดิม" },
+        { id: 53, q: "This model is the same size _____ the previous one.", options: { A: "as", B: "than", C: "to", D: "for" }, answer: "A", hint: "the same + N. + as = ...เหมือนกัน / เท่ากัน" },
+        { id: 54, q: "The new system is _____ than the old one.", options: { A: "efficient", B: "more efficient", C: "most efficient", D: "as efficient" }, answer: "B", hint: "เห็น than เลือก more... หรือ -er" },
+        { id: 55, q: "The new printer is _____ than the old one.", options: { A: "fast", B: "fastest", C: "faster", D: "more fast" }, answer: "C", hint: "เห็น than เลือก more... หรือ -er" },
+
+        // Page 12 (56-60)
+        { id: 56, q: "The meeting room is much _____ than my office.", options: { A: "large", B: "larger", C: "largest", D: "very large" }, answer: "B", hint: "much / far / even / a lot + ขั้นกว่า = ขยายขั้นกว่า" },
+        { id: 57, q: "The more carefully you read, the _____ mistakes you make.", options: { A: "fewer", B: "less", C: "fewest", D: "few" }, answer: "A", hint: "the + ขั้นกว่า, the + ขั้นกว่า = ยิ่ง...ยิ่ง..." },
+        { id: 58, q: "We have _____ time than we expected.", options: { A: "least", B: "few", C: "less", D: "fewer" }, answer: "C", hint: "fewer + นามนับได้พหูพจน์ / less + นามนับไม่ได้" },
+        { id: 59, q: "She is the _____ of the three sisters.", options: { A: "tall", B: "taller", C: "tallest", D: "more tall" }, answer: "C", hint: "เห็น the เลือก most... หรือ -est" },
+        { id: 60, q: "He is _____ candidate in the group.", options: { A: "qualified", B: "qualifiedest", C: "more qualified", D: "the most qualified" }, answer: "D", hint: "the + ขั้นสุด + in/of + กลุ่มที่เปรียบเทียบ" },
+
+        // Page 13 (61-65)
+        { id: 61, q: "The woman _____ lives next door is a doctor.", options: { A: "whom", B: "who", C: "whose", D: "which" }, answer: "B", hint: "คน + who + V." },
+        { id: 62, q: "The man _____ we interviewed yesterday is an engineer.", options: { A: "where", B: "whose", C: "whom", D: "which" }, answer: "C", hint: "คน + whom + S. + V." },
+        { id: 63, q: "The student _____ father is a pilot won the competition.", options: { A: "whose", B: "whom", C: "who", D: "where" }, answer: "A", hint: "คน, สิ่งของ + whose + N. = ...ของคนหรือสิ่งข้างหน้า" },
+        { id: 64, q: "The machine _____ broke down yesterday has been repaired.", options: { A: "who", B: "whom", C: "whose", D: "which" }, answer: "D", hint: "สิ่งของ + which + V." },
+        { id: 65, q: "This is the restaurant _____ we had dinner last night.", options: { A: "which", B: "who", C: "whose", D: "where" }, answer: "D", hint: "สถานที่ + where + S. + V." },
+
+        // Page 14 (66-70)
+        { id: 66, q: "I remember the day _____ we first met.", options: { A: "whose", B: "when", C: "whom", D: "where" }, answer: "B", hint: "เวลา + when + S. + V." },
+        { id: 67, q: "I'll never forget the day _____ changed my life.", options: { A: "when", B: "who", C: "where", D: "which" }, answer: "D", hint: "เวลา + which + V." },
+        { id: 68, q: "The reason _____ he resigned is still unclear.", options: { A: "why", B: "which", C: "whose", D: "whom" }, answer: "A", hint: "the reason + why + S. + V." },
+        { id: 69, q: "The man _____ near the door is my teacher.", options: { A: "stand", B: "standing", C: "stands", D: "to standing" }, answer: "B", hint: "ลดรูปจาก who + V. ที่ประธานทำเอง → V.ing" },
+        { id: 70, q: "The documents _____ by the manager are on my desk.", options: { A: "signed", B: "signing", C: "sign", D: "signs" }, answer: "A", hint: "ลดรูปจาก which + be + V.3 ถูกทำ → V.3" },
+
+        // Page 15 (71-75)
+        { id: 71, q: "We received useful _____ about the course.", options: { A: "informative", B: "inform", C: "informatively", D: "information" }, answer: "D", hint: "หลัง adj. = คำนาม" },
+        { id: 72, q: "Everyone understands the importance of _____.", options: { A: "preparation", B: "prepared", C: "preparatory", D: "prepare" }, answer: "A", hint: "คำนามอยู่ หน้า/หลัง of หลัง of มี adj. ขยายได้ ต้องดูให้ดี" },
+        { id: 73, q: "The _____ of the project surprised everyone.", options: { A: "successfully", B: "successful", C: "success", D: "succeed" }, answer: "C", hint: "คำนามอยู่ หน้า/หลัง of หลัง of มี adj. ขยายได้ ต้องดูให้ดี" },
+        { id: 74, q: "We need your _____ before we proceed.", options: { A: "approve", B: "approval", C: "approved", D: "approvingly" }, answer: "B", hint: "my / your / his / her / our / their + คำนาม" },
+        { id: 75, q: "We need a _____ source of information.", options: { A: "reliable", B: "reliability", C: "rely", D: "reliably" }, answer: "A", hint: "adj. อยู่หน้าคำนาม" },
+
+        // Page 16 (76-80)
+        { id: 76, q: "The instructions in the manual are _____.", options: { A: "clear", B: "clearly", C: "clarity", D: "clarify" }, answer: "A", hint: "adj. อยู่หลัง V. to be" },
+        { id: 77, q: "The children seem _____ about the trip.", options: { A: "excitement", B: "excite", C: "excitedly", D: "excited" }, answer: "D", hint: "seem / look / feel / sound / become + adj." },
+        { id: 78, q: "The employees worked _____ to finish the report on time.", options: { A: "efficient", B: "efficiency", C: "efficiently", D: "efficiencies" }, answer: "C", hint: "adv. อยู่หลังกริยา (ขยายกริยา)" },
+        { id: 79, q: "The manager was _____ pleased with the results.", options: { A: "extreme", B: "extremely", C: "extremity", D: "extremes" }, answer: "B", hint: "adv. อยู่หน้า adj. (ขยาย adj.)" },
+        { id: 80, q: "The trainer can _____ explain the new safety rules.", options: { A: "effective", B: "effect", C: "effectiveness", D: "effectively" }, answer: "D", hint: "adv. อยู่ระหว่าง V. ช่วย กับ V.แท้\n\nคำลงท้ายบอกประเภทคำ\nNoun: -tion, -sion, -ment, -ness, -ity, -ance\nAdjective: -ful, -less, -able, -ible, -ive, -ous\nAdverb: มักลงท้าย -ly" }
+      ];
+
+      function renderQuiz() {
+        const container = document.getElementById('quiz-container');
+        quizData.forEach((item) => {
+          const card = document.createElement('div');
+          card.className = 'qcard';
+          card.id = 'qcard_' + item.id;
+          let optsHTML = '';
+          for (const [key, val] of Object.entries(item.options)) {
+            optsHTML += `<label class="opt" id="opt_${item.id}_${key}">
+              <input type="radio" name="q${item.id}" value="${key}" onchange="updateProgress()">
+              <span><b>${key}.</b> ${val}</span>
+            </label>`;
+          }
+          card.innerHTML = `<div class="qtext">${item.id}. ${item.q}</div>${optsHTML}<div class="hint-box">💡 <b>จำ:</b> ${item.hint.replace(/\n/g, '<br>')}</div>`;
+          container.appendChild(card);
+        });
+      }
+
+      function updateProgress() {
+        let count = 0;
+        quizData.forEach(i => {
+          if (document.querySelector(`input[name="q${i.id}"]:checked`)) count++;
+        });
+        document.getElementById('progressFill').style.width = (count / 80 * 100) + '%';
+        document.getElementById('progressCount').textContent = count + ' / 80 ข้อ';
+      }
+
+      let totalSec = 5400, timerInt = null;
+      function startTimer() {
+        document.getElementById('startBtn').disabled = true;
+        document.getElementById('pauseBtn').disabled = false;
+        timerInt = setInterval(() => {
+          totalSec--;
+          let h = String(Math.floor(totalSec / 3600)).padStart(2, '0');
+          let m = String(Math.floor((totalSec % 3600) / 60)).padStart(2, '0');
+          let s = String(totalSec % 60).padStart(2, '0');
+          document.getElementById('timeDisplay').textContent = `${h}:${m}:${s}`;
+          if (totalSec <= 0) { clearInterval(timerInt); gradeExam(); }
+        }, 1000);
+      }
+      function pauseTimer() {
+        clearInterval(timerInt);
+        document.getElementById('startBtn').disabled = false;
+        document.getElementById('pauseBtn').disabled = true;
+      }
+
+      let wrongList = [];
+      function gradeExam() {
+        clearInterval(timerInt);
+        let score = 0; wrongList = [];
+        quizData.forEach(item => {
+          const sel = document.querySelector(`input[name="q${item.id}"]:checked`);
+          const val = sel ? sel.value : null;
+          const card = document.getElementById(`qcard_${item.id}`);
+          card.querySelectorAll('input').forEach(i => i.disabled = true);
+          if (val === item.answer) {
+            score++;
+          } else {
+            wrongList.push(item.id);
+          }
+        });
+        document.getElementById('totalScore').textContent = `${score} / 80`;
+        document.getElementById('totalPercent').textContent = `${Math.round(score/80*100)}%`;
+        document.getElementById('resultsPanel').style.display = 'block';
+        document.getElementById('resultsPanel').scrollIntoView({ behavior: 'smooth' });
+      }
+
+      function revealAllAnswers() {
+        quizData.forEach(item => {
+          const correctOpt = document.getElementById(`opt_${item.id}_${item.answer}`);
+          if (correctOpt) correctOpt.classList.add('correct-answer');
+        });
+      }
+
+      function startRetry() {
+        if (wrongList.length === 0) return alert('ทำถูกหมดทุกข้อแล้วครับ!');
+        wrongList.forEach(id => {
+          const card = document.getElementById(`qcard_${id}`);
+          card.querySelectorAll('input').forEach(i => { i.disabled = false; i.checked = false; });
+          card.querySelectorAll('.opt').forEach(o => o.classList.remove('correct-answer', 'wrong-answer'));
+        });
+        document.getElementById('qcard_' + wrongList[0]).scrollIntoView({ behavior: 'smooth' });
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        renderQuiz();
+        document.getElementById('studentDate').valueAsDate = new Date();
+      });
+    </script>
+  </body>
+</html>
