@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ระบบทำข้อสอบออนไลน์ สวช. 205010</title>
+    <title>ระบบทำข้อสอบออนไลน์ TSB 2023 (Level 1: ป.1 - ป.2)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -61,15 +61,15 @@
     <header
       class="bg-white border-b border-slate-200 px-4 py-2.5 flex items-center justify-between shadow-sm z-10 shrink-0">
       <div class="flex items-center gap-3">
-        <div class="bg-blue-600 text-white p-2 rounded-lg font-bold text-lg leading-none shadow-md">
-          สวช.
+        <div class="bg-amber-500 text-white p-2 rounded-lg font-bold text-lg leading-none shadow-md">
+          TSB
         </div>
         <div>
           <h1 class="font-bold text-slate-800 text-base md:text-lg leading-tight">
-            ระบบทำข้อสอบออนไลน์ (NAT Online Exam)
+            ระบบทำข้อสอบออนไลน์ (TSB Online Exam)
           </h1>
           <p class="text-xs text-slate-500">
-            วิชาภาษาอังกฤษ ประถมศึกษาตอนปลาย | รหัสชุดข้อสอบ 205010
+            Thailand Spelling Bee 2023 | Level 1 (ป.1 - ป.2) | จำนวน 80 ข้อ
           </p>
         </div>
       </div>
@@ -78,7 +78,7 @@
       <div class="flex items-center gap-4">
         <div
           class="hidden md:flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200 text-sm font-medium">
-          <i class="fa-regular fa-clock text-blue-600"></i>
+          <i class="fa-regular fa-clock text-amber-500"></i>
           <span>เวลาสอบ: <strong class="text-slate-700">90 นาที</strong></span>
         </div>
         <button
@@ -101,7 +101,7 @@
           <div class="flex items-center gap-2">
             <i class="fa-solid fa-file-pdf text-red-400 text-sm"></i>
             <span class="font-medium truncate max-w-[180px] sm:max-w-[250px]" id="pdf-name-display"
-              >205010.pdf (ข้อสอบ สวช.)</span
+              >TSB1_2023_Exam.pdf (ข้อสอบ TSB Level 1)</span
             >
           </div>
 
@@ -168,7 +168,7 @@
           <div
             id="pdf-loading-spinner"
             class="absolute inset-0 bg-slate-900/80 text-white flex flex-col items-center justify-center p-6 text-center z-10">
-            <i class="fa-solid fa-circle-notch fa-spin text-4xl text-blue-400 mb-3"></i>
+            <i class="fa-solid fa-circle-notch fa-spin text-4xl text-amber-400 mb-3"></i>
             <p class="text-slate-300 text-sm">กำลังโหลดไฟล์ PDF...</p>
           </div>
 
@@ -179,7 +179,7 @@
             <i class="fa-solid fa-file-pdf text-5xl text-red-500 mb-3 animate-bounce"></i>
             <h3 class="text-lg font-bold">ไม่สามารถแสดงตัวอย่าง PDF โดยตรงได้</h3>
             <p class="text-slate-300 text-sm max-w-md mt-1 mb-4">
-              คุณสามารถอัปโหลดไฟล์ PDF ข้อสอบ 205010 จากเครื่องของคุณ
+              คุณสามารถอัปโหลดไฟล์ PDF ข้อสอบ TSB จากเครื่องของคุณ
               หรือเปิดไฟล์ดูต่างหากในแท็บใหม่ได้
             </p>
             <div class="flex gap-3">
@@ -203,17 +203,17 @@
         <div class="bg-white border-b border-slate-200 p-4 shrink-0 shadow-sm">
           <div class="flex items-center justify-between mb-2">
             <span class="text-sm font-bold text-slate-700 flex items-center gap-2">
-              <i class="fa-solid fa-list-check text-blue-600"></i> กระดาตอบคำตอบดิจิทัล
+              <i class="fa-solid fa-list-check text-amber-500"></i> กระดาษคำตอบดิจิทัล
             </span>
             <span
-              class="text-xs font-semibold px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
-              ทำแล้ว <span id="answered-count">0</span> / 50 ข้อ
+              class="text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200">
+              ทำแล้ว <span id="answered-count">0</span> / 80 ข้อ
             </span>
           </div>
 
           <!-- Progress Bar -->
           <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
-            <div id="progress-bar" class="bg-blue-600 h-full w-0 transition-all duration-300"></div>
+            <div id="progress-bar" class="bg-amber-500 h-full w-0 transition-all duration-300"></div>
           </div>
 
           <!-- Unanswered Filter Tracker -->
@@ -221,7 +221,7 @@
             <span id="completion-text">กรุณาเลือกคำตอบให้ครบทุกข้อ</span>
             <button
               onclick="scrollToNextUnanswered()"
-              class="text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1">
+              class="text-amber-600 hover:text-amber-800 font-medium flex items-center gap-1">
               <i class="fa-solid fa-arrow-down-short-wide"></i> ไปยังข้อที่ยังไม่ได้ทำ
             </button>
           </div>
@@ -231,48 +231,26 @@
         <div
           class="flex-1 overflow-y-auto p-4 custom-scrollbar space-y-6"
           id="answer-sheet-container">
-          <!-- Part I -->
+          <!-- Part I: ข้อ 1 - 40 -->
           <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
             <div class="border-b border-slate-100 pb-2 mb-3 flex justify-between items-baseline">
-              <h2 class="font-bold text-slate-800 text-sm sm:text-base text-blue-700">
-                Part I: Expression (ข้อ 1 - 10)
+              <h2 class="font-bold text-slate-800 text-sm sm:text-base text-amber-600">
+                Thailand Spelling Bee (ข้อ 1 - 40)
               </h2>
-              <span class="text-xs text-slate-500 font-medium">ข้อละ 1.6 คะแนน</span>
+              <span class="text-xs text-slate-500 font-medium">ข้อละ 1.25 คะแนน</span>
             </div>
             <div class="space-y-3" id="part-1-questions"></div>
           </div>
 
-          <!-- Part II -->
+          <!-- Part II: ข้อ 41 - 80 -->
           <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
             <div class="border-b border-slate-100 pb-2 mb-3 flex justify-between items-baseline">
-              <h2 class="font-bold text-slate-800 text-sm sm:text-base text-blue-700">
-                Part II: Reading Comprehension (ข้อ 11 - 25)
+              <h2 class="font-bold text-slate-800 text-sm sm:text-base text-amber-600">
+                Thailand Spelling Bee (ข้อ 41 - 80)
               </h2>
-              <span class="text-xs text-slate-500 font-medium">ข้อละ 2.4 คะแนน</span>
+              <span class="text-xs text-slate-500 font-medium">ข้อละ 1.25 คะแนน</span>
             </div>
             <div class="space-y-3" id="part-2-questions"></div>
-          </div>
-
-          <!-- Part III -->
-          <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-            <div class="border-b border-slate-100 pb-2 mb-3 flex justify-between items-baseline">
-              <h2 class="font-bold text-slate-800 text-sm sm:text-base text-blue-700">
-                Part III: Structure and Writing (ข้อ 26 - 40)
-              </h2>
-              <span class="text-xs text-slate-500 font-medium">ข้อละ 2.2 คะแนน</span>
-            </div>
-            <div class="space-y-3" id="part-3-questions"></div>
-          </div>
-
-          <!-- Part IV -->
-          <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-            <div class="border-b border-slate-100 pb-2 mb-3 flex justify-between items-baseline">
-              <h2 class="font-bold text-slate-800 text-sm sm:text-base text-blue-700">
-                Part IV: Vocabulary (ข้อ 41 - 50)
-              </h2>
-              <span class="text-xs text-slate-500 font-medium">ข้อละ 1.5 คะแนน</span>
-            </div>
-            <div class="space-y-3" id="part-4-questions"></div>
           </div>
 
           <!-- Submit Button at Bottom -->
@@ -300,13 +278,13 @@
           class="bg-slate-900 text-white p-5 flex items-center justify-between border-b border-slate-800 shrink-0">
           <div class="flex items-center gap-3">
             <div
-              class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xl">
+              class="w-10 h-10 rounded-full bg-amber-500 flex items-center justify-center text-white font-bold text-xl">
               <i class="fa-solid fa-trophy"></i>
             </div>
             <div>
-              <h3 class="font-bold text-lg leading-tight">ผลการสอบวัดทักษะวิชาการ (สวช.)</h3>
+              <h3 class="font-bold text-lg leading-tight">ผลการแข่งขัน Thailand Spelling Bee 2023</h3>
               <p class="text-xs text-slate-400">
-                ชุดข้อสอบ 205010 วิชาภาษาอังกฤษ ประถมศึกษาตอนปลาย
+                Level 1 (ป.1 - ป.2) | จำนวน 80 ข้อ
               </p>
             </div>
           </div>
@@ -321,28 +299,28 @@
         <div class="flex-1 overflow-y-auto p-5 space-y-6 custom-scrollbar">
           <!-- Score Overview Banner -->
           <div
-            class="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl p-6 text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-md">
+            class="bg-gradient-to-br from-amber-500 to-amber-700 rounded-2xl p-6 text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-md">
             <div class="text-center sm:text-left">
-              <span class="text-blue-200 text-sm font-medium uppercase tracking-wider"
+              <span class="text-amber-100 text-sm font-medium uppercase tracking-wider"
                 >คะแนนรวมที่ได้</span
               >
               <div class="text-5xl font-extrabold mt-1 tracking-tight">
                 <span id="total-score">0.0</span>
-                <span class="text-2xl font-normal text-blue-200">/ 100</span>
+                <span class="text-2xl font-normal text-amber-200">/ 100</span>
               </div>
-              <p class="text-blue-100 text-sm mt-2" id="score-evaluation">กำลังประมวลผล...</p>
+              <p class="text-amber-100 text-sm mt-2" id="score-evaluation">กำลังประมวลผล...</p>
             </div>
 
             <div class="grid grid-cols-2 gap-3 w-full sm:w-auto">
               <div
                 class="bg-white/10 backdrop-blur-md p-3 rounded-xl text-center border border-white/10">
-                <span class="block text-xs text-blue-200">ตอบถูกทั้งหมด</span>
+                <span class="block text-xs text-amber-100">ตอบถูกทั้งหมด</span>
                 <span class="text-2xl font-bold text-emerald-300" id="correct-count">0</span>
-                <span class="text-xs text-blue-200"> / 50 ข้อ</span>
+                <span class="text-xs text-amber-100"> / 80 ข้อ</span>
               </div>
               <div
                 class="bg-white/10 backdrop-blur-md p-3 rounded-xl text-center border border-white/10">
-                <span class="block text-xs text-blue-200">คิดเป็นเปอร์เซ็นต์</span>
+                <span class="block text-xs text-amber-100">คิดเป็นเปอร์เซ็นต์</span>
                 <span class="text-2xl font-bold text-yellow-300" id="percentage-score">0%</span>
               </div>
             </div>
@@ -351,62 +329,34 @@
           <!-- Part Breakdown Cards -->
           <div>
             <h4 class="font-bold text-slate-800 mb-3 text-sm sm:text-base flex items-center gap-2">
-              <i class="fa-solid fa-chart-pie text-blue-600"></i> สรุปคะแนนรายส่วน (Part Breakdown)
+              <i class="fa-solid fa-chart-pie text-amber-500"></i> สรุปคะแนนรายส่วน (Part Breakdown)
             </h4>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <!-- Part 1 -->
               <div class="bg-slate-50 border border-slate-200 p-3.5 rounded-xl">
                 <span class="text-xs font-bold text-slate-500 block truncate"
-                  >Part I: Expression</span
+                  >ข้อ 1 - 40</span
                 >
                 <div class="text-lg font-bold text-slate-800 mt-1">
                   <span id="part1-score">0</span>
-                  <span class="text-xs text-slate-400 font-normal">/ 16 คะแนน</span>
+                  <span class="text-xs text-slate-400 font-normal">/ 50 คะแนน</span>
                 </div>
                 <span class="text-xs text-slate-500 block mt-1" id="part1-detail"
-                  >ถูก 0/10 ข้อ</span
+                  >ถูก 0/40 ข้อ</span
                 >
               </div>
 
               <!-- Part 2 -->
               <div class="bg-slate-50 border border-slate-200 p-3.5 rounded-xl">
                 <span class="text-xs font-bold text-slate-500 block truncate"
-                  >Part II: Reading</span
+                  >ข้อ 41 - 80</span
                 >
                 <div class="text-lg font-bold text-slate-800 mt-1">
                   <span id="part2-score">0</span>
-                  <span class="text-xs text-slate-400 font-normal">/ 36 คะแนน</span>
+                  <span class="text-xs text-slate-400 font-normal">/ 50 คะแนน</span>
                 </div>
                 <span class="text-xs text-slate-500 block mt-1" id="part2-detail"
-                  >ถูก 0/15 ข้อ</span
-                >
-              </div>
-
-              <!-- Part 3 -->
-              <div class="bg-slate-50 border border-slate-200 p-3.5 rounded-xl">
-                <span class="text-xs font-bold text-slate-500 block truncate"
-                  >Part III: Structure</span
-                >
-                <div class="text-lg font-bold text-slate-800 mt-1">
-                  <span id="part3-score">0</span>
-                  <span class="text-xs text-slate-400 font-normal">/ 33 คะแนน</span>
-                </div>
-                <span class="text-xs text-slate-500 block mt-1" id="part3-detail"
-                  >ถูก 0/15 ข้อ</span
-                >
-              </div>
-
-              <!-- Part 4 -->
-              <div class="bg-slate-50 border border-slate-200 p-3.5 rounded-xl">
-                <span class="text-xs font-bold text-slate-500 block truncate"
-                  >Part IV: Vocabulary</span
-                >
-                <div class="text-lg font-bold text-slate-800 mt-1">
-                  <span id="part4-score">0</span>
-                  <span class="text-xs text-slate-400 font-normal">/ 15 คะแนน</span>
-                </div>
-                <span class="text-xs text-slate-500 block mt-1" id="part4-detail"
-                  >ถูก 0/10 ข้อ</span
+                  >ถูก 0/40 ข้อ</span
                 >
               </div>
             </div>
@@ -415,7 +365,7 @@
           <!-- Detailed Answer Key Analysis Table -->
           <div>
             <h4 class="font-bold text-slate-800 mb-3 text-sm sm:text-base flex items-center gap-2">
-              <i class="fa-solid fa-list-ol text-blue-600"></i> รายละเอียดการตรวจคำตอบแบบข้อต่อข้อ
+              <i class="fa-solid fa-list-ol text-amber-500"></i> รายละเอียดการตรวจคำตอบแบบข้อต่อข้อ
             </h4>
             <div class="border border-slate-200 rounded-xl overflow-hidden shadow-sm">
               <div class="max-h-64 overflow-y-auto custom-scrollbar">
@@ -448,7 +398,7 @@
           </button>
           <button
             onclick="resetExam()"
-            class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold text-sm transition shadow-sm flex items-center gap-2">
+            class="px-5 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-semibold text-sm transition shadow-sm flex items-center gap-2">
             <i class="fa-solid fa-rotate-right"></i> ทำใหม่อีกครั้ง (Reset)
           </button>
         </div>
@@ -459,72 +409,25 @@
     <div
       id="toast"
       class="fixed bottom-5 right-5 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl flex items-center gap-3 z-50 transform translate-y-20 opacity-0 transition-all duration-300 border border-slate-700">
-      <i id="toast-icon" class="fa-solid fa-circle-info text-blue-400 text-lg"></i>
+      <i id="toast-icon" class="fa-solid fa-circle-info text-amber-400 text-lg"></i>
       <span id="toast-message" class="text-sm font-medium">ข้อความแจ้งเตือน</span>
     </div>
 
     <script>
-      // Official Answer Key Mapping based on provided document
+      // Official Answer Key Mapping based on TSB1_2023_answer.pdf (Questions 1 - 80)
       const ANSWER_KEY = {
-        1: 1,
-        2: 4,
-        3: 5,
-        4: 2,
-        5: 3,
-        6: 4,
-        7: 2,
-        8: 5,
-        9: 4,
-        10: 3,
-        11: 1,
-        12: 2,
-        13: 3,
-        14: 4,
-        15: 2,
-        16: 4,
-        17: 3,
-        18: 4,
-        19: 3,
-        20: 2,
-        21: 2,
-        22: 2,
-        23: 3,
-        24: 2,
-        25: 1,
-        26: 2,
-        27: 1,
-        28: 1,
-        29: 4,
-        30: 1,
-        31: 3,
-        32: 3,
-        33: 4,
-        34: 5,
-        35: 2,
-        36: 1,
-        37: [3, 4],
-        38: 5,
-        39: 3,
-        40: 4,
-        41: 4,
-        42: 3,
-        43: 4,
-        44: 1,
-        45: 2,
-        46: 3,
-        47: 1,
-        48: 4,
-        49: 1,
-        50: 2,
+        1: 1, 2: 3, 3: 2, 4: 3, 5: 1, 6: 3, 7: 4, 8: 2, 9: 1, 10: 4,
+        11: 2, 12: 2, 13: 4, 14: 1, 15: 1, 16: 3, 17: 3, 18: 3, 19: 4, 20: 2,
+        21: 1, 22: 1, 23: 2, 24: 1, 25: 3, 26: 3, 27: 2, 28: 2, 29: 4, 30: 2,
+        31: 3, 32: 4, 33: 4, 34: 4, 35: 3, 36: 4, 37: 1, 38: 2, 39: 1, 40: 1,
+        41: 1, 42: 4, 43: 1, 44: 2, 45: 3, 46: 1, 47: 2, 48: 4, 49: 4, 50: 4,
+        51: 2, 52: 3, 53: 4, 54: 2, 55: 1, 56: 3, 57: 3, 58: 4, 59: 1, 60: 2,
+        61: 1, 62: 3, 63: 3, 64: 2, 65: 3, 66: 4, 67: 3, 68: 2, 69: 2, 70: 2,
+        71: 3, 72: 4, 73: 4, 74: 1, 75: 1, 76: 3, 77: 4, 78: 4, 79: 3, 80: 4
       };
 
-      // Scoring rules
-      const QUESTION_PARTS = [
-        { start: 1, end: 10, points: 1.6, title: "Part I: Expression" },
-        { start: 11, end: 25, points: 2.4, title: "Part II: Reading Comprehension" },
-        { start: 26, end: 40, points: 2.2, title: "Part III: Structure and Writing" },
-        { start: 41, end: 50, points: 1.5, title: "Part IV: Vocabulary" },
-      ];
+      const TOTAL_QUESTIONS = 80;
+      const POINTS_PER_QUESTION = 1.25;
 
       // User Selected Answers Object
       let userAnswers = {};
@@ -534,20 +437,16 @@
         generateAnswerSheet();
       };
 
-      // Render digital answer sheet inputs
+      // Render digital answer sheet inputs (80 Questions, 4 Choices)
       function generateAnswerSheet() {
-        for (let i = 1; i <= 50; i++) {
-          let targetContainerId = "part-1-questions";
-          if (i >= 11 && i <= 25) targetContainerId = "part-2-questions";
-          else if (i >= 26 && i <= 40) targetContainerId = "part-3-questions";
-          else if (i >= 41) targetContainerId = "part-4-questions";
-
+        for (let i = 1; i <= TOTAL_QUESTIONS; i++) {
+          let targetContainerId = i <= 40 ? "part-1-questions" : "part-2-questions";
           const container = document.getElementById(targetContainerId);
 
           const questionRow = document.createElement("div");
           questionRow.id = `question-row-${i}`;
           questionRow.className =
-            "flex flex-col sm:flex-row sm:items-center justify-between p-2.5 rounded-lg border border-slate-100 hover:bg-blue-50/50 transition duration-150 gap-2";
+            "flex flex-col sm:flex-row sm:items-center justify-between p-2.5 rounded-lg border border-slate-100 hover:bg-amber-50/50 transition duration-150 gap-2";
 
           questionRow.innerHTML = `
                     <div class="flex items-center gap-2">
@@ -558,12 +457,12 @@
                     </div>
 
                     <div class="flex items-center justify-between sm:justify-end gap-1 sm:gap-2 flex-1">
-                        ${[1, 2, 3, 4, 5]
+                        ${[1, 2, 3, 4]
                           .map(
                             (choice) => `
                             <label class="cursor-pointer flex-1 sm:flex-none">
-                                <input type="radio" name="question_${i}" value="${choice}" onchange="selectAnswer(${i}, ${choice})" class="peer hidden">
-                                <span class="w-full sm:w-9 h-8 rounded-lg border border-slate-300 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 flex items-center justify-center text-xs font-semibold text-slate-600 hover:border-blue-400 hover:bg-blue-50 transition">
+                                <input type="radio" name="question_${i}" value="${choice}" onchange="selectAnswer(${i},${choice})" class="peer hidden">
+                                <span class="w-full sm:w-9 h-8 rounded-lg border border-slate-300 peer-checked:bg-amber-500 peer-checked:text-white peer-checked:border-amber-500 flex items-center justify-center text-xs font-semibold text-slate-600 hover:border-amber-400 hover:bg-amber-50 transition">
                                     ${choice}
                                 </span>
                             </label>
@@ -586,38 +485,38 @@
         const badge = document.getElementById(`q-badge-${questionNum}`);
         if (badge) {
           badge.classList.remove("bg-slate-200", "text-slate-700");
-          badge.classList.add("bg-blue-600", "text-white");
+          badge.classList.add("bg-amber-500", "text-white");
         }
       }
 
       // Update Answer Progress Bar & Counter
       function updateProgress() {
         const answeredCount = Object.keys(userAnswers).length;
-        const percentage = (answeredCount / 50) * 100;
+        const percentage = (answeredCount / TOTAL_QUESTIONS) * 100;
 
         document.getElementById("answered-count").textContent = answeredCount;
         document.getElementById("progress-bar").style.width = `${percentage}%`;
 
         const completionText = document.getElementById("completion-text");
-        if (answeredCount === 50) {
+        if (answeredCount === TOTAL_QUESTIONS) {
           completionText.textContent = "ตอบครบทุกข้อแล้ว! พร้อมกดส่งคำตอบ";
           completionText.className = "text-xs font-semibold text-emerald-600";
         } else {
-          completionText.textContent = `คงเหลืออีก ${50 - answeredCount} ข้อที่ยังไม่ได้ตอบ`;
+          completionText.textContent = `คงเหลืออีก ${TOTAL_QUESTIONS - answeredCount} ข้อที่ยังไม่ได้ตอบ`;
           completionText.className = "text-xs text-slate-500";
         }
       }
 
       // Scroll to Next Unanswered Question
       function scrollToNextUnanswered() {
-        for (let i = 1; i <= 50; i++) {
+        for (let i = 1; i <= TOTAL_QUESTIONS; i++) {
           if (!userAnswers[i]) {
             const el = document.getElementById(`question-row-${i}`);
             if (el) {
               el.scrollIntoView({ behavior: "smooth", block: "center" });
-              el.classList.add("ring-2", "ring-blue-500", "bg-blue-50");
+              el.classList.add("ring-2", "ring-amber-500", "bg-amber-50");
               setTimeout(() => {
-                el.classList.remove("ring-2", "ring-blue-500", "bg-blue-50");
+                el.classList.remove("ring-2", "ring-amber-500", "bg-amber-50");
               }, 1500);
             }
             showToast(`พายังข้อที่ ${i} ที่ยังไม่ได้ตอบ`, "info");
@@ -630,8 +529,8 @@
       // Confirm Before Submitting
       function confirmSubmit() {
         const answeredCount = Object.keys(userAnswers).length;
-        if (answeredCount < 50) {
-          const unansweredCount = 50 - answeredCount;
+        if (answeredCount < TOTAL_QUESTIONS) {
+          const unansweredCount = TOTAL_QUESTIONS - answeredCount;
           if (
             confirm(
               `คุณยังตอบไม่ครบ (เหลืออีก ${unansweredCount} ข้อ)\nคุณต้องการส่งคำตอบและตรวจคะแนนเลยหรือไม่?`,
@@ -650,51 +549,30 @@
       function calculateAndShowResults() {
         let totalScore = 0;
         let totalCorrectCount = 0;
-
-        const partStats = [
-          { correct: 0, total: 10, score: 0, maxScore: 16 },
-          { correct: 0, total: 15, score: 0, maxScore: 36 },
-          { correct: 0, total: 15, score: 0, maxScore: 33 },
-          { correct: 0, total: 10, score: 0, maxScore: 15 },
-        ];
+        let part1Correct = 0;
+        let part2Correct = 0;
 
         const tableBody = document.getElementById("detailed-results-body");
         tableBody.innerHTML = "";
 
-        for (let i = 1; i <= 50; i++) {
+        for (let i = 1; i <= TOTAL_QUESTIONS; i++) {
           const userChoice = userAnswers[i] || null;
           const correctChoice = ANSWER_KEY[i];
           let isCorrect = false;
 
-          // Check answer (handle single value or array of correct answers like Q37)
           if (Array.isArray(correctChoice)) {
             isCorrect = correctChoice.includes(userChoice);
           } else {
             isCorrect = userChoice === correctChoice;
           }
 
-          // Identify Part
-          let partIndex = 0;
-          let points = 1.6;
-          if (i >= 11 && i <= 25) {
-            partIndex = 1;
-            points = 2.4;
-          } else if (i >= 26 && i <= 40) {
-            partIndex = 2;
-            points = 2.2;
-          } else if (i >= 41) {
-            partIndex = 3;
-            points = 1.5;
-          }
-
           if (isCorrect) {
             totalCorrectCount++;
-            totalScore += points;
-            partStats[partIndex].correct++;
-            partStats[partIndex].score += points;
+            totalScore += POINTS_PER_QUESTION;
+            if (i <= 40) part1Correct++;
+            else part2Correct++;
           }
 
-          // Format correct choice text display
           const correctDisplayStr = Array.isArray(correctChoice)
             ? correctChoice.join(" หรือ ")
             : correctChoice;
@@ -711,7 +589,7 @@
                     <td class="py-2 px-3 text-center">
                         ${
                           isCorrect
-                            ? `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800"><i class="fa-solid fa-check mr-1"></i> ถูก (+${points})</span>`
+                            ? `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800"><i class="fa-solid fa-check mr-1"></i> ถูก (+${POINTS_PER_QUESTION})</span>`
                             : `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-800"><i class="fa-solid fa-xmark mr-1"></i> ผิด (0)</span>`
                         }
                     </td>
@@ -719,8 +597,8 @@
           tableBody.appendChild(tr);
         }
 
-        // Fix floating point precision
-        totalScore = Math.round(totalScore * 10) / 10;
+        // Round score to decimal format
+        totalScore = Math.round(totalScore * 100) / 100;
 
         // Render Overview
         document.getElementById("total-score").textContent = totalScore.toFixed(1);
@@ -731,22 +609,22 @@
         // Evaluation Text
         const evalElem = document.getElementById("score-evaluation");
         if (totalScore >= 80)
-          evalElem.textContent =
-            "🏆 ยอดเยี่ยมระดับเกียรติบัตรทอง! ทักษะภาษาอังกฤษอยู่ในเกณฑ์ดีเยี่ยม";
+          evalElem.textContent = "🏆 ยอดเยี่ยมระดับเกียรติบัตรทอง! ทักษะสะกดคำอยู่ในเกณฑ์ดีเยี่ยม";
         else if (totalScore >= 65)
           evalElem.textContent = "🥇 ผลการสอบอยู่ในเกณฑ์ดีมาก ทำคะแนนได้สูงกว่ามาตรฐาน";
         else if (totalScore >= 50)
-          evalElem.textContent = "🥈 ผ่านเกณฑ์การประเมิน ทบทวนส่วนข้อผิดพลาดเพิ่มเติมเพื่อพัฒนาการ";
+          evalElem.textContent = "🥈 ผ่านเกณฑ์การประเมิน ทบทวนคำศัพท์และสะกดคำเพิ่มเติมเพื่อพัฒนาการ";
         else
-          evalElem.textContent = "📚 ควรฝึกฝนและทบทวนเพิ่มเติม โดยเฉพาะในส่วน Reading & Structure";
+          evalElem.textContent = "📚 ควรฝึกฝนและท่องจำการสะกดคำศัพท์เพิ่มเติม";
 
         // Render Part Stats
-        for (let p = 0; p < 4; p++) {
-          const pScore = Math.round(partStats[p].score * 10) / 10;
-          document.getElementById(`part${p + 1}-score`).textContent = pScore;
-          document.getElementById(`part${p + 1}-detail`).textContent =
-            `ตอบถูก ${partStats[p].correct}/${partStats[p].total} ข้อ`;
-        }
+        const part1Score = Math.round(part1Correct * POINTS_PER_QUESTION * 100) / 100;
+        const part2Score = Math.round(part2Correct * POINTS_PER_QUESTION * 100) / 100;
+
+        document.getElementById("part1-score").textContent = part1Score;
+        document.getElementById("part1-detail").textContent = `ตอบถูก ${part1Correct}/40 ข้อ`;
+        document.getElementById("part2-score").textContent = part2Score;
+        document.getElementById("part2-detail").textContent = `ตอบถูก ${part2Correct}/40 ข้อ`;
 
         // Open Modal
         const modal = document.getElementById("result-modal");
@@ -775,7 +653,7 @@
           radios.forEach((radio) => (radio.checked = false));
 
           // Reset Q badges
-          for (let i = 1; i <= 50; i++) {
+          for (let i = 1; i <= TOTAL_QUESTIONS; i++) {
             const badge = document.getElementById(`q-badge-${i}`);
             if (badge) {
               badge.className =
@@ -805,7 +683,7 @@
         } else if (type === "error") {
           toastIcon.className = "fa-solid fa-triangle-exclamation text-red-400 text-lg";
         } else {
-          toastIcon.className = "fa-solid fa-circle-info text-blue-400 text-lg";
+          toastIcon.className = "fa-solid fa-circle-info text-amber-400 text-lg";
         }
 
         toast.classList.remove("translate-y-20", "opacity-0");
@@ -818,37 +696,27 @@
       }
     </script>
 
-    <!-- ============================================================
-         PDF.js Viewer
-         Render ไฟล์ PDF เองด้วย JS/Canvas แทนการฝัง <iframe src="...pdf">
-         เหตุผล: บางอุปกรณ์ (เช่น Android tablet/WebView) ไม่มี PDF viewer
-         ในตัวเบราว์เซอร์ ทำให้ <iframe> เปิด PDF ตรงๆ ไม่ได้ และระบบจะ
-         ขึ้นปุ่ม "Open" ให้ไปเปิดด้วยแอปอื่นแทน การ render ด้วย PDF.js
-         ทำงานเหมือนกันทุกอุปกรณ์เพราะไม่ต้องพึ่ง PDF viewer ของระบบ
-         ไฟล์ไลบรารีถูกเก็บไว้ในเครื่อง (../assets/pdfjs/) จึงใช้งาน
-         ออฟไลน์ได้ด้วย ไม่ต้องพึ่งอินเทอร์เน็ตหลังโหลดครั้งแรก
-         ============================================================ -->
+    <!-- PDF.js Viewer -->
     <script type="module">
-      import * as pdfjsLib from "../assets/pdfjs/build/pdf.mjs";
+      import * as pdfjsLib from "../../assets/pdfjs/build/pdf.mjs";
 
-      pdfjsLib.GlobalWorkerOptions.workerSrc = "../assets/pdfjs/build/pdf.worker.mjs";
+      pdfjsLib.GlobalWorkerOptions.workerSrc = "../../assets/pdfjs/build/pdf.worker.mjs";
 
-      const CMAP_URL = "../assets/pdfjs/cmaps/";
-      const STANDARD_FONT_DATA_URL = "../assets/pdfjs/standard_fonts/";
+      const CMAP_URL = "../../assets/pdfjs/cmaps/";
+      const STANDARD_FONT_DATA_URL = "../../assets/pdfjs/standard_fonts/";
 
-      const DEFAULT_PDF_URL = "../assets/pdf/205010.pdf";
+      const DEFAULT_PDF_URL = "../../assets/pdf/eng/TSB1_2023_Exam.pdf";
 
       let currentPdfDoc = null;
       let currentZoom = 1.0;
       let currentObjectUrl = null;
-      let currentSourceUrl = DEFAULT_PDF_URL; // ลิงก์ล่าสุดที่ใช้เปิด (สำหรับปุ่ม "ขยายใหญ่")
+      let currentSourceUrl = DEFAULT_PDF_URL;
 
       const pagesWrapper = document.getElementById("pdf-pages-wrapper");
       const loadingSpinner = document.getElementById("pdf-loading-spinner");
       const errorOverlay = document.getElementById("pdf-loading-overlay");
       const pageIndicator = document.getElementById("pdf-page-indicator");
       const zoomDisplay = document.getElementById("zoom-level-display");
-      const pdfContainer = document.getElementById("pdf-container");
 
       function showSpinner() {
         errorOverlay.classList.add("hidden");
@@ -864,7 +732,6 @@
         errorOverlay.classList.remove("hidden");
       }
 
-      // โหลดและ render ไฟล์ PDF จาก URL หรือ ArrayBuffer/Uint8Array
       async function loadPdf(source, displayName) {
         showSpinner();
         pagesWrapper.innerHTML = "";
@@ -892,7 +759,6 @@
         }
       }
 
-      // Render ทุกหน้าของ PDF ลงใน canvas ต่อกันเป็นแนวตั้ง (เลื่อนดูได้ทั้งเล่ม)
       async function renderAllPages() {
         if (!currentPdfDoc) return;
         pagesWrapper.innerHTML = "";
@@ -913,7 +779,6 @@
         }
       }
 
-      // ปรับ zoom แล้ว render ใหม่
       window.changeZoom = async function (delta) {
         if (!currentPdfDoc) return;
         const next = Math.min(3, Math.max(0.4, currentZoom + delta));
@@ -928,7 +793,6 @@
         }
       };
 
-      // อัปโหลดไฟล์ PDF จากเครื่อง
       window.handleFileUpload = async function (event) {
         const file = event.target.files[0];
         if (file && file.type === "application/pdf") {
@@ -945,16 +809,14 @@
         }
       };
 
-      // ใส่ URL ของ PDF เอง
       window.promptPdfUrl = async function () {
-        const url = prompt("กรุณาระบุ URL ของไฟล์ PDF ข้อสอบ:", "205010.pdf");
+        const url = prompt("กรุณาระบุ URL ของไฟล์ PDF ข้อสอบ:", "TSB1_2023_Exam.pdf");
         if (url) {
           currentSourceUrl = url;
           await loadPdf(url, url.split("/").pop() || "เอกสารข้อสอบ");
         }
       };
 
-      // เปิดไฟล์ PDF ต้นฉบับในแท็บใหม่ (ใช้ตัวจัดการ PDF ของระบบ ถ้าต้องการพิมพ์/ดาวน์โหลด)
       window.openPdfExternal = function () {
         if (currentSourceUrl) {
           window.open(currentSourceUrl, "_blank");
@@ -963,9 +825,8 @@
         }
       };
 
-      // โหลดไฟล์ PDF เริ่มต้นของข้อสอบทันทีที่หน้าเว็บพร้อม
       window.addEventListener("DOMContentLoaded", () => {
-        loadPdf(DEFAULT_PDF_URL, "205010.pdf (ข้อสอบ สวช.)");
+        loadPdf(DEFAULT_PDF_URL, "TSB1_2023_Exam.pdf (ข้อสอบ TSB Level 1)");
       });
     </script>
   </body>

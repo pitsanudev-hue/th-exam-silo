@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>แบบฝึกหัดคิดเลขเร็ว (ตัวเลข 3 ตัว คละ บวก ลบ คูณ หาร)</title>
+    <title>แบบฝึกหัดแก้สมการตัวแปรเดียว (หาค่า X) - ป.4</title>
     <style>
       * {
         box-sizing: border-box;
@@ -111,8 +111,17 @@
         color: #2c3e50;
         padding-right: 5px;
       }
+      .answer-box {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .x-label {
+        font-weight: bold;
+        color: #8e44ad;
+      }
       input[type="number"] {
-        width: 85px;
+        width: 75px;
         padding: 6px;
         font-size: 1rem;
         text-align: center;
@@ -150,99 +159,63 @@
 
     <div class="container" id="quiz-container"></div>
 
-    <script src="../assets/stats.js"></script>
+    <script src="../../assets/stats.js"></script>
     <script>
       function getRandomInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
       }
 
-      // คำนวณหาผลลัพธ์ของสมการ A op1 B op2 C
-      function evaluateExpression(a, op1, b, op2, c) {
-        // กรณี คูณ/หาร มีลำดับความสำคัญสูงกว่า บวก/ลบ
-        const isMulDiv = (op) => op === "×" || op === "÷";
-        const calc = (n1, op, n2) => {
-          if (op === "+") return n1 + n2;
-          if (op === "-") return n1 - n2;
-          if (op === "×") return n1 * n2;
-          if (op === "÷") return n1 / n2;
-        };
+      // ฟังก์ชันสุ่มสร้างโจทย์สมการตัวแปรเดียว 1 ข้อ
+      function generateSingleEquation() {
+        const type = getRandomInt(0, 3);
+        let expr = "";
+        let ans = 0;
 
-        if (isMulDiv(op2) && !isMulDiv(op1)) {
-          // op2 สำคัญกว่า ทำ b op2 c ก่อน
-          if (op2 === "÷" && b % c !== 0) return null; // ไม่ลงตัว
-          const rightRes = calc(b, op2, c);
-          const finalRes = calc(a, op1, rightRes);
-          if (finalRes < 0 || !Number.isInteger(finalRes)) return null;
-          return finalRes;
-        } else {
-          // คำนวณจากซ้ายไปขวา
-          if (op1 === "÷" && a % b !== 0) return null;
-          const leftRes = calc(a, op1, b);
-          if (leftRes < 0) return null;
+        if (type === 0) {
+          // 1. สมการการบวก (x + a = b หรือ a + x = b)
+          ans = getRandomInt(5, 50);
+          const num = getRandomInt(10, 99);
+          const total = ans + num;
 
-          if (op2 === "÷" && leftRes % c !== 0) return null;
-          const finalRes = calc(leftRes, op2, c);
-          if (finalRes < 0 || !Number.isInteger(finalRes)) return null;
-          return finalRes;
-        }
-      }
-
-      // สุ่มสร้างโจทย์ 1 ข้อโดยกำหนดเงื่อนไขให้เป็นตัวเลขไม่เกิน 3 หลัก จำนวน 3 ตัว
-      function generateSingleProblem() {
-        const ops = ["+", "-", "×", "÷"];
-
-        while (true) {
-          const op1 = ops[getRandomInt(0, 3)];
-          const op2 = ops[getRandomInt(0, 3)];
-
-          let a, b, c;
-
-          // ปรับช่วงตัวเลขให้เหมาะสม ไม่ใหญ่จนคำนวณมือไม่ได้
-          // if (op1 === "×" || op2 === "×") {
-          //   a = getRandomInt(5, 50);
-          //   b = getRandomInt(2, 20);
-          //   c = getRandomInt(2, 20);
-          // } else if (op1 === "÷" || op2 === "÷") {
-          //   a = getRandomInt(10, 500);
-          //   b = getRandomInt(2, 50);
-          //   c = getRandomInt(2, 50);
-          // } else {
-          //   a = getRandomInt(10, 999);
-          //   b = getRandomInt(10, 999);
-          //   c = getRandomInt(10, 999);
-          // }
-
-          // โค้ดใหม่ (ตัวเลขไม่เกิน 2 หลัก)
-          if (op1 === "×" || op2 === "×") {
-            a = getRandomInt(2, 25);
-            b = getRandomInt(2, 12);
-            c = getRandomInt(2, 12);
-          } else if (op1 === "÷" || op2 === "÷") {
-            a = getRandomInt(10, 99);
-            b = getRandomInt(2, 12);
-            c = getRandomInt(2, 12);
+          if (Math.random() > 0.5) {
+            expr = `x + ${num} = ${total}`;
           } else {
-            a = getRandomInt(10, 99);
-            b = getRandomInt(10, 99);
-            c = getRandomInt(10, 99);
+            expr = `${num} + x = ${total}`;
           }
+        } else if (type === 1) {
+          // 2. สมการการลบ (x - a = b)
+          ans = getRandomInt(10, 99);
+          const num = getRandomInt(5, ans - 1);
+          const diff = ans - num;
 
-          const answer = evaluateExpression(a, op1, b, op2, c);
+          expr = `x - ${num} = ${diff}`;
+        } else if (type === 2) {
+          // 3. สมการการคูณ (ax = b หรือ a × x = b)
+          ans = getRandomInt(2, 20);
+          const num = getRandomInt(2, 12);
+          const prod = ans * num;
 
-          // ต้องได้ผลลัพธ์ที่เป็นจำนวนเต็มบวก ไม่เกิน 9,999
-          if (answer !== null && answer >= 0 && answer <= 9999) {
-            return {
-              expr: `${a} ${op1} ${b} ${op2} ${c}`,
-              ans: answer,
-            };
+          if (Math.random() > 0.5) {
+            expr = `${num}x = ${prod}`;
+          } else {
+            expr = `${num} × x = ${prod}`;
           }
+        } else {
+          // 4. สมการการหาร (x ÷ a = b)
+          const divisor = getRandomInt(2, 12);
+          const quotient = getRandomInt(2, 20);
+          ans = divisor * quotient;
+
+          expr = `x ÷ ${divisor} = ${quotient}`;
         }
+
+        return { expr, ans };
       }
 
       function generateRandomProblems(total = 100) {
         const list = [];
         for (let i = 1; i <= total; i++) {
-          const p = generateSingleProblem();
+          const p = generateSingleEquation();
           list.push({
             id: i,
             expr: p.expr,
@@ -282,8 +255,11 @@
 
         card.innerHTML = `
           <span class="item-num">${p.id}.</span>
-          <span class="problem">${p.expr} =</span>
-          <input type="number" id="input-${p.id}" ${index !== 0 ? "disabled" : ""} autocomplete="off">
+          <span class="problem">${p.expr}</span>
+          <div class="answer-box">
+            <span class="x-label">x =</span>
+            <input type="number" id="input-${p.id}" ${index !== 0 ? "disabled" : ""} autocomplete="off">
+          </div>
         `;
 
         container.appendChild(card);
@@ -317,14 +293,14 @@
               const finalSecs = seconds % 60;
               if (window.ExamSiloStats) {
                 ExamSiloStats.recordQuizResult({
-                  quizFile: "quick_math_advance_all.html",
+                  quizFile: "equation_math.html",
                   quizName: document.title,
                   type: "drill",
                   timeSeconds: seconds,
                 });
               }
               alert(
-                `ยอดเยี่ยมมาก! คุณทำชุดโจทย์ 3 ตัวแปร (บวก ลบ คูณ หาร) ครบ 100 ข้อแล้ว\nเวลาที่ใช้ไปทั้งหมด: ${finalMins} นาที ${finalSecs} วินาที`,
+                `ยอดเยี่ยมมาก! คุณทำชุดโจทย์แก้สมการตัวแปรเดียว ครบ 100 ข้อแล้ว\nเวลาที่ใช้ไปทั้งหมด: ${finalMins} นาที ${finalSecs} วินาที`,
               );
             }
           }

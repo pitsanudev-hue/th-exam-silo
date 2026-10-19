@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>แบบฝึกหัดแก้สมการตัวแปรเดียว (หาค่า X) - ป.4</title>
+    <title>แบบฝึกหัดคิดเลขเร็ว (การบวก / การลบ)</title>
     <style>
       * {
         box-sizing: border-box;
@@ -58,14 +58,14 @@
       }
       .container {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(5, 1fr);
         gap: 12px;
         max-width: 1200px;
         width: 100%;
       }
-      @media (max-width: 1024px) {
+      @media (max-width: 900px) {
         .container {
-          grid-template-columns: repeat(2, 1fr);
+          grid-template-columns: repeat(3, 1fr);
         }
         .header-panel {
           gap: 15px;
@@ -88,9 +88,9 @@
         border-left: 5px solid #ccc;
       }
       .card.active {
-        border-left-color: #8e44ad;
-        background-color: #f4ecf7;
-        box-shadow: 0 4px 8px rgba(142, 68, 173, 0.2);
+        border-left-color: #e67e22;
+        background-color: #fef5e7;
+        box-shadow: 0 4px 8px rgba(230, 126, 34, 0.2);
       }
       .card.completed {
         border-left-color: #27ae60;
@@ -106,22 +106,12 @@
       }
       .problem {
         font-weight: 600;
-        font-size: 1.05rem;
+        font-size: 1.1rem;
         flex-grow: 1;
         color: #2c3e50;
-        padding-right: 5px;
-      }
-      .answer-box {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-      }
-      .x-label {
-        font-weight: bold;
-        color: #8e44ad;
       }
       input[type="number"] {
-        width: 75px;
+        width: 65px;
         padding: 6px;
         font-size: 1rem;
         text-align: center;
@@ -130,7 +120,7 @@
         outline: none;
       }
       input[type="number"]:focus {
-        border-color: #8e44ad;
+        border-color: #e67e22;
       }
       input::-webkit-outer-spin-button,
       input::-webkit-inner-spin-button {
@@ -159,68 +149,37 @@
 
     <div class="container" id="quiz-container"></div>
 
-    <script src="../assets/stats.js"></script>
+    <script src="../../assets/stats.js"></script>
     <script>
       function getRandomInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
       }
 
-      // ฟังก์ชันสุ่มสร้างโจทย์สมการตัวแปรเดียว 1 ข้อ
-      function generateSingleEquation() {
-        const type = getRandomInt(0, 3);
-        let expr = "";
-        let ans = 0;
-
-        if (type === 0) {
-          // 1. สมการการบวก (x + a = b หรือ a + x = b)
-          ans = getRandomInt(5, 50);
-          const num = getRandomInt(10, 99);
-          const total = ans + num;
-
-          if (Math.random() > 0.5) {
-            expr = `x + ${num} = ${total}`;
-          } else {
-            expr = `${num} + x = ${total}`;
-          }
-        } else if (type === 1) {
-          // 2. สมการการลบ (x - a = b)
-          ans = getRandomInt(10, 99);
-          const num = getRandomInt(5, ans - 1);
-          const diff = ans - num;
-
-          expr = `x - ${num} = ${diff}`;
-        } else if (type === 2) {
-          // 3. สมการการคูณ (ax = b หรือ a × x = b)
-          ans = getRandomInt(2, 20);
-          const num = getRandomInt(2, 12);
-          const prod = ans * num;
-
-          if (Math.random() > 0.5) {
-            expr = `${num}x = ${prod}`;
-          } else {
-            expr = `${num} × x = ${prod}`;
-          }
-        } else {
-          // 4. สมการการหาร (x ÷ a = b)
-          const divisor = getRandomInt(2, 12);
-          const quotient = getRandomInt(2, 20);
-          ans = divisor * quotient;
-
-          expr = `x ÷ ${divisor} = ${quotient}`;
-        }
-
-        return { expr, ans };
-      }
-
+      // ฟังก์ชันสร้างโจทย์ 100 ข้อสุ่ม (บวก และ ลบ)
       function generateRandomProblems(total = 100) {
         const list = [];
         for (let i = 1; i <= total; i++) {
-          const p = generateSingleEquation();
-          list.push({
-            id: i,
-            expr: p.expr,
-            ans: p.ans,
-          });
+          const isAddition = Math.random() < 0.5;
+
+          if (isAddition) {
+            // การบวก: สุ่มตัวเลขสองจำนวน (10 - 99)
+            const a = getRandomInt(10, 99);
+            const b = getRandomInt(10, 99);
+            list.push({
+              id: i,
+              expr: `${a} + ${b}`,
+              ans: a + b,
+            });
+          } else {
+            // การลบ: สุ่มตัวตั้งและตัวลบ ให้ผลลัพธ์ไม่ติดลบ
+            const a = getRandomInt(20, 150);
+            const b = getRandomInt(10, a - 1);
+            list.push({
+              id: i,
+              expr: `${a} - ${b}`,
+              ans: a - b,
+            });
+          }
         }
         return list;
       }
@@ -254,13 +213,10 @@
         card.id = `card-${p.id}`;
 
         card.innerHTML = `
-          <span class="item-num">${p.id}.</span>
-          <span class="problem">${p.expr}</span>
-          <div class="answer-box">
-            <span class="x-label">x =</span>
-            <input type="number" id="input-${p.id}" ${index !== 0 ? "disabled" : ""} autocomplete="off">
-          </div>
-        `;
+                <span class="item-num">${p.id}.</span>
+                <span class="problem">${p.expr} =</span>
+                <input type="number" id="input-${p.id}" ${index !== 0 ? "disabled" : ""} autocomplete="off">
+            `;
 
         container.appendChild(card);
 
@@ -293,14 +249,14 @@
               const finalSecs = seconds % 60;
               if (window.ExamSiloStats) {
                 ExamSiloStats.recordQuizResult({
-                  quizFile: "equation_math.html",
+                  quizFile: "quick_math_add_sub.html",
                   quizName: document.title,
                   type: "drill",
                   timeSeconds: seconds,
                 });
               }
               alert(
-                `ยอดเยี่ยมมาก! คุณทำชุดโจทย์แก้สมการตัวแปรเดียว ครบ 100 ข้อแล้ว\nเวลาที่ใช้ไปทั้งหมด: ${finalMins} นาที ${finalSecs} วินาที`,
+                `ยอดเยี่ยมมาก! คุณทำชุดโจทย์บวกลบครบ 100 ข้อแล้ว\nเวลาที่ใช้ไปทั้งหมด: ${finalMins} นาที ${finalSecs} วินาที`,
               );
             }
           }

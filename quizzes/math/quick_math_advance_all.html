@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>แบบฝึกหัดโจทย์ปัญหาแก้สมการ - ป.4</title>
+    <title>แบบฝึกหัดคิดเลขเร็ว (ตัวเลข 3 ตัว คละ บวก ลบ คูณ หาร)</title>
     <style>
       * {
         box-sizing: border-box;
@@ -58,12 +58,21 @@
       }
       .container {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
         max-width: 1200px;
         width: 100%;
       }
-      @media (max-width: 800px) {
+      @media (max-width: 1024px) {
+        .container {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .header-panel {
+          gap: 15px;
+          padding: 10px 15px;
+        }
+      }
+      @media (max-width: 600px) {
         .container {
           grid-template-columns: repeat(1, 1fr);
         }
@@ -71,11 +80,11 @@
       .card {
         background: #fff;
         border-radius: 8px;
-        padding: 15px 20px;
+        padding: 10px 15px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         display: flex;
-        flex-direction: column;
-        gap: 10px;
+        align-items: center;
+        justify-content: space-between;
         border-left: 5px solid #ccc;
       }
       .card.active {
@@ -90,35 +99,20 @@
       .card.locked {
         opacity: 0.5;
       }
-      .card-header {
-        display: flex;
-        align-items: flex-start;
-        gap: 10px;
-      }
       .item-num {
         font-weight: bold;
         color: #7f8c8d;
-        min-width: 30px;
+        width: 35px;
       }
       .problem {
-        font-weight: 500;
-        font-size: 1rem;
+        font-weight: 600;
+        font-size: 1.05rem;
+        flex-grow: 1;
         color: #2c3e50;
-        line-height: 1.5;
-      }
-      .answer-box {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        gap: 8px;
-        margin-top: 5px;
-      }
-      .ans-label {
-        font-weight: bold;
-        color: #2c3e50;
+        padding-right: 5px;
       }
       input[type="number"] {
-        width: 90px;
+        width: 85px;
         padding: 6px;
         font-size: 1rem;
         text-align: center;
@@ -147,7 +141,7 @@
       </div>
       <div class="stat-box">
         <div class="stat-label">ความก้าวหน้า</div>
-        <div class="stat-value" id="progress-text">0 / 50</div>
+        <div class="stat-value" id="progress-text">0 / 100</div>
         <div class="progress-container">
           <div class="progress-bar" id="progress-bar"></div>
         </div>
@@ -156,69 +150,103 @@
 
     <div class="container" id="quiz-container"></div>
 
-    <script src="../assets/stats.js"></script>
+    <script src="../../assets/stats.js"></script>
     <script>
       function getRandomInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
       }
 
-      function getRandomItem(arr) {
-        return arr[Math.floor(Math.random() * arr.length)];
-      }
+      // คำนวณหาผลลัพธ์ของสมการ A op1 B op2 C
+      function evaluateExpression(a, op1, b, op2, c) {
+        // กรณี คูณ/หาร มีลำดับความสำคัญสูงกว่า บวก/ลบ
+        const isMulDiv = (op) => op === "×" || op === "÷";
+        const calc = (n1, op, n2) => {
+          if (op === "+") return n1 + n2;
+          if (op === "-") return n1 - n2;
+          if (op === "×") return n1 * n2;
+          if (op === "÷") return n1 / n2;
+        };
 
-      // สุ่มโจทย์ปัญหาภาษาไทย สำหรับ ป.4
-      function generateWordProblem() {
-        const type = getRandomInt(0, 3);
-        const names = ["แคน", "ปั้น", "ฟ้า", "ต้น", "มินต์", "น้ำมัน", "คุณครู"];
-        const items = ["สมุด", "ดินสอ", "ขนม", "ลูกแก้ว", "สติ๊กเกอร์", "คุกกี้"];
-        const units = ["เล่ม", "แท่ง", "ห่อ", "ลูก", "แผ่น", "ชิ้น"];
-
-        const name = getRandomItem(names);
-        const itemIdx = getRandomInt(0, items.length - 1);
-        const item = items[itemIdx];
-        const unit = units[itemIdx];
-
-        let text = "";
-        let ans = 0;
-
-        if (type === 0) {
-          // โจทย์สมการบวก: เช่น มีของเดิม x ซื้อมาเพิ่ม b มีรวม c (หา x)
-          ans = getRandomInt(10, 80);
-          const added = getRandomInt(5, 50);
-          const total = ans + added;
-          text = `${name}มี${item}อยู่จำนวนหนึ่ง ซื้อมาเพิ่มอีก ${added} ${unit} ทำให้มี${item}รวมทั้งหมด ${total} ${unit} เดิม${name}มี${item}กี่${unit}?`;
-        } else if (type === 1) {
-          // โจทย์สมการลบ: เช่น มีเงินเดิม x ใช้ไป b เหลือ c (หา x)
-          ans = getRandomInt(30, 150);
-          const spent = getRandomInt(10, ans - 5);
-          const remain = ans - spent;
-          text = `${name}มีเงินอยู่จำนวนหนึ่ง นำไปซื้อของ ${spent} บาท แล้วเหลือเงินอยู่ ${remain} บาท เดิม${name}มีเงินกี่บาท?`;
-        } else if (type === 2) {
-          // โจทย์สมการคูณ: เช่น จัดของใส่ ถุง ละ b ชิ้น ได้รวม c ชิ้น (หาจำนวนถุง x)
-          ans = getRandomInt(3, 15); // จำนวนกลุ่ม/ถุง (x)
-          const perGroup = getRandomInt(4, 12); // จำนวนต่อกลุ่ม
-          const total = ans * perGroup;
-          text = `คุณครูจัด${item}ใส่ถุง ถุงละ ${perGroup} ${unit} ใช้${item}ไปทั้งหมด ${total} ${unit} คุณครูจัด${item}ได้ทั้งหมดกี่ถุง?`;
+        if (isMulDiv(op2) && !isMulDiv(op1)) {
+          // op2 สำคัญกว่า ทำ b op2 c ก่อน
+          if (op2 === "÷" && b % c !== 0) return null; // ไม่ลงตัว
+          const rightRes = calc(b, op2, c);
+          const finalRes = calc(a, op1, rightRes);
+          if (finalRes < 0 || !Number.isInteger(finalRes)) return null;
+          return finalRes;
         } else {
-          // โจทย์สมการหาร: เช่น มีของ x ชิ้น แบ่งให้เพื่อน b คน ได้คนละ c ชิ้น (หา x)
-          const count = getRandomInt(2, 10); // จำนวนคน
-          const perPerson = getRandomInt(3, 12); // ได้คนละ
-          ans = count * perPerson; // ของทั้งหมด (x)
-          text = `${name}มี${item}อยู่จำนวนหนึ่ง แบ่งให้เพื่อน ${count} คน เท่าๆ กัน ได้รับคนละ ${perPerson} ${unit} เดิม${name}มี${item}ทั้งหมดกี่${unit}?`;
-        }
+          // คำนวณจากซ้ายไปขวา
+          if (op1 === "÷" && a % b !== 0) return null;
+          const leftRes = calc(a, op1, b);
+          if (leftRes < 0) return null;
 
-        return { text, ans, unit: type === 1 ? "บาท" : type === 2 ? "ถุง" : unit };
+          if (op2 === "÷" && leftRes % c !== 0) return null;
+          const finalRes = calc(leftRes, op2, c);
+          if (finalRes < 0 || !Number.isInteger(finalRes)) return null;
+          return finalRes;
+        }
       }
 
-      function generateRandomProblems(total = 50) {
+      // สุ่มสร้างโจทย์ 1 ข้อโดยกำหนดเงื่อนไขให้เป็นตัวเลขไม่เกิน 3 หลัก จำนวน 3 ตัว
+      function generateSingleProblem() {
+        const ops = ["+", "-", "×", "÷"];
+
+        while (true) {
+          const op1 = ops[getRandomInt(0, 3)];
+          const op2 = ops[getRandomInt(0, 3)];
+
+          let a, b, c;
+
+          // ปรับช่วงตัวเลขให้เหมาะสม ไม่ใหญ่จนคำนวณมือไม่ได้
+          // if (op1 === "×" || op2 === "×") {
+          //   a = getRandomInt(5, 50);
+          //   b = getRandomInt(2, 20);
+          //   c = getRandomInt(2, 20);
+          // } else if (op1 === "÷" || op2 === "÷") {
+          //   a = getRandomInt(10, 500);
+          //   b = getRandomInt(2, 50);
+          //   c = getRandomInt(2, 50);
+          // } else {
+          //   a = getRandomInt(10, 999);
+          //   b = getRandomInt(10, 999);
+          //   c = getRandomInt(10, 999);
+          // }
+
+          // โค้ดใหม่ (ตัวเลขไม่เกิน 2 หลัก)
+          if (op1 === "×" || op2 === "×") {
+            a = getRandomInt(2, 25);
+            b = getRandomInt(2, 12);
+            c = getRandomInt(2, 12);
+          } else if (op1 === "÷" || op2 === "÷") {
+            a = getRandomInt(10, 99);
+            b = getRandomInt(2, 12);
+            c = getRandomInt(2, 12);
+          } else {
+            a = getRandomInt(10, 99);
+            b = getRandomInt(10, 99);
+            c = getRandomInt(10, 99);
+          }
+
+          const answer = evaluateExpression(a, op1, b, op2, c);
+
+          // ต้องได้ผลลัพธ์ที่เป็นจำนวนเต็มบวก ไม่เกิน 9,999
+          if (answer !== null && answer >= 0 && answer <= 9999) {
+            return {
+              expr: `${a} ${op1} ${b} ${op2} ${c}`,
+              ans: answer,
+            };
+          }
+        }
+      }
+
+      function generateRandomProblems(total = 100) {
         const list = [];
         for (let i = 1; i <= total; i++) {
-          const p = generateWordProblem();
+          const p = generateSingleProblem();
           list.push({
             id: i,
-            expr: p.text,
+            expr: p.expr,
             ans: p.ans,
-            unit: p.unit,
           });
         }
         return list;
@@ -244,8 +272,7 @@
         clearInterval(timerInterval);
       }
 
-      const totalItems = 50;
-      const problems = generateRandomProblems(totalItems);
+      const problems = generateRandomProblems(100);
       const container = document.getElementById("quiz-container");
 
       problems.forEach((p, index) => {
@@ -254,15 +281,9 @@
         card.id = `card-${p.id}`;
 
         card.innerHTML = `
-          <div class="card-header">
-            <span class="item-num">${p.id}.</span>
-            <span class="problem">${p.expr}</span>
-          </div>
-          <div class="answer-box">
-            <span class="ans-label">ตอบ:</span>
-            <input type="number" id="input-${p.id}" ${index !== 0 ? "disabled" : ""} autocomplete="off">
-            <span class="ans-label">${p.unit}</span>
-          </div>
+          <span class="item-num">${p.id}.</span>
+          <span class="problem">${p.expr} =</span>
+          <input type="number" id="input-${p.id}" ${index !== 0 ? "disabled" : ""} autocomplete="off">
         `;
 
         container.appendChild(card);
@@ -279,10 +300,8 @@
             this.disabled = true;
 
             const completedCount = p.id;
-            document.getElementById("progress-text").textContent =
-              `${completedCount} / ${totalItems}`;
-            document.getElementById("progress-bar").style.width =
-              `${(completedCount / totalItems) * 100}%`;
+            document.getElementById("progress-text").textContent = `${completedCount} / 100`;
+            document.getElementById("progress-bar").style.width = `${completedCount}%`;
 
             const nextId = p.id + 1;
             const nextCard = document.getElementById(`card-${nextId}`);
@@ -298,14 +317,14 @@
               const finalSecs = seconds % 60;
               if (window.ExamSiloStats) {
                 ExamSiloStats.recordQuizResult({
-                  quizFile: "problem_resolve_math.html",
+                  quizFile: "quick_math_advance_all.html",
                   quizName: document.title,
                   type: "drill",
                   timeSeconds: seconds,
                 });
               }
               alert(
-                `ยอดเยี่ยมมาก! คุณทำชุดโจทย์ปัญหาแก้สมการ ครบ ${totalItems} ข้อแล้ว\nเวลาที่ใช้ไปทั้งหมด: ${finalMins} นาที ${finalSecs} วินาที`,
+                `ยอดเยี่ยมมาก! คุณทำชุดโจทย์ 3 ตัวแปร (บวก ลบ คูณ หาร) ครบ 100 ข้อแล้ว\nเวลาที่ใช้ไปทั้งหมด: ${finalMins} นาที ${finalSecs} วินาที`,
               );
             }
           }
