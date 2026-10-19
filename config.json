@@ -45,6 +45,11 @@
     "category": "ภาษาอังกฤษ"
   },
   {
+    "name": "TESET 2026 - English Practice Exam (ป.4-ป.6)",
+    "file": "eng/teset_b_2026_exam.html",
+    "category": "ภาษาอังกฤษ"
+  },
+  {
     "name": "TESET 2025 - Thailand English Skills Evaluation Test (ป.1 - ป.3)",
     "file": "eng/teset_a_2025_exam.html",
     "category": "ภาษาอังกฤษ"
@@ -70,15 +75,10 @@
     "category": "ภาษาอังกฤษ"
   },
   {
-    "name": "ระบบทำข้อสอบออนไลน์ TESET 2026 (ป.4-ป.6)",
-    "file": "eng/teset_b_2026_exam.html",
-    "category": "ภาษาอังกฤษ"
-  },
-  {
     "name": "ทวน Grammar ก่อนสอบ",
     "file": "eng/grammar_krudew.html",
     "category": "ภาษาอังกฤษ"
-  },  
+  },
   {
     "name": "เกม Coding: บริหารเงินประจำวัน",
     "file": "code/coding_flow1.html",
