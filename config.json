@@ -109,7 +109,7 @@
     "file": "code/coding_flow4.html",
     "category": "วิทยาการคำนวณ"
   },
-{
+  {
     "name": "Science สวช. 2564",
     "file": "sci/nat_sci_64_exam.html",
     "category": "วิทยาศาสตร์ NAT"
@@ -133,5 +133,30 @@
     "name": "Science สวช. 2568",
     "file": "sci/nat_sci_68_exam.html",
     "category": "วิทยาศาสตร์ NAT"
+  },
+  {
+    "name": "Math สวช. 2564",
+    "file": "math_nat/nat_math_64_exam.html",
+    "category": "คณิตศาสตร์ NAT"
+  },
+  {
+    "name": "Math สวช. 2565",
+    "file": "math_nat/nat_math_65_exam.html",
+    "category": "คณิตศาสตร์ NAT"
+  },
+  {
+    "name": "Math สวช. 2566",
+    "file": "math_nat/nat_math_66_exam.html",
+    "category": "คณิตศาสตร์ NAT"
+  },
+  {
+    "name": "Math สวช. 2567",
+    "file": "math_nat/nat_math_67_exam.html",
+    "category": "คณิตศาสตร์ NAT"
+  },
+  {
+    "name": "Math สวช. 2568",
+    "file": "math_nat/nat_math_68_exam.html",
+    "category": "คณิตศาสตร์ NAT"
   }
 ]
