@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(docker exec *)",
+      "Bash(sed -n '387,396p' /tmp/general-df005.log | base64 | head -30)",
+      "Read(//private/tmp/**)"
+    ]
+  }
+}

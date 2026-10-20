@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(./docs/2026 DHV/Backoffice-Acitivity_diagram/**)",
+      "Read(./**/*.png)",
+      "Read(./**/*.jpg)",
+      "Read(./**/*.jpeg)",
+      "Read(./**/*.gif)",
+      "Read(./**/*.webp)",
+      "Read(./**/*.bmp)",
+      "Read(./**/*.pdf)",
+      "Read(./**/*.xlsx)",
+      "Read(./**/*.xls)",
+      "Read(./**/*.docx)",
+      "Read(./**/*.zip)",
+      "Read(./**/*.ttf)",
+      "Read(./**/*.otf)"
+    ]
+  }
+}

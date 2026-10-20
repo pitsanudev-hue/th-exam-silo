@@ -80,10 +80,25 @@
     "category": "ภาษาอังกฤษ TAC"
   },
   {
+    "name": "English สวช. 2565",
+    "file": "eng/nat_en_65_exam.html",
+    "category": "ภาษาอังกฤษ NAT"
+  },
+  {
+    "name": "English สวช. 2566",
+    "file": "eng/nat_en_66_exam.html",
+    "category": "ภาษาอังกฤษ NAT"
+  },
+    {
     "name": "English สวช. 2567",
     "file": "eng/nat_en_67_exam.html",
     "category": "ภาษาอังกฤษ NAT"
   },
+    {
+    "name": "English สวช. 2568",
+    "file": "eng/nat_en_68_exam.html",
+    "category": "ภาษาอังกฤษ NAT"
+  },  
   {
     "name": "ทวน Grammar ก่อนสอบ",
     "file": "eng/grammar_krudew.html",
