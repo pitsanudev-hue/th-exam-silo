@@ -42,47 +42,47 @@
   {
     "name": "TESET 2024 - English Practice Exam (ป.1-ป.3)",
     "file": "eng/teset_a_2024_exam.html",
-    "category": "ภาษาอังกฤษ"
+    "category": "ภาษาอังกฤษ TAC"
   },
   {
     "name": "TESET 2025 - English Practice Exam (ป.4-ป.6)",
     "file": "eng/teset_b_2025_exam.html",
-    "category": "ภาษาอังกฤษ"
+    "category": "ภาษาอังกฤษ TAC"
   },
   {
     "name": "TESET 2026 - English Practice Exam (ป.4-ป.6)",
     "file": "eng/teset_b_2026_exam.html",
-    "category": "ภาษาอังกฤษ"
+    "category": "ภาษาอังกฤษ TAC"
   },
   {
     "name": "TESET 2025 - Thailand English Skills Evaluation Test (ป.1 - ป.3)",
     "file": "eng/teset_a_2025_exam.html",
-    "category": "ภาษาอังกฤษ"
+    "category": "ภาษาอังกฤษ TAC"
   },
   {
     "name": "TSB 2023 - Thailand Spelling Bee Practice Exam (Level 1: ป.1-ป.2)",
     "file": "eng/tsb_a_2023_exam.html",
-    "category": "ภาษาอังกฤษ"
+    "category": "ภาษาอังกฤษ TAC"
   },
   {
     "name": "TSB 2024 - Thailand Spelling Bee Practice Exam (Level 2: ป.3-ป.4)",
     "file": "eng/tsb_b_2024_exam.html",
-    "category": "ภาษาอังกฤษ"
+    "category": "ภาษาอังกฤษ TAC"
   },
   {
     "name": "TSB 2025 - Thailand Spelling Bee Practice Exam (Level 2: ป.3-ป.4)",
     "file": "eng/tsb_b_2025_exam.html",
-    "category": "ภาษาอังกฤษ"
+    "category": "ภาษาอังกฤษ TAC"
   },
   {
     "name": "TSB 2026 - Thailand Spelling Bee Practice Exam (Level Bee 2: ป.3-ป.4)",
     "file": "eng/tsb_b_2026_exam.html",
-    "category": "ภาษาอังกฤษ"
+    "category": "ภาษาอังกฤษ TAC"
   },
   {
-    "name": "ระบบทำข้อสอบออนไลน์ สวช. 205010",
+    "name": "English สวช. 2567",
     "file": "eng/nat_en_67_exam.html",
-    "category": "ภาษาอังกฤษ"
+    "category": "ภาษาอังกฤษ NAT"
   },
   {
     "name": "ทวน Grammar ก่อนสอบ",
@@ -108,5 +108,30 @@
     "name": "TEDET Algorithm Puzzle - เกมเรียงลำดับอัลกอริทึม",
     "file": "code/coding_flow4.html",
     "category": "วิทยาการคำนวณ"
+  },
+{
+    "name": "Science สวช. 2564",
+    "file": "sci/nat_sci_64_exam.html",
+    "category": "วิทยาศาสตร์ NAT"
+  },
+  {
+    "name": "Science สวช. 2565",
+    "file": "sci/nat_sci_65_exam.html",
+    "category": "วิทยาศาสตร์ NAT"
+  },
+  {
+    "name": "Science สวช. 2566",
+    "file": "sci/nat_sci_66_exam.html",
+    "category": "วิทยาศาสตร์ NAT"
+  },
+  {
+    "name": "Science สวช. 2567",
+    "file": "sci/nat_sci_67_exam.html",
+    "category": "วิทยาศาสตร์ NAT"
+  },
+  {
+    "name": "Science สวช. 2568",
+    "file": "sci/nat_sci_68_exam.html",
+    "category": "วิทยาศาสตร์ NAT"
   }
 ]
