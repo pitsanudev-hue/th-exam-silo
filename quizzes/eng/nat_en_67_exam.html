@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ระบบทำข้อสอบออนไลน์ สวช. 205010</title>
+    <title>ระบบทำข้อสอบออนไลน์ สวช. 205010 (ภาษาอังกฤษ ป.ปลาย 2567)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -69,7 +69,7 @@
             ระบบทำข้อสอบออนไลน์ (NAT Online Exam)
           </h1>
           <p class="text-xs text-slate-500">
-            วิชาภาษาอังกฤษ ประถมศึกษาตอนปลาย | รหัสชุดข้อสอบ 205010
+            วิชาภาษาอังกฤษ ประถมศึกษาตอนปลาย (2567) | รหัสชุดข้อสอบ 205010
           </p>
         </div>
       </div>
@@ -101,7 +101,7 @@
           <div class="flex items-center gap-2">
             <i class="fa-solid fa-file-pdf text-red-400 text-sm"></i>
             <span class="font-medium truncate max-w-[180px] sm:max-w-[250px]" id="pdf-name-display"
-              >Nat_En_2567.pdf (ข้อสอบ สวช.)</span
+              >Nat_En_2567.pdf (ข้อสอบ สวช. ภาษาอังกฤษ ป.ปลาย 2567)</span
             >
           </div>
 
@@ -203,7 +203,7 @@
         <div class="bg-white border-b border-slate-200 p-4 shrink-0 shadow-sm">
           <div class="flex items-center justify-between mb-2">
             <span class="text-sm font-bold text-slate-700 flex items-center gap-2">
-              <i class="fa-solid fa-list-check text-blue-600"></i> กระดาตอบคำตอบดิจิทัล
+              <i class="fa-solid fa-list-check text-blue-600"></i> กระดาษคำตอบดิจิทัล
             </span>
             <span
               class="text-xs font-semibold px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
@@ -231,48 +231,15 @@
         <div
           class="flex-1 overflow-y-auto p-4 custom-scrollbar space-y-6"
           id="answer-sheet-container">
-          <!-- Part I -->
+          <!-- Questions List: ข้อ 1 - 50 (ปรนัย 5 ตัวเลือก) -->
           <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
             <div class="border-b border-slate-100 pb-2 mb-3 flex justify-between items-baseline">
               <h2 class="font-bold text-slate-800 text-sm sm:text-base text-blue-700">
-                Part I: Expression (ข้อ 1 - 10)
+                กระดาษคำตอบปรนัย (ข้อ 1 - 50)
               </h2>
-              <span class="text-xs text-slate-500 font-medium">ข้อละ 1.6 คะแนน</span>
+              <span class="text-xs text-slate-500 font-medium">ข้อละ 2 คะแนน (รวม 100 คะแนน)</span>
             </div>
-            <div class="space-y-3" id="part-1-questions"></div>
-          </div>
-
-          <!-- Part II -->
-          <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-            <div class="border-b border-slate-100 pb-2 mb-3 flex justify-between items-baseline">
-              <h2 class="font-bold text-slate-800 text-sm sm:text-base text-blue-700">
-                Part II: Reading Comprehension (ข้อ 11 - 25)
-              </h2>
-              <span class="text-xs text-slate-500 font-medium">ข้อละ 2.4 คะแนน</span>
-            </div>
-            <div class="space-y-3" id="part-2-questions"></div>
-          </div>
-
-          <!-- Part III -->
-          <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-            <div class="border-b border-slate-100 pb-2 mb-3 flex justify-between items-baseline">
-              <h2 class="font-bold text-slate-800 text-sm sm:text-base text-blue-700">
-                Part III: Structure and Writing (ข้อ 26 - 40)
-              </h2>
-              <span class="text-xs text-slate-500 font-medium">ข้อละ 2.2 คะแนน</span>
-            </div>
-            <div class="space-y-3" id="part-3-questions"></div>
-          </div>
-
-          <!-- Part IV -->
-          <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-            <div class="border-b border-slate-100 pb-2 mb-3 flex justify-between items-baseline">
-              <h2 class="font-bold text-slate-800 text-sm sm:text-base text-blue-700">
-                Part IV: Vocabulary (ข้อ 41 - 50)
-              </h2>
-              <span class="text-xs text-slate-500 font-medium">ข้อละ 1.5 คะแนน</span>
-            </div>
-            <div class="space-y-3" id="part-4-questions"></div>
+            <div class="space-y-3" id="questions-container"></div>
           </div>
 
           <!-- Submit Button at Bottom -->
@@ -304,7 +271,7 @@
               <i class="fa-solid fa-trophy"></i>
             </div>
             <div>
-              <h3 class="font-bold text-lg leading-tight">ผลการสอบวัดทักษะวิชาการ (สวช.)</h3>
+              <h3 class="font-bold text-lg leading-tight">ผลการสอบวัดทักษะวิชาการ (สวช. 2567)</h3>
               <p class="text-xs text-slate-400">
                 ชุดข้อสอบ 205010 วิชาภาษาอังกฤษ ประถมศึกษาตอนปลาย
               </p>
@@ -344,70 +311,6 @@
                 class="bg-white/10 backdrop-blur-md p-3 rounded-xl text-center border border-white/10">
                 <span class="block text-xs text-blue-200">คิดเป็นเปอร์เซ็นต์</span>
                 <span class="text-2xl font-bold text-yellow-300" id="percentage-score">0%</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Part Breakdown Cards -->
-          <div>
-            <h4 class="font-bold text-slate-800 mb-3 text-sm sm:text-base flex items-center gap-2">
-              <i class="fa-solid fa-chart-pie text-blue-600"></i> สรุปคะแนนรายส่วน (Part Breakdown)
-            </h4>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-              <!-- Part 1 -->
-              <div class="bg-slate-50 border border-slate-200 p-3.5 rounded-xl">
-                <span class="text-xs font-bold text-slate-500 block truncate"
-                  >Part I: Expression</span
-                >
-                <div class="text-lg font-bold text-slate-800 mt-1">
-                  <span id="part1-score">0</span>
-                  <span class="text-xs text-slate-400 font-normal">/ 16 คะแนน</span>
-                </div>
-                <span class="text-xs text-slate-500 block mt-1" id="part1-detail"
-                  >ถูก 0/10 ข้อ</span
-                >
-              </div>
-
-              <!-- Part 2 -->
-              <div class="bg-slate-50 border border-slate-200 p-3.5 rounded-xl">
-                <span class="text-xs font-bold text-slate-500 block truncate"
-                  >Part II: Reading</span
-                >
-                <div class="text-lg font-bold text-slate-800 mt-1">
-                  <span id="part2-score">0</span>
-                  <span class="text-xs text-slate-400 font-normal">/ 36 คะแนน</span>
-                </div>
-                <span class="text-xs text-slate-500 block mt-1" id="part2-detail"
-                  >ถูก 0/15 ข้อ</span
-                >
-              </div>
-
-              <!-- Part 3 -->
-              <div class="bg-slate-50 border border-slate-200 p-3.5 rounded-xl">
-                <span class="text-xs font-bold text-slate-500 block truncate"
-                  >Part III: Structure</span
-                >
-                <div class="text-lg font-bold text-slate-800 mt-1">
-                  <span id="part3-score">0</span>
-                  <span class="text-xs text-slate-400 font-normal">/ 33 คะแนน</span>
-                </div>
-                <span class="text-xs text-slate-500 block mt-1" id="part3-detail"
-                  >ถูก 0/15 ข้อ</span
-                >
-              </div>
-
-              <!-- Part 4 -->
-              <div class="bg-slate-50 border border-slate-200 p-3.5 rounded-xl">
-                <span class="text-xs font-bold text-slate-500 block truncate"
-                  >Part IV: Vocabulary</span
-                >
-                <div class="text-lg font-bold text-slate-800 mt-1">
-                  <span id="part4-score">0</span>
-                  <span class="text-xs text-slate-400 font-normal">/ 15 คะแนน</span>
-                </div>
-                <span class="text-xs text-slate-500 block mt-1" id="part4-detail"
-                  >ถูก 0/10 ข้อ</span
-                >
               </div>
             </div>
           </div>
@@ -464,67 +367,18 @@
     </div>
 
     <script>
-      // Official Answer Key Mapping based on provided document
+      // Official Answer Key Mapping for Nat_En_2567 (Code: 205010)
       const ANSWER_KEY = {
-        1: 1,
-        2: 4,
-        3: 5,
-        4: 2,
-        5: 3,
-        6: 4,
-        7: 2,
-        8: 5,
-        9: 4,
-        10: 3,
-        11: 1,
-        12: 2,
-        13: 3,
-        14: 4,
-        15: 2,
-        16: 4,
-        17: 3,
-        18: 4,
-        19: 3,
-        20: 2,
-        21: 2,
-        22: 2,
-        23: 3,
-        24: 2,
-        25: 1,
-        26: 2,
-        27: 1,
-        28: 1,
-        29: 4,
-        30: 1,
-        31: 3,
-        32: 3,
-        33: 4,
-        34: 5,
-        35: 2,
-        36: 1,
-        37: [3, 4],
-        38: 5,
-        39: 3,
-        40: 4,
-        41: 4,
-        42: 3,
-        43: 4,
-        44: 1,
-        45: 2,
-        46: 3,
-        47: 1,
-        48: 4,
-        49: 1,
-        50: 2,
+        1: 1, 2: 4, 3: 5, 4: 2, 5: 3, 6: 4, 7: 2, 8: 5, 9: 4, 10: 3,
+        11: 1, 12: 2, 13: 3, 14: 4, 15: 2, 16: 4, 17: 3, 18: 4, 19: 3, 20: 2,
+        21: 2, 22: 2, 23: 3, 24: 2, 25: 1, 26: 2, 27: 1, 28: 1, 29: 4, 30: 1,
+        31: 3, 32: 3, 33: 4, 34: 5, 35: 2, 36: 1,
+        37: [3, 4], // เฉลย 3 หรือ 4
+        38: 5, 39: 3, 40: 4,
+        41: 4, 42: 3, 43: 4, 44: 1, 45: 2, 46: 3, 47: 1, 48: 4, 49: 1, 50: 2
       };
 
-      // Scoring rules
-      const QUESTION_PARTS = [
-        { start: 1, end: 10, points: 1.6, title: "Part I: Expression" },
-        { start: 11, end: 25, points: 2.4, title: "Part II: Reading Comprehension" },
-        { start: 26, end: 40, points: 2.2, title: "Part III: Structure and Writing" },
-        { start: 41, end: 50, points: 1.5, title: "Part IV: Vocabulary" },
-      ];
+      const TOTAL_QUESTIONS = 50;
 
       // User Selected Answers Object
       let userAnswers = {};
@@ -536,53 +390,45 @@
 
       // Render digital answer sheet inputs
       function generateAnswerSheet() {
-        for (let i = 1; i <= 50; i++) {
-          let targetContainerId = "part-1-questions";
-          if (i >= 11 && i <= 25) targetContainerId = "part-2-questions";
-          else if (i >= 26 && i <= 40) targetContainerId = "part-3-questions";
-          else if (i >= 41) targetContainerId = "part-4-questions";
-
-          const container = document.getElementById(targetContainerId);
-
+        const container = document.getElementById("questions-container");
+        for (let i = 1; i <= TOTAL_QUESTIONS; i++) {
           const questionRow = document.createElement("div");
           questionRow.id = `question-row-${i}`;
           questionRow.className =
             "flex flex-col sm:flex-row sm:items-center justify-between p-2.5 rounded-lg border border-slate-100 hover:bg-blue-50/50 transition duration-150 gap-2";
 
           questionRow.innerHTML = `
-                    <div class="flex items-center gap-2">
-                        <span class="w-7 h-7 rounded-full bg-slate-200 text-slate-700 font-bold text-xs flex items-center justify-center shrink-0" id="q-badge-${i}">
-                            ${i}
+            <div class="flex items-center gap-2">
+                <span class="w-7 h-7 rounded-full bg-slate-200 text-slate-700 font-bold text-xs flex items-center justify-center shrink-0" id="q-badge-${i}">
+                    ${i}
+                </span>
+                <span class="text-xs text-slate-500 font-medium sm:hidden">เลือกคำตอบ:</span>
+            </div>
+
+            <div class="flex items-center justify-between sm:justify-end gap-1 sm:gap-2 flex-1">
+                ${[1, 2, 3, 4, 5]
+                  .map(
+                    (choice) => `
+                    <label class="cursor-pointer flex-1 sm:flex-none">
+                        <input type="radio" name="question_${i}" value="${choice}" onchange="selectRadioAnswer(${i},${choice})" class="peer hidden">
+                        <span class="w-full sm:w-9 h-8 rounded-lg border border-slate-300 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 flex items-center justify-center text-xs font-semibold text-slate-600 hover:border-blue-400 hover:bg-blue-50 transition">
+                            ${choice}
                         </span>
-                        <span class="text-xs text-slate-500 font-medium sm:hidden">เลือกคำตอบ:</span>
-                    </div>
-
-                    <div class="flex items-center justify-between sm:justify-end gap-1 sm:gap-2 flex-1">
-                        ${[1, 2, 3, 4, 5]
-                          .map(
-                            (choice) => `
-                            <label class="cursor-pointer flex-1 sm:flex-none">
-                                <input type="radio" name="question_${i}" value="${choice}" onchange="selectAnswer(${i}, ${choice})" class="peer hidden">
-                                <span class="w-full sm:w-9 h-8 rounded-lg border border-slate-300 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 flex items-center justify-center text-xs font-semibold text-slate-600 hover:border-blue-400 hover:bg-blue-50 transition">
-                                    ${choice}
-                                </span>
-                            </label>
-                        `,
-                          )
-                          .join("")}
-                    </div>
-                `;
-
+                    </label>
+                `,
+                  )
+                  .join("")}
+            </div>
+          `;
           container.appendChild(questionRow);
         }
       }
 
-      // Record User Answer
-      function selectAnswer(questionNum, choice) {
+      // Record Multiple Choice Answer
+      function selectRadioAnswer(questionNum, choice) {
         userAnswers[questionNum] = parseInt(choice);
         updateProgress();
 
-        // Highlight Question Row
         const badge = document.getElementById(`q-badge-${questionNum}`);
         if (badge) {
           badge.classList.remove("bg-slate-200", "text-slate-700");
@@ -593,24 +439,24 @@
       // Update Answer Progress Bar & Counter
       function updateProgress() {
         const answeredCount = Object.keys(userAnswers).length;
-        const percentage = (answeredCount / 50) * 100;
+        const percentage = (answeredCount / TOTAL_QUESTIONS) * 100;
 
         document.getElementById("answered-count").textContent = answeredCount;
         document.getElementById("progress-bar").style.width = `${percentage}%`;
 
         const completionText = document.getElementById("completion-text");
-        if (answeredCount === 50) {
+        if (answeredCount === TOTAL_QUESTIONS) {
           completionText.textContent = "ตอบครบทุกข้อแล้ว! พร้อมกดส่งคำตอบ";
           completionText.className = "text-xs font-semibold text-emerald-600";
         } else {
-          completionText.textContent = `คงเหลืออีก ${50 - answeredCount} ข้อที่ยังไม่ได้ตอบ`;
+          completionText.textContent = `คงเหลืออีก ${TOTAL_QUESTIONS - answeredCount} ข้อที่ยังไม่ได้ตอบ`;
           completionText.className = "text-xs text-slate-500";
         }
       }
 
       // Scroll to Next Unanswered Question
       function scrollToNextUnanswered() {
-        for (let i = 1; i <= 50; i++) {
+        for (let i = 1; i <= TOTAL_QUESTIONS; i++) {
           if (!userAnswers[i]) {
             const el = document.getElementById(`question-row-${i}`);
             if (el) {
@@ -630,8 +476,8 @@
       // Confirm Before Submitting
       function confirmSubmit() {
         const answeredCount = Object.keys(userAnswers).length;
-        if (answeredCount < 50) {
-          const unansweredCount = 50 - answeredCount;
+        if (answeredCount < TOTAL_QUESTIONS) {
+          const unansweredCount = TOTAL_QUESTIONS - answeredCount;
           if (
             confirm(
               `คุณยังตอบไม่ครบ (เหลืออีก ${unansweredCount} ข้อ)\nคุณต้องการส่งคำตอบและตรวจคะแนนเลยหรือไม่?`,
@@ -651,53 +497,33 @@
         let totalScore = 0;
         let totalCorrectCount = 0;
 
-        const partStats = [
-          { correct: 0, total: 10, score: 0, maxScore: 16 },
-          { correct: 0, total: 15, score: 0, maxScore: 36 },
-          { correct: 0, total: 15, score: 0, maxScore: 33 },
-          { correct: 0, total: 10, score: 0, maxScore: 15 },
-        ];
-
         const tableBody = document.getElementById("detailed-results-body");
         tableBody.innerHTML = "";
 
-        for (let i = 1; i <= 50; i++) {
+        for (let i = 1; i <= TOTAL_QUESTIONS; i++) {
           const userChoice = userAnswers[i] || null;
           const correctChoice = ANSWER_KEY[i];
           let isCorrect = false;
+          let points = 2.0; // 50 ข้อ ข้อละ 2 คะแนน
 
-          // Check answer (handle single value or array of correct answers like Q37)
           if (Array.isArray(correctChoice)) {
             isCorrect = correctChoice.includes(userChoice);
           } else {
             isCorrect = userChoice === correctChoice;
           }
 
-          // Identify Part
-          let partIndex = 0;
-          let points = 1.6;
-          if (i >= 11 && i <= 25) {
-            partIndex = 1;
-            points = 2.4;
-          } else if (i >= 26 && i <= 40) {
-            partIndex = 2;
-            points = 2.2;
-          } else if (i >= 41) {
-            partIndex = 3;
-            points = 1.5;
-          }
-
           if (isCorrect) {
             totalCorrectCount++;
             totalScore += points;
-            partStats[partIndex].correct++;
-            partStats[partIndex].score += points;
           }
 
-          // Format correct choice text display
-          const correctDisplayStr = Array.isArray(correctChoice)
-            ? correctChoice.join(" หรือ ")
-            : correctChoice;
+          // Format Correct Display String
+          let correctDisplayStr = "";
+          if (Array.isArray(correctChoice)) {
+            correctDisplayStr = `ตัวเลือก ${correctChoice.join(" หรือ ")}`;
+          } else {
+            correctDisplayStr = `ตัวเลือก ${correctChoice}`;
+          }
 
           // Create Detail Table Row
           const tr = document.createElement("tr");
@@ -707,7 +533,7 @@
                     <td class="py-2 px-3 font-medium ${userChoice ? (isCorrect ? "text-emerald-700" : "text-red-600") : "text-slate-400 italic"}">
                         ${userChoice ? `ตัวเลือก ${userChoice}` : "ไม่ได้ตอบ"}
                     </td>
-                    <td class="py-2 px-3 font-semibold text-slate-700">ตัวเลือก ${correctDisplayStr}</td>
+                    <td class="py-2 px-3 font-semibold text-slate-700">${correctDisplayStr}</td>
                     <td class="py-2 px-3 text-center">
                         ${
                           isCorrect
@@ -719,7 +545,6 @@
           tableBody.appendChild(tr);
         }
 
-        // Fix floating point precision
         totalScore = Math.round(totalScore * 10) / 10;
 
         // Render Overview
@@ -731,22 +556,13 @@
         // Evaluation Text
         const evalElem = document.getElementById("score-evaluation");
         if (totalScore >= 80)
-          evalElem.textContent =
-            "🏆 ยอดเยี่ยมระดับเกียรติบัตรทอง! ทักษะภาษาอังกฤษอยู่ในเกณฑ์ดีเยี่ยม";
+          evalElem.textContent = "🏆 ยอดเยี่ยมระดับเกียรติบัตรทอง! ทักษะภาษาอังกฤษอยู่ในเกณฑ์ดีเยี่ยม";
         else if (totalScore >= 65)
           evalElem.textContent = "🥇 ผลการสอบอยู่ในเกณฑ์ดีมาก ทำคะแนนได้สูงกว่ามาตรฐาน";
         else if (totalScore >= 50)
-          evalElem.textContent = "🥈 ผ่านเกณฑ์การประเมิน ทบทวนส่วนข้อผิดพลาดเพิ่มเติมเพื่อพัฒนาการ";
+          evalElem.textContent = "🥈 ผ่านเกณฑ์การประเมิน ทบทวนส่วนที่ผิดเพิ่มเติมเพื่อพัฒนาการ";
         else
-          evalElem.textContent = "📚 ควรฝึกฝนและทบทวนเพิ่มเติม โดยเฉพาะในส่วน Reading & Structure";
-
-        // Render Part Stats
-        for (let p = 0; p < 4; p++) {
-          const pScore = Math.round(partStats[p].score * 10) / 10;
-          document.getElementById(`part${p + 1}-score`).textContent = pScore;
-          document.getElementById(`part${p + 1}-detail`).textContent =
-            `ตอบถูก ${partStats[p].correct}/${partStats[p].total} ข้อ`;
-        }
+          evalElem.textContent = "📚 ควรฝึกฝนและทบทวนเนื้อหาภาษาอังกฤษเพิ่มเติม";
 
         // Open Modal
         const modal = document.getElementById("result-modal");
@@ -775,7 +591,7 @@
           radios.forEach((radio) => (radio.checked = false));
 
           // Reset Q badges
-          for (let i = 1; i <= 50; i++) {
+          for (let i = 1; i <= TOTAL_QUESTIONS; i++) {
             const badge = document.getElementById(`q-badge-${i}`);
             if (badge) {
               badge.className =
@@ -818,16 +634,7 @@
       }
     </script>
 
-    <!-- ============================================================
-         PDF.js Viewer
-         Render ไฟล์ PDF เองด้วย JS/Canvas แทนการฝัง <iframe src="...pdf">
-         เหตุผล: บางอุปกรณ์ (เช่น Android tablet/WebView) ไม่มี PDF viewer
-         ในตัวเบราว์เซอร์ ทำให้ <iframe> เปิด PDF ตรงๆ ไม่ได้ และระบบจะ
-         ขึ้นปุ่ม "Open" ให้ไปเปิดด้วยแอปอื่นแทน การ render ด้วย PDF.js
-         ทำงานเหมือนกันทุกอุปกรณ์เพราะไม่ต้องพึ่ง PDF viewer ของระบบ
-         ไฟล์ไลบรารีถูกเก็บไว้ในเครื่อง (../assets/pdfjs/) จึงใช้งาน
-         ออฟไลน์ได้ด้วย ไม่ต้องพึ่งอินเทอร์เน็ตหลังโหลดครั้งแรก
-         ============================================================ -->
+    <!-- PDF.js Viewer -->
     <script type="module">
       import * as pdfjsLib from "../../assets/pdfjs/build/pdf.mjs";
 
@@ -841,14 +648,13 @@
       let currentPdfDoc = null;
       let currentZoom = 1.0;
       let currentObjectUrl = null;
-      let currentSourceUrl = DEFAULT_PDF_URL; // ลิงก์ล่าสุดที่ใช้เปิด (สำหรับปุ่ม "ขยายใหญ่")
+      let currentSourceUrl = DEFAULT_PDF_URL;
 
       const pagesWrapper = document.getElementById("pdf-pages-wrapper");
       const loadingSpinner = document.getElementById("pdf-loading-spinner");
       const errorOverlay = document.getElementById("pdf-loading-overlay");
       const pageIndicator = document.getElementById("pdf-page-indicator");
       const zoomDisplay = document.getElementById("zoom-level-display");
-      const pdfContainer = document.getElementById("pdf-container");
 
       function showSpinner() {
         errorOverlay.classList.add("hidden");
@@ -864,7 +670,6 @@
         errorOverlay.classList.remove("hidden");
       }
 
-      // โหลดและ render ไฟล์ PDF จาก URL หรือ ArrayBuffer/Uint8Array
       async function loadPdf(source, displayName) {
         showSpinner();
         pagesWrapper.innerHTML = "";
@@ -892,7 +697,6 @@
         }
       }
 
-      // Render ทุกหน้าของ PDF ลงใน canvas ต่อกันเป็นแนวตั้ง (เลื่อนดูได้ทั้งเล่ม)
       async function renderAllPages() {
         if (!currentPdfDoc) return;
         pagesWrapper.innerHTML = "";
@@ -913,7 +717,6 @@
         }
       }
 
-      // ปรับ zoom แล้ว render ใหม่
       window.changeZoom = async function (delta) {
         if (!currentPdfDoc) return;
         const next = Math.min(3, Math.max(0.4, currentZoom + delta));
@@ -928,7 +731,6 @@
         }
       };
 
-      // อัปโหลดไฟล์ PDF จากเครื่อง
       window.handleFileUpload = async function (event) {
         const file = event.target.files[0];
         if (file && file.type === "application/pdf") {
@@ -945,7 +747,6 @@
         }
       };
 
-      // ใส่ URL ของ PDF เอง
       window.promptPdfUrl = async function () {
         const url = prompt("กรุณาระบุ URL ของไฟล์ PDF ข้อสอบ:", "Nat_En_2567.pdf");
         if (url) {
@@ -954,7 +755,6 @@
         }
       };
 
-      // เปิดไฟล์ PDF ต้นฉบับในแท็บใหม่ (ใช้ตัวจัดการ PDF ของระบบ ถ้าต้องการพิมพ์/ดาวน์โหลด)
       window.openPdfExternal = function () {
         if (currentSourceUrl) {
           window.open(currentSourceUrl, "_blank");
@@ -963,9 +763,8 @@
         }
       };
 
-      // โหลดไฟล์ PDF เริ่มต้นของข้อสอบทันทีที่หน้าเว็บพร้อม
       window.addEventListener("DOMContentLoaded", () => {
-        loadPdf(DEFAULT_PDF_URL, "Nat_En_2567.pdf (ข้อสอบ สวช.)");
+        loadPdf(DEFAULT_PDF_URL, "Nat_En_2567.pdf (ข้อสอบ สวช. ภาษาอังกฤษ ป.ปลาย 2567)");
       });
     </script>
   </body>
