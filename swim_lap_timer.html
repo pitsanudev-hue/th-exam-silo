@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="th" class="h-full bg-slate-900">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Swim Lap Timer - ระบบจับเวลาว่ายน้ำ</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font - Inter & Kanit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pool: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                            950: '#082f49',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Kanit', 'sans-serif'],
+                        mono: ['Roboto Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Prevention of highlight/zoom on rapid taps for mobile */
+        * {
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #0284c7;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="h-full text-slate-100 flex flex-col font-sans antialiased bg-slate-950 overflow-x-hidden">
+
+    <!-- Header Section -->
+    <header class="bg-slate-900 border-b border-slate-800 px-4 py-3 shrink-0 flex justify-between items-center shadow-md">
+        <div class="flex items-center space-x-2">
+            <div class="bg-pool-500 p-2 rounded-xl text-white shadow-lg shadow-pool-500/30">
+                <i class="fa-solid fa-person-swimming text-xl"></i>
+            </div>
+            <div>
+                <h1 class="font-bold text-lg leading-tight tracking-wide text-white">SWIM TIMER PRO</h1>
+                <p class="text-xs text-pool-400 font-light">จับเวลา & คำนวณ Pace ว่ายน้ำ</p>
+            </div>
+        </div>
+        <div class="flex items-center space-x-2">
+            <button onclick="toggleSettingsModal()" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-pool-400 transition active:scale-95" title="ตั้งค่าเป้าหมาย">
+                <i class="fa-solid fa-sliders"></i>
+            </button>
+            <button id="soundToggleBtn" onclick="toggleSound()" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition active:scale-95">
+                <i id="soundIcon" class="fa-solid fa-volume-high text-pool-400"></i>
+            </button>
+            <button onclick="confirmResetAll()" class="p-2.5 rounded-xl bg-slate-800 hover:bg-red-950/60 text-slate-400 hover:text-red-400 transition active:scale-95" title="ล้างข้อมูลทั้งหมด">
+                <i class="fa-solid fa-trash-can"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-1 max-w-md w-full mx-auto flex flex-col p-4 space-y-3 overflow-y-auto">
+
+        <!-- Target Progress Card -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3 shadow-md">
+            <div class="flex justify-between items-center mb-1.5 text-xs">
+                <span class="text-slate-400 flex items-center gap-1.5 font-medium">
+                    <i class="fa-solid fa-bullseye text-pool-400"></i> เป้าหมายระยะทาง:
+                    <strong id="targetDisplay" class="text-white">1000m</strong>
+                </span>
+                <span id="progressPercent" class="font-mono font-bold text-pool-400">0%</span>
+            </div>
+            <!-- Progress Bar -->
+            <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden border border-slate-700/50">
+                <div id="progressBar" class="bg-gradient-to-r from-pool-500 to-teal-400 h-2.5 rounded-full transition-all duration-300 w-0"></div>
+            </div>
+            <div class="flex justify-between items-center mt-1.5 text-[11px] text-slate-400 font-mono">
+                <span>ระยะทาง: <strong id="currentDistanceText" class="text-white">0m</strong></span>
+                <span>ความยาวสระ: <strong id="poolLengthText" class="text-slate-300">50m/Lap</strong></span>
+            </div>
+        </div>
+
+        <!-- Timer Display Card -->
+        <div class="bg-gradient-to-b from-slate-900 to-slate-900/90 border border-slate-800 rounded-3xl p-4 text-center shadow-xl relative overflow-hidden">
+            <!-- Background Glow Effect -->
+            <div id="glowBg" class="absolute -top-24 -left-24 w-48 h-48 bg-pool-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <!-- Current Stroke Selector -->
+            <div class="mb-2">
+                <div class="relative">
+                    <select id="strokeSelect" class="w-full bg-slate-800 border border-pool-700/50 text-white font-medium text-sm rounded-xl px-3 py-2 appearance-none focus:outline-none focus:ring-2 focus:ring-pool-500 text-center shadow-inner">
+                        <option value="ฟรีสไตล์ (Freestyle)">🏊‍♂️ ฟรีสไตล์ (Freestyle)</option>
+                        <option value="กบ (Breaststroke)">🐸 ท่ากบ (Breaststroke)</option>
+                        <option value="กรรเชียง (Backstroke)">🏊‍♀️ กรรเชียง (Backstroke)</option>
+                        <option value="ผีเสื้อ (Butterfly)">🦋 ผีเสื้อ (Butterfly)</option>
+                        <option value="เดี่ยวผสม (IM)">🏅 เดี่ยวผสม (IM)</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-pool-400 text-xs">
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Time Display -->
+            <div class="py-1">
+                <div id="mainDisplay" class="font-mono text-5xl sm:text-6xl font-bold tracking-tight text-white drop-shadow-[0_0_15px_rgba(14,165,233,0.3)]">
+                    00:00<span class="text-3xl sm:text-4xl text-pool-400">.00</span>
+                </div>
+                <div class="flex justify-around items-center mt-2 pt-2 border-t border-slate-800/80 text-xs">
+                    <div>
+                        <span class="text-slate-400 block text-[10px]">Lap ปัจจุบัน</span>
+                        <span id="currentLapDisplay" class="font-mono text-sm font-semibold text-pool-400">00:00.00</span>
+                    </div>
+                    <div class="h-6 w-px bg-slate-800"></div>
+                    <div>
+                        <span class="text-slate-400 block text-[10px]">Pace รวม (/100m)</span>
+                        <span id="overallPaceDisplay" class="font-mono text-sm font-semibold text-teal-400">--:--</span>
+                    </div>
+                    <div class="h-6 w-px bg-slate-800"></div>
+                    <div>
+                        <span class="text-slate-400 block text-[10px]">จำนวน Lap</span>
+                        <span id="lapCountDisplay" class="font-mono text-sm font-semibold text-white">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Control Buttons -->
+        <div class="grid grid-cols-2 gap-3">
+            <!-- Left Button: Start / Pause -->
+            <button id="startPauseBtn" onclick="toggleStartPause()" class="h-16 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 active:from-emerald-600 active:to-teal-700 text-white font-bold text-lg shadow-lg shadow-emerald-900/30 flex items-center justify-center space-x-2 transition-all active:scale-[0.98]">
+                <i id="startPauseIcon" class="fa-solid fa-play"></i>
+                <span id="startPauseText">START</span>
+            </button>
+
+            <!-- Right Button: Lap / Reset -->
+            <button id="lapResetBtn" onclick="handleLapOrReset()" disabled class="h-16 rounded-2xl bg-slate-800 text-slate-500 font-bold text-lg border border-slate-700/50 flex items-center justify-center space-x-2 transition-all opacity-60 cursor-not-allowed">
+                <i id="lapResetIcon" class="fa-solid fa-stopwatch"></i>
+                <span id="lapResetText">LAP</span>
+            </button>
+        </div>
+
+        <!-- Summary Stats Card Grid -->
+        <div class="grid grid-cols-3 gap-2 text-center text-xs">
+            <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-2">
+                <span class="text-slate-400 block text-[10px] mb-0.5">ระยะทางรวม</span>
+                <span id="statTotalDist" class="font-mono font-bold text-white text-sm">0 m</span>
+            </div>
+            <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-2">
+                <span class="text-slate-400 block text-[10px] mb-0.5">Avg Pace (/100m)</span>
+                <span id="statAvgPace" class="font-mono font-bold text-teal-400 text-sm">--:--</span>
+            </div>
+            <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-2">
+                <span class="text-slate-400 block text-[10px] mb-0.5">Best Pace</span>
+                <span id="statBestPace" class="font-mono font-bold text-emerald-400 text-sm">--:--</span>
+            </div>
+        </div>
+
+        <!-- Lap History & Stats Card -->
+        <div class="flex-1 bg-slate-900 border border-slate-800 rounded-3xl p-4 flex flex-col shadow-xl min-h-[240px]">
+            <!-- Header & Export Actions -->
+            <div class="flex justify-between items-center mb-2 pb-2 border-b border-slate-800">
+                <h2 class="font-semibold text-xs text-slate-300 flex items-center gap-1.5">
+                    <i class="fa-solid fa-list-ol text-pool-400"></i> ประวัติ Lap & Pace
+                </h2>
+                <div class="flex space-x-1.5">
+                    <button onclick="copyToClipboard()" id="copyBtn" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] font-medium flex items-center gap-1 transition border border-slate-700">
+                        <i class="fa-regular fa-copy text-xs"></i> คัดลอก
+                    </button>
+                    <button onclick="exportToCSV()" class="px-2.5 py-1 rounded-lg bg-pool-700 hover:bg-pool-600 text-white text-[11px] font-medium flex items-center gap-1 transition shadow-sm">
+                        <i class="fa-solid fa-file-csv text-xs"></i> CSV
+                    </button>
+                </div>
+            </div>
+
+            <!-- Lap Table List -->
+            <div class="flex-1 overflow-y-auto pr-1">
+                <table class="w-full text-left border-collapse">
+                    <thead class="sticky top-0 bg-slate-900 text-[10px] text-slate-400 uppercase tracking-wider border-b border-slate-800">
+                        <tr>
+                            <th class="py-1.5 px-1 text-center w-8">Lap</th>
+                            <th class="py-1.5 px-1">ท่าว่าย</th>
+                            <th class="py-1.5 px-1 text-right">เวลา Lap</th>
+                            <th class="py-1.5 px-1 text-right">Pace/100m</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lapList" class="divide-y divide-slate-800/50 text-xs font-medium">
+                        <!-- Empty State -->
+                        <tr id="emptyState">
+                            <td colspan="4" class="py-10 text-center text-slate-500 font-light">
+                                <i class="fa-solid fa-stopwatch-20 text-3xl mb-2 opacity-40 block"></i>
+                                กดปุ่ม START เพื่อเริ่มจับเวลา
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-sm w-full p-5 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h3 class="font-bold text-base text-white flex items-center gap-2">
+                    <i class="fa-solid fa-sliders text-pool-400"></i> ตั้งค่าเป้าหมายการว่าย
+                </h3>
+                <button onclick="toggleSettingsModal()" class="text-slate-400 hover:text-white text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Pool Length Setting -->
+            <div>
+                <label class="block text-xs font-medium text-slate-300 mb-1.5">ความยาวสระต่อ Lap (Pool Length)</label>
+                <div class="grid grid-cols-3 gap-2 mb-2">
+                    <button type="button" onclick="setPoolLength(25)" class="pool-btn py-2 text-xs rounded-xl border border-slate-700 bg-slate-800 text-slate-300 font-medium">25 เมตร</button>
+                    <button type="button" onclick="setPoolLength(50)" class="pool-btn py-2 text-xs rounded-xl border border-slate-700 bg-slate-800 text-slate-300 font-medium">50 เมตร</button>
+                    <button type="button" onclick="setPoolLength('custom')" class="pool-btn py-2 text-xs rounded-xl border border-slate-700 bg-slate-800 text-slate-300 font-medium"> กำหนดเอง</button>
+                </div>
+                <input type="number" id="customPoolInput" placeholder="ระบุความยาวสระ (เมตร)" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white hidden focus:outline-none focus:border-pool-500">
+            </div>
+
+            <!-- Target Distance Setting -->
+            <div>
+                <label class="block text-xs font-medium text-slate-300 mb-1.5">เป้าหมายระยะทางรวม (Target Distance)</label>
+                <div class="grid grid-cols-3 gap-2 mb-2">
+                    <button type="button" onclick="setTargetDist(500)" class="target-btn py-2 text-xs rounded-xl border border-slate-700 bg-slate-800 text-slate-300 font-medium">500 m</button>
+                    <button type="button" onclick="setTargetDist(1000)" class="target-btn py-2 text-xs rounded-xl border border-slate-700 bg-slate-800 text-slate-300 font-medium">1000 m</button>
+                    <button type="button" onclick="setTargetDist('custom')" class="target-btn py-2 text-xs rounded-xl border border-slate-700 bg-slate-800 text-slate-300 font-medium">กำหนดเอง</button>
+                </div>
+                <input type="number" id="customTargetInput" placeholder="ระบุเป้าหมายระยะทาง (เมตร)" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white hidden focus:outline-none focus:border-pool-500">
+            </div>
+
+            <button onclick="saveSettings()" class="w-full py-2.5 bg-pool-600 hover:bg-pool-500 text-white font-semibold text-sm rounded-xl transition shadow-lg shadow-pool-600/30">
+                บันทึกการตั้งค่า
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal / Toast Notifications -->
+    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-800 border border-pool-500/50 text-white px-4 py-2.5 rounded-full shadow-2xl flex items-center space-x-2 text-sm transition-all duration-300 opacity-0 pointer-events-none translate-y-4 z-50">
+        <i id="toastIcon" class="fa-solid fa-check-circle text-pool-400"></i>
+        <span id="toastMessage">คัดลอกข้อมูลเรียบร้อยแล้ว</span>
+    </div>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Config & Settings State
+        let poolLength = 50; // default 50 meters
+        let targetDistance = 1000; // default 1000 meters
+
+        // Timer State Variables
+        let isRunning = false;
+        let startTime = 0;
+        let elapsedTime = 0;
+        let timerInterval = null;
+        let laps = []; // { lapNo, stroke, lapTime, totalTime, distance, paceMs }
+        let lastLapTotalTime = 0;
+        let soundEnabled = true;
+        let goalReachedAlerted = false;
+
+        // Audio Context for Web Audio API Sound Feedback
+        let audioCtx = null;
+
+        // Load saved state from LocalStorage on init
+        window.onload = function () {
+            loadSettings();
+            loadFromLocalStorage();
+            updateUI();
+        };
+
+        // Format milliseconds into MM:SS.ss
+        function formatTime(ms) {
+            if (ms < 0 || isNaN(ms)) ms = 0;
+            const minutes = Math.floor(ms / 60000);
+            const seconds = Math.floor((ms % 60000) / 1000);
+            const hundredths = Math.floor((ms % 1000) / 10);
+
+            const mStr = String(minutes).padStart(2, '0');
+            const sStr = String(seconds).padStart(2, '0');
+            const hStr = String(hundredths).padStart(2, '0');
+
+            return {
+                main: `${mStr}:${sStr}`,
+                sub: `.${hStr}`,
+                full: `${mStr}:${sStr}.${hStr}`
+            };
+        }
+
+        // Format Pace (min:sec per 100m)
+        function formatPace(paceMs) {
+            if (!isFinite(paceMs) || paceMs <= 0 || isNaN(paceMs)) return "--:--";
+            const minutes = Math.floor(paceMs / 60000);
+            const seconds = Math.floor((paceMs % 60000) / 1000);
+            return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        // Sound Feedback Generator
+        function playBeep(type = 'lap') {
+            if (!soundEnabled) return;
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                if (type === 'start') {
+                    osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.15);
+                } else if (type === 'pause') {
+                    osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.15);
+                } else if (type === 'lap') {
+                    osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.08);
+                } else if (type === 'goal') {
+                    // Win chime
+                    osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+                    osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1); // E5
+                    osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.2); // G5
+                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.4);
+                }
+            } catch (e) {
+                console.log('Audio Context error:', e);
+            }
+        }
+
+        function triggerVibration() {
+            if ("vibrate" in navigator) {
+                navigator.vibrate(50);
+            }
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const icon = document.getElementById('soundIcon');
+            if (soundEnabled) {
+                icon.className = "fa-solid fa-volume-high text-pool-400";
+                showToast("เปิดเสียงแจ้งเตือนแล้ว");
+            } else {
+                icon.className = "fa-solid fa-volume-xmark text-slate-500";
+                showToast("ปิดเสียงแจ้งเตือนแล้ว");
+            }
+        }
+
+        // Timer Controls
+        function toggleStartPause() {
+            if (!isRunning) {
+                isRunning = true;
+                startTime = Date.now() - elapsedTime;
+                timerInterval = setInterval(updateTimerDisplay, 10);
+                playBeep('start');
+            } else {
+                isRunning = false;
+                clearInterval(timerInterval);
+                playBeep('pause');
+            }
+            triggerVibration();
+            updateControlButtons();
+            saveToLocalStorage();
+        }
+
+        function updateTimerDisplay() {
+            elapsedTime = Date.now() - startTime;
+            const formatted = formatTime(elapsedTime);
+            document.getElementById('mainDisplay').innerHTML = `${formatted.main}<span class="text-3xl sm:text-4xl text-pool-400">${formatted.sub}</span>`;
+
+            // Update Current Lap Display
+            const currentLapMs = elapsedTime - lastLapTotalTime;
+            document.getElementById('currentLapDisplay').textContent = formatTime(currentLapMs).full;
+
+            // Update Realtime Overall Pace
+            const totalDist = laps.length * poolLength;
+            if (totalDist > 0) {
+                const overallPaceMs = (elapsedTime / totalDist) * 100;
+                document.getElementById('overallPaceDisplay').textContent = formatPace(overallPaceMs);
+            }
+        }
+
+        function handleLapOrReset() {
+            if (isRunning) {
+                recordLap();
+            } else if (elapsedTime > 0) {
+                resetTimer();
+            }
+        }
+
+        // Record Lap & Calculate Pace
+        function recordLap() {
+            if (elapsedTime === 0) return;
+
+            const currentStroke = document.getElementById('strokeSelect').value;
+            const lapTime = elapsedTime - lastLapTotalTime;
+            const lapNumber = laps.length + 1;
+
+            // Calculate Pace per 100m for this specific lap
+            const lapPaceMs = (lapTime / poolLength) * 100;
+
+            const newLap = {
+                lapNo: lapNumber,
+                stroke: currentStroke,
+                lapTime: lapTime,
+                totalTime: elapsedTime,
+                distance: poolLength,
+                paceMs: lapPaceMs
+            };
+
+            laps.unshift(newLap);
+            lastLapTotalTime = elapsedTime;
+
+            playBeep('lap');
+            triggerVibration();
+
+            // Check Goal Reached
+            const currentTotalDist = laps.length * poolLength;
+            if (currentTotalDist >= targetDistance && !goalReachedAlerted) {
+                goalReachedAlerted = true;
+                setTimeout(() => {
+                    playBeep('goal');
+                    showToast("🎉 ยินดีด้วย! บรรลุเป้าหมายระยะทางแล้ว!");
+                }, 200);
+            }
+
+            renderLaps();
+            updateStatsAndProgress();
+            updateControlButtons();
+            saveToLocalStorage();
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            isRunning = false;
+            elapsedTime = 0;
+            startTime = 0;
+            lastLapTotalTime = 0;
+            laps = [];
+            goalReachedAlerted = false;
+
+            document.getElementById('mainDisplay').innerHTML = `00:00<span class="text-3xl sm:text-4xl text-pool-400">.00</span>`;
+            document.getElementById('currentLapDisplay').textContent = "00:00.00";
+            document.getElementById('overallPaceDisplay').textContent = "--:--";
+            document.getElementById('lapCountDisplay').textContent = "0";
+
+            renderLaps();
+            updateStatsAndProgress();
+            updateControlButtons();
+            saveToLocalStorage();
+            showToast("รีเซ็ตเวลาและบันทึกเรียบร้อย");
+        }
+
+        function confirmResetAll() {
+            if (laps.length > 0 || elapsedTime > 0) {
+                if (confirm("คุณต้องการรีเซ็ตเวลาและล้างบันทึก Lap ทั้งหมดหรือไม่?")) {
+                    resetTimer();
+                }
+            }
+        }
+
+        function updateControlButtons() {
+            const startBtn = document.getElementById('startPauseBtn');
+            const startIcon = document.getElementById('startPauseIcon');
+            const startText = document.getElementById('startPauseText');
+
+            const lapBtn = document.getElementById('lapResetBtn');
+            const lapIcon = document.getElementById('lapResetIcon');
+            const lapText = document.getElementById('lapResetText');
+
+            if (isRunning) {
+                startBtn.className = "h-16 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-600 text-white font-bold text-lg shadow-lg shadow-amber-900/30 flex items-center justify-center space-x-2 transition-all active:scale-[0.98]";
+                startIcon.className = "fa-solid fa-pause";
+                startText.textContent = "PAUSE";
+
+                lapBtn.disabled = false;
+                lapBtn.className = "h-16 rounded-2xl bg-gradient-to-r from-pool-600 to-blue-700 text-white font-bold text-lg shadow-lg shadow-pool-900/30 flex items-center justify-center space-x-2 transition-all active:scale-[0.98]";
+                lapIcon.className = "fa-solid fa-stopwatch";
+                lapText.textContent = "LAP";
+            } else {
+                startBtn.className = "h-16 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold text-lg shadow-lg shadow-emerald-900/30 flex items-center justify-center space-x-2 transition-all active:scale-[0.98]";
+                startIcon.className = "fa-solid fa-play";
+                startText.textContent = elapsedTime > 0 ? "RESUME" : "START";
+
+                if (elapsedTime > 0) {
+                    lapBtn.disabled = false;
+                    lapBtn.className = "h-16 rounded-2xl bg-gradient-to-r from-rose-600 to-red-700 text-white font-bold text-lg shadow-lg shadow-red-900/30 flex items-center justify-center space-x-2 transition-all active:scale-[0.98]";
+                    lapIcon.className = "fa-solid fa-rotate-right";
+                    lapText.textContent = "RESET";
+                } else {
+                    lapBtn.disabled = true;
+                    lapBtn.className = "h-16 rounded-2xl bg-slate-800 text-slate-500 font-bold text-lg border border-slate-700/50 flex items-center justify-center space-x-2 transition-all opacity-60 cursor-not-allowed";
+                    lapIcon.className = "fa-solid fa-stopwatch";
+                    lapText.textContent = "LAP";
+                }
+            }
+
+            document.getElementById('lapCountDisplay').textContent = laps.length;
+        }
+
+        // Update Statistics & Progress Bar
+        function updateStatsAndProgress() {
+            const totalDistance = laps.length * poolLength;
+            document.getElementById('statTotalDist').textContent = `${totalDistance} m`;
+            document.getElementById('currentDistanceText').textContent = `${totalDistance}m`;
+
+            // Progress Bar
+            const percent = Math.min(100, Math.round((totalDistance / targetDistance) * 100));
+            document.getElementById('progressBar').style.width = `${percent}%`;
+            document.getElementById('progressPercent').textContent = `${percent}%`;
+
+            // Pace calculations
+            if (laps.length > 0 && totalDistance > 0) {
+                // Average Pace
+                const avgPaceMs = (elapsedTime / totalDistance) * 100;
+                document.getElementById('statAvgPace').textContent = formatPace(avgPaceMs);
+                document.getElementById('overallPaceDisplay').textContent = formatPace(avgPaceMs);
+
+                // Best Pace
+                const bestPaceMs = Math.min(...laps.map(l => l.paceMs));
+                document.getElementById('statBestPace').textContent = formatPace(bestPaceMs);
+            } else {
+                document.getElementById('statAvgPace').textContent = "--:--";
+                document.getElementById('statBestPace').textContent = "--:--";
+                document.getElementById('overallPaceDisplay').textContent = "--:--";
+            }
+        }
+
+        // Render Lap List & Highlights
+        function renderLaps() {
+            const tbody = document.getElementById('lapList');
+
+            if (laps.length === 0) {
+                tbody.innerHTML = `
+                    <tr id="emptyState">
+                        <td colspan="4" class="py-10 text-center text-slate-500 font-light">
+                            <i class="fa-solid fa-stopwatch-20 text-3xl mb-2 opacity-40 block"></i>
+                            กดปุ่ม START เพื่อเริ่มจับเวลา
+                        </td>
+                    </tr>`;
+                return;
+            }
+
+            let minMs = Infinity;
+            let maxMs = -Infinity;
+
+            if (laps.length >= 2) {
+                laps.forEach(l => {
+                    if (l.lapTime < minMs) minMs = l.lapTime;
+                    if (l.lapTime > maxMs) maxMs = l.lapTime;
+                });
+            }
+
+            tbody.innerHTML = laps.map(lap => {
+                let isFastest = (laps.length >= 2 && lap.lapTime === minMs);
+                let isSlowest = (laps.length >= 2 && lap.lapTime === maxMs);
+
+                let rowBgClass = 'hover:bg-slate-800/40';
+                let badge = '';
+
+                if (isFastest) {
+                    rowBgClass = 'bg-emerald-950/30 text-emerald-200';
+                    badge = `<span class="text-[9px] bg-emerald-500/20 text-emerald-400 px-1 py-0.5 rounded border border-emerald-500/30 ml-1">เร็วสุด</span>`;
+                } else if (isSlowest) {
+                    rowBgClass = 'bg-rose-950/30 text-rose-200';
+                    badge = `<span class="text-[9px] bg-rose-500/20 text-rose-400 px-1 py-0.5 rounded border border-rose-500/30 ml-1">ช้าสุด</span>`;
+                }
+
+                return `
+                    <tr class="transition-colors ${rowBgClass}">
+                        <td class="py-2 px-1 text-center font-mono font-bold text-slate-400">#${lap.lapNo}</td>
+                        <td class="py-2 px-1 text-slate-200 truncate max-w-[100px]">
+                            ${lap.stroke}
+                        </td>
+                        <td class="py-2 px-1 text-right font-mono font-bold">
+                            ${formatTime(lap.lapTime).full} ${badge}
+                        </td>
+                        <td class="py-2 px-1 text-right font-mono text-teal-400">
+                            ${formatPace(lap.paceMs)}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Settings Modal Controls
+        function toggleSettingsModal() {
+            const modal = document.getElementById('settingsModal');
+            modal.classList.toggle('hidden');
+        }
+
+        function setPoolLength(val) {
+            const customInput = document.getElementById('customPoolInput');
+            if (val === 'custom') {
+                customInput.classList.remove('hidden');
+                customInput.focus();
+            } else {
+                customInput.classList.add('hidden');
+                poolLength = parseInt(val);
+            }
+        }
+
+        function setTargetDist(val) {
+            const customInput = document.getElementById('customTargetInput');
+            if (val === 'custom') {
+                customInput.classList.remove('hidden');
+                customInput.focus();
+            } else {
+                customInput.classList.add('hidden');
+                targetDistance = parseInt(val);
+            }
+        }
+
+        function saveSettings() {
+            const customPool = document.getElementById('customPoolInput').value;
+            const customTarget = document.getElementById('customTargetInput').value;
+
+            if (customPool && !document.getElementById('customPoolInput').classList.contains('hidden')) {
+                poolLength = parseInt(customPool) || 50;
+            }
+            if (customTarget && !document.getElementById('customTargetInput').classList.contains('hidden')) {
+                targetDistance = parseInt(customTarget) || 1000;
+            }
+
+            document.getElementById('poolLengthText').textContent = `${poolLength}m/Lap`;
+            document.getElementById('targetDisplay').textContent = `${targetDistance}m`;
+
+            localStorage.setItem('swim_pool_length', poolLength);
+            localStorage.setItem('swim_target_dist', targetDistance);
+
+            updateStatsAndProgress();
+            toggleSettingsModal();
+            showToast("บันทึกการตั้งค่าแล้ว");
+        }
+
+        function loadSettings() {
+            const savedPool = localStorage.getItem('swim_pool_length');
+            const savedTarget = localStorage.getItem('swim_target_dist');
+
+            if (savedPool) poolLength = parseInt(savedPool);
+            if (savedTarget) targetDistance = parseInt(savedTarget);
+
+            document.getElementById('poolLengthText').textContent = `${poolLength}m/Lap`;
+            document.getElementById('targetDisplay').textContent = `${targetDistance}m`;
+        }
+
+        // Export Data
+        function exportToCSV() {
+            if (laps.length === 0) {
+                showToast("ไม่มีข้อมูล Lap สำหรับส่งออก");
+                return;
+            }
+
+            let csvContent = "\uFEFF"; // UTF-8 BOM
+            csvContent += "Lap,Stroke,Lap Time,Total Time,Distance (m),Pace per 100m\n";
+
+            const sortedLaps = [...laps].reverse();
+            sortedLaps.forEach(l => {
+                csvContent += `${l.lapNo},"${l.stroke}",${formatTime(l.lapTime).full},${formatTime(l.totalTime).full},${l.distance},${formatPace(l.paceMs)}\n`;
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            const dateStr = new Date().toISOString().slice(0,10);
+
+            link.setAttribute("href", url);
+            link.setAttribute("download", `Swim_Laps_Pace_${dateStr}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            showToast("ดาวน์โหลดไฟล์ CSV เรียบร้อยแล้ว");
+        }
+
+        function copyToClipboard() {
+            if (laps.length === 0) {
+                showToast("ไม่มีข้อมูล Lap สำหรับคัดลอก");
+                return;
+            }
+
+            let textContent = "Lap\tStroke\tLap Time\tTotal Time\tDistance\tPace/100m\n";
+            const sortedLaps = [...laps].reverse();
+            sortedLaps.forEach(l => {
+                textContent += `${l.lapNo}\t${l.stroke}\t${formatTime(l.lapTime).full}\t${formatTime(l.totalTime).full}\t${l.distance}m\t${formatPace(l.paceMs)}\n`;
+            });
+
+            const textarea = document.createElement('textarea');
+            textarea.value = textContent;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showToast("คัดลอกข้อมูลแล้ว (นำไปวางใน Sheets ได้เลย)");
+                } else {
+                    showToast("ไม่สามารถคัดลอกได้");
+                }
+            } catch (err) {
+                showToast("เกิดข้อผิดพลาดในการคัดลอก");
+            } finally {
+                document.body.removeChild(textarea);
+            }
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const msgEl = document.getElementById('toastMessage');
+            msgEl.textContent = message;
+
+            toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+            toast.classList.add('opacity-100', 'translate-y-0');
+
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+            }, 2500);
+        }
+
+        // LocalStorage Logic
+        function saveToLocalStorage() {
+            const data = {
+                elapsedTime,
+                lastLapTotalTime,
+                laps,
+                isRunning,
+                savedAt: Date.now()
+            };
+            localStorage.setItem('swim_timer_data', JSON.stringify(data));
+        }
+
+        function loadFromLocalStorage() {
+            const saved = localStorage.getItem('swim_timer_data');
+            if (!saved) return;
+
+            try {
+                const data = JSON.parse(saved);
+                laps = data.laps || [];
+                elapsedTime = data.elapsedTime || 0;
+                lastLapTotalTime = data.lastLapTotalTime || 0;
+
+                if (data.isRunning && data.savedAt) {
+                    const now = Date.now();
+                    elapsedTime += (now - data.savedAt);
+                    isRunning = true;
+                    startTime = Date.now() - elapsedTime;
+                    timerInterval = setInterval(updateTimerDisplay, 10);
+                } else {
+                    isRunning = false;
+                }
+
+                updateUI();
+            } catch (e) {
+                console.error("Failed to load state", e);
+            }
+        }
+
+        function updateUI() {
+            const formatted = formatTime(elapsedTime);
+            document.getElementById('mainDisplay').innerHTML = `${formatted.main}<span class="text-3xl sm:text-4xl text-pool-400">${formatted.sub}</span>`;
+            
+            const currentLapMs = elapsedTime - lastLapTotalTime;
+            document.getElementById('currentLapDisplay').textContent = formatTime(currentLapMs).full;
+
+            renderLaps();
+            updateStatsAndProgress();
+            updateControlButtons();
+        }
+    </script>
+</body>
+</html>
